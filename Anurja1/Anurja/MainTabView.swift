@@ -3,28 +3,17 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject private var state: AppState
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
             CreamBackground()
+            // Tabs switch instantly when tapped (no cross-fade that reads as scrolling).
             ZStack {
-                HomeView()
-                    .opacity(state.tab == .home ? 1 : 0)
-                    .allowsHitTesting(state.tab == .home)
-                    .accessibilityHidden(state.tab != .home)
-                TrendsView()
-                    .opacity(state.tab == .trends ? 1 : 0)
-                    .allowsHitTesting(state.tab == .trends)
-                    .accessibilityHidden(state.tab != .trends)
-                MealsView()
-                    .opacity(state.tab == .meals ? 1 : 0)
-                    .allowsHitTesting(state.tab == .meals)
-                    .accessibilityHidden(state.tab != .meals)
-                HabitsView()
-                    .opacity(state.tab == .habits ? 1 : 0)
-                    .allowsHitTesting(state.tab == .habits)
-                    .accessibilityHidden(state.tab != .habits)
+                tabPage(.home) { HomeView() }
+                tabPage(.trends) { TrendsView() }
+                tabPage(.meals) { MealsView() }
+                tabPage(.habits) { HabitsView() }
+                tabPage(.me) { ProfileView() }
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -33,13 +22,24 @@ struct MainTabView: View {
         .sheet(item: $state.insightMeal) { meal in
             MealInsightSheet(meal: meal)
         }
-        .sheet(isPresented: $state.showMe) {
-            MeView()
+        .sheet(isPresented: $state.showAddMeal) {
+            AddMealFlow()
+        }
+        .sheet(isPresented: $state.showInsulin) {
+            InsulinSheet()
+                .presentationDetents([.medium, .large])
         }
         .fullScreenCover(item: $state.coach) { exercise in
             CoachScreen(exercise: exercise)
         }
-        .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.82), value: state.tab)
+    }
+
+    private func tabPage<Content: View>(_ tab: AppTab, @ViewBuilder content: () -> Content) -> some View {
+        content()
+            .opacity(state.tab == tab ? 1 : 0)
+            .animation(nil, value: state.tab)
+            .allowsHitTesting(state.tab == tab)
+            .accessibilityHidden(state.tab != tab)
     }
 }
 
@@ -57,19 +57,19 @@ struct FloatingTabBar: View {
                             state.tab = tab
                         }
                     } label: {
-                        VStack(spacing: 4) {
+                        VStack(spacing: 3) {
                             Image(systemName: tab.symbol)
-                                .font(.system(size: 22))
+                                .font(.system(size: 20))
                                 .symbolVariant(state.tab == tab ? .fill : .none)
                                 .accessibilityHidden(true)
                             Text(tab.title)
-                                .font(.system(size: 12, weight: state.tab == tab ? .semibold : .regular))
+                                .font(.system(size: 11, weight: state.tab == tab ? .semibold : .regular))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
                         }
                         .foregroundStyle(state.tab == tab ? Color.ink : Color.cream)
                         .frame(maxWidth: .infinity)
-                        .frame(width: 66, height: 66)
+                        .frame(width: 56, height: 60)
                         .background {
                             if state.tab == tab {
                                 Circle()
@@ -83,15 +83,22 @@ struct FloatingTabBar: View {
                     .accessibilityAddTraits(state.tab == tab ? .isSelected : [])
                 }
             }
-            .padding(5)
+            .padding(4)
             .background(Color.pillGreen, in: Capsule())
             .shadow(color: .black.opacity(0.2), radius: 8, y: 6)
 
             Menu {
                 Button {
-                    state.tab = .meals
+                    state.openAddMeal()
                 } label: {
-                    Label("Log a meal", systemImage: "fork.knife")
+                    Label("Add meal", systemImage: "fork.knife")
+                }
+                if state.profile.takesInsulin {
+                    Button {
+                        state.showInsulin = true
+                    } label: {
+                        Label("Log insulin", systemImage: "syringe")
+                    }
                 }
                 Button {
                     state.tab = .habits
@@ -105,28 +112,37 @@ struct FloatingTabBar: View {
                 }
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 26, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(Color.white)
-                    .frame(width: 64, height: 64)
+                    .frame(width: 58, height: 58)
                     .background(Color.terracotta, in: Circle())
                     .shadow(color: .black.opacity(0.2), radius: 8, y: 6)
             }
             .accessibilityLabel(Text("Quick add"))
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 10)
         .padding(.bottom, 8)
     }
 }
 
+// MARK: - Home
+
 struct HomeView: View {
     @EnvironmentObject private var state: AppState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var range: TimeRange = .day
 
     private var greeting: LocalizedStringKey {
         let hour = Calendar.current.component(.hour, from: Date())
-        if hour < 12 { return "Good morning" }
-        if hour < 17 { return "Good afternoon" }
-        return "Good evening"
+        let name = state.profile.firstName
+        if name.isEmpty {
+            if hour < 12 { return "Good morning" }
+            if hour < 17 { return "Good afternoon" }
+            return "Good evening"
+        }
+        if hour < 12 { return "Good morning, \(name)" }
+        if hour < 17 { return "Good afternoon, \(name)" }
+        return "Good evening, \(name)"
     }
 
     var body: some View {
@@ -135,27 +151,15 @@ struct HomeView: View {
                 ScreenHeader(title: greeting, subtitle: "Your rhythm today")
                 glucoseCard
                 forecastChip
-                if state.forecast.contains(where: { $0.value < 70 }) {
-                    ForecastBanner(low: true)
+                if let activity = state.activity {
+                    ActivityCard(recommendation: activity)
                 }
-                if state.forecast.contains(where: { $0.value > 180 }) {
-                    ForecastBanner(low: false)
-                }
-                if state.gamified {
-                    gardenCard
-                    questsCard
-                } else {
-                    simpleStats
-                }
+                statsRow
                 if let meal = state.meals.first {
                     latestInsight(meal)
                 }
-                PrimaryButton(
-                    title: state.goal == .meals ? "Log a meal" : "Today's habit"
-                ) {
-                    withAnimation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.82)) {
-                        state.tab = state.goal == .meals ? .meals : .habits
-                    }
+                PrimaryButton(title: "Log a meal") {
+                    state.openAddMeal()
                 }
                 .padding(.top, 4)
                 Text("Predictions are estimates, not medical advice.")
@@ -170,7 +174,8 @@ struct HomeView: View {
     }
 
     private var glucoseCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let shown = state.points(in: range)
+        return VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(state.points.currentValue, format: .number.precision(.fractionLength(0)))
@@ -188,18 +193,19 @@ struct HomeView: View {
                 }
                 Spacer(minLength: 8)
                 VStack(alignment: .trailing, spacing: 0) {
-                    Text((Double(state.points.timeInRange) / 100), format: .percent.precision(.fractionLength(0)))
+                    Text((Double(shown.timeInRange) / 100), format: .percent.precision(.fractionLength(0)))
                         .scaledFont(size: 24, weight: .bold)
                         .foregroundStyle(Color.forest)
-                    Text("in range, 24h")
+                    Text("Time in Target range")
                         .scaledFont(size: 12)
                         .foregroundStyle(Color.muted)
                         .multilineTextAlignment(.trailing)
                 }
             }
-            if state.points.count > 1 {
-                GlucoseLineChart(points: state.points, showsAxes: false)
-                    .frame(height: 80)
+            RangePicker(range: $range)
+            if shown.count > 1 {
+                GlucoseLineChart(points: shown, range: range, showsAxes: true, compact: true)
+                    .frame(height: 130)
                     .accessibilityLabel(Text("Glucose chart"))
             } else {
                 Text("No readings yet")
@@ -210,18 +216,23 @@ struct HomeView: View {
         .anurjaCard()
     }
 
+    /// Prediction stays abstract: rise / fall / steady, never a number.
     private var forecastChip: some View {
-        let hourValue = Int((state.forecast.last?.value ?? state.points.currentValue).rounded())
-        let tone = GlucoseForecast.tone(last: state.points.currentValue, forecast: state.forecast)
+        let tone = state.forecastTone
         return HStack(spacing: 8) {
             Image(systemName: tone.symbol)
                 .foregroundStyle(Color.terracotta)
                 .accessibilityHidden(true)
-            Text("In 1 hour: about \(hourValue) mg/dL")
+            Text(tone.prediction)
                 .scaledFont(size: 15, weight: .semibold)
                 .foregroundStyle(Color.ink)
                 .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
+            Spacer(minLength: 4)
+            Text(state.activity.map { "\($0.targetLow)–\($0.targetHigh) mg/dL" } ?? "70–180 mg/dL")
+                .scaledFont(size: 12)
+                .foregroundStyle(Color.muted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
         .padding(.horizontal, 16)
         .frame(minHeight: 44)
@@ -229,173 +240,191 @@ struct HomeView: View {
         .overlay(Capsule().stroke(Color.sand, lineWidth: 1))
     }
 
-    private var gardenCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .center, spacing: 12) {
-                Image(systemName: gardenSymbol)
-                    .font(.system(size: 42))
-                    .foregroundStyle(Color.forest)
-                    .frame(width: 56, height: 56)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Level \(state.level) garden")
-                        .scaledFont(size: 18, weight: .bold)
-                        .foregroundStyle(Color.ink)
-                    Text("Small steps help it grow")
-                        .scaledFont(size: 13)
-                        .foregroundStyle(Color.muted)
-                }
-                Spacer(minLength: 8)
-                HStack(spacing: 4) {
-                    Image(systemName: "flame.fill")
-                        .foregroundStyle(Color.terracotta)
-                    Text(state.streak.formatted())
-                        .scaledFont(size: 16, weight: .bold)
-                        .foregroundStyle(Color.terracotta)
-                }
-                .accessibilityLabel(Text("Streak \(state.streak)"))
-            }
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Color.sand)
-                    Capsule()
-                        .fill(Color.terracotta)
-                        .frame(width: geo.size.width * CGFloat(state.xpIntoLevel) / 100)
-                }
-            }
-            .frame(height: 8)
-            .accessibilityLabel(Text("\(state.xpIntoLevel) / 100 XP to the next level"))
-            Text("\(state.xpIntoLevel) / 100 XP to the next level")
-                .scaledFont(size: 12)
-                .foregroundStyle(Color.muted)
-        }
-        .anurjaCard()
-    }
-
-    private var gardenSymbol: String {
-        switch min(3, state.level - 1) {
-        case 0: "leaf"
-        case 1: "leaf.fill"
-        case 2: "camera.macro"
-        default: "tree.fill"
-        }
-    }
-
-    private var questsCard: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Today's gentle quests")
-                .scaledFont(size: 17, weight: .bold)
-                .foregroundStyle(Color.ink)
-            questRow(done: state.loggedMealToday, title: "Log one meal", tab: .meals)
-            questRow(done: state.walkedToday, title: "A walk after lunch", tab: .habits)
-            questRow(done: state.coachedToday, title: "One coached exercise", tab: .habits)
-        }
-        .anurjaCard()
-    }
-
-    private func questRow(done: Bool, title: LocalizedStringKey, tab: AppTab) -> some View {
-        Button {
-            withAnimation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.82)) {
-                state.tab = tab
-            }
-        } label: {
-            HStack(spacing: 10) {
-                Image(systemName: done ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 22))
-                    .foregroundStyle(done ? Color.forest : Color.terracotta)
-                Text(title)
-                    .scaledFont(size: 15)
-                    .foregroundStyle(Color.ink)
-                    .multilineTextAlignment(.leading)
-                Spacer(minLength: 0)
-            }
-            .frame(minHeight: 44)
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(done ? .isSelected : [])
-    }
-
-    private var simpleStats: some View {
+    private var statsRow: some View {
         ViewThatFits(in: .horizontal) {
-            HStack(spacing: 10) {
-                stat(state.meals.count.formatted(), "meals logged")
-                stat(state.points.averageValue.formatted(), "avg mg/dL")
-                stat(state.positiveCheckIns.formatted(), "walks done")
-            }
-            VStack(spacing: 10) {
-                stat(state.meals.count.formatted(), "meals logged")
-                stat(state.points.averageValue.formatted(), "avg mg/dL")
-                stat(state.positiveCheckIns.formatted(), "walks done")
-            }
+            HStack(spacing: 10) { gmiStat; stepsStat; caloriesStat }
+            VStack(spacing: 10) { gmiStat; stepsStat; caloriesStat }
         }
     }
 
-    private func stat(_ value: String, _ label: LocalizedStringKey) -> some View {
+    private var gmiStat: some View {
+        let current = (state.gmi * 10).rounded() / 10
+        var compare: String = String(localized: "Updates monthly")
+        if let previous = state.previousGMI {
+            let delta = current - previous
+            let arrow = delta > 0 ? "↑" : (delta < 0 ? "↓" : "→")
+            compare = String(localized: "\(arrow) \(abs(delta).formatted(.number.precision(.fractionLength(1)))) vs last month")
+        }
+        return stat(
+            "\(current.formatted(.number.precision(.fractionLength(1))))%",
+            "Est. GMI",
+            compare
+        )
+    }
+
+    private var stepsStat: some View {
+        stat(state.stepsToday.formatted(), "Steps", String(localized: "Today"))
+    }
+
+    private var caloriesStat: some View {
+        stat(state.caloriesToday.formatted(), "Calories", String(localized: "Active kcal, Health"))
+    }
+
+    private func stat(_ value: String, _ label: LocalizedStringKey, _ detail: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .scaledFont(size: 24, weight: .bold)
+                .scaledFont(size: 22, weight: .bold)
                 .foregroundStyle(Color.ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
             Text(label)
-                .scaledFont(size: 12)
+                .scaledFont(size: 13, weight: .semibold)
+                .foregroundStyle(Color.ink)
+            Text(detail)
+                .scaledFont(size: 11)
                 .foregroundStyle(Color.muted)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .anurjaCard()
+        .anurjaCard(padding: 13)
     }
 
     private func latestInsight(_ meal: MealLog) -> some View {
         let insight = state.insights.insight(for: meal)
-        let food = meal.food.localizedName
+        let food = meal.displayName
         let shownFood = Locale.current.language.languageCode?.identifier == "en" ? food.lowercased() : food
-        return VStack(alignment: .leading, spacing: 6) {
-            Text("Latest insight")
-                .scaledFont(size: 13)
-                .foregroundStyle(Color.muted)
-            Text("\(insight.title) after \(shownFood)")
-                .scaledFont(size: 17, weight: .bold)
-                .foregroundStyle(Color.ink)
-                .fixedSize(horizontal: false, vertical: true)
-            if let detail = insight.items.first?.detail {
-                Text(detail)
-                    .scaledFont(size: 14)
+        return Button {
+            state.insightMeal = meal
+        } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Latest insight")
+                    .scaledFont(size: 13)
+                    .foregroundStyle(Color.muted)
+                Text("\(insight.title) after \(shownFood)")
+                    .scaledFont(size: 17, weight: .bold)
+                    .foregroundStyle(Color.ink)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                if let detail = insight.items.first?.detail {
+                    Text(detail)
+                        .scaledFont(size: 14)
+                        .foregroundStyle(Color.forest)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .anurjaCard()
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+/// Immediate activity suggestion from the on-device activity model.
+struct ActivityCard: View {
+    @EnvironmentObject private var state: AppState
+    var recommendation: ActivityRecommendation
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: recommendation.status.symbol)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(recommendation.status.needsAttention ? Color.white : Color.forest)
+                    .frame(width: 40, height: 40)
+                    .background(recommendation.status.needsAttention ? Color.terracotta : Color.sand, in: Circle())
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Right now")
+                        .scaledFont(size: 12)
+                        .foregroundStyle(Color.muted)
+                    Text(recommendation.status.title)
+                        .scaledFont(size: 17, weight: .bold)
+                        .foregroundStyle(Color.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(recommendation.targetText)
+                        .scaledFont(size: 13)
+                        .foregroundStyle(Color.forest)
+                }
+            }
+            ForEach(recommendation.actions) { action in
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: action.symbol)
+                        .foregroundStyle(Color.maroon)
+                        .frame(width: 28)
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(action.title)
+                            .scaledFont(size: 15, weight: .semibold)
+                            .foregroundStyle(Color.ink)
+                        Text(action.detail)
+                            .scaledFont(size: 13)
+                            .foregroundStyle(Color.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer(minLength: 0)
+                    if action.id == "squats" {
+                        Button {
+                            state.openCoach(.squat)
+                        } label: {
+                            Image(systemName: "play.circle.fill")
+                                .font(.system(size: 26))
+                                .foregroundStyle(Color.terracotta)
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("Start squats"))
+                    }
+                }
+                .padding(10)
+                .background(Color.cream, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            }
+            if let note = recommendation.personalNote {
+                Text(note)
+                    .scaledFont(size: 13)
                     .foregroundStyle(Color.forest)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+            if recommendation.status == .low {
+                Text("Follow your care team's plan for lows.")
+                    .scaledFont(size: 12)
+                    .foregroundStyle(Color.muted)
             }
         }
         .anurjaCard()
     }
 }
 
-struct TrendsView: View {
-    @EnvironmentObject private var state: AppState
+struct RangePicker: View {
+    @Binding var range: TimeRange
 
     var body: some View {
-        ScrollView {
+        SegmentedTabs(options: TimeRange.allCases, title: { $0.title }, selection: $range)
+            .accessibilityLabel(Text("Time period"))
+    }
+}
+
+// MARK: - Trends
+
+struct TrendsView: View {
+    @EnvironmentObject private var state: AppState
+    @State private var range: TimeRange = .day
+
+    var body: some View {
+        let shown = state.points(in: range)
+        return ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                ScreenHeader(title: "Trends", subtitle: "Last 24 hours")
-                chartCard
+                ScreenHeader(title: "Trends", subtitle: range.subtitle)
+                RangePicker(range: $range)
+                chartCard(shown)
                 ViewThatFits(in: .horizontal) {
-                    HStack(spacing: 10) {
-                        trendStat((Double(state.points.timeInRange) / 100).formatted(.percent.precision(.fractionLength(0))), "time in range")
-                        trendStat(state.points.averageValue.formatted(), "average")
-                        trendStat(state.points.highReadings.formatted(), "high readings")
-                    }
-                    VStack(spacing: 10) {
-                        trendStat((Double(state.points.timeInRange) / 100).formatted(.percent.precision(.fractionLength(0))), "time in range")
-                        trendStat(state.points.averageValue.formatted(), "average")
-                        trendStat(state.points.highReadings.formatted(), "high readings")
-                    }
+                    HStack(spacing: 10) { stats(shown) }
+                    VStack(spacing: 10) { stats(shown) }
+                }
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .top, spacing: 10) { peaks(shown) }
+                    VStack(spacing: 10) { peaks(shown) }
                 }
                 nextHourCard
-                if state.forecast.contains(where: { $0.value < 70 }) {
-                    ForecastBanner(low: true)
-                }
-                if state.forecast.contains(where: { $0.value > 180 }) {
-                    ForecastBanner(low: false)
-                }
                 todayLog
                 Text("Shaded band is 70–180 mg/dL. Dots mark meals you logged.")
                     .scaledFont(size: 12)
@@ -412,42 +441,118 @@ struct TrendsView: View {
         }
     }
 
-    private var chartCard: some View {
+    private func chartCard(_ shown: [GlucosePoint]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            if state.points.count > 1 {
-                GlucoseLineChart(points: state.points, forecast: state.forecast, meals: state.meals, showsAxes: true)
-                    .frame(height: 220)
+            Text("Glucose trend (mg/dL)")
+                .scaledFont(size: 15, weight: .semibold)
+                .foregroundStyle(Color.ink)
+            if shown.count > 1 {
+                GlucoseLineChart(
+                    points: shown,
+                    forecast: range == .week ? [] : state.forecast,
+                    meals: state.meals.filter { meal in shown.first.map { meal.date >= $0.time } ?? false },
+                    range: range,
+                    showsAxes: true
+                )
+                .frame(height: 230)
             } else {
                 Text("No readings yet")
                     .scaledFont(size: 15)
                     .foregroundStyle(Color.muted)
                     .frame(maxWidth: .infinity, minHeight: 120)
             }
-            HStack(spacing: 6) {
-                RoundedRectangle(cornerRadius: 2)
-                    .stroke(Color.forest, style: StrokeStyle(lineWidth: 2, dash: [4, 3]))
-                    .frame(width: 22, height: 2)
-                Text("Predicted")
-                    .scaledFont(size: 12)
-                    .foregroundStyle(Color.muted)
+            if range != .week {
+                HStack(spacing: 6) {
+                    RoundedRectangle(cornerRadius: 2)
+                        .stroke(Color.forest, style: StrokeStyle(lineWidth: 2, dash: [4, 3]))
+                        .frame(width: 22, height: 2)
+                    Text("Predicted direction")
+                        .scaledFont(size: 12)
+                        .foregroundStyle(Color.muted)
+                }
             }
         }
         .anurjaCard()
     }
 
+    @ViewBuilder
+    private func stats(_ shown: [GlucosePoint]) -> some View {
+        trendStat((Double(shown.timeInRange) / 100).formatted(.percent.precision(.fractionLength(0))), "Time in Target range")
+        trendStat("\(shown.averageValue) mg/dL", "average")
+        trendStat("\(GlucoseTargets.gmi(meanGlucose: shown.meanValue).formatted(.number.precision(.fractionLength(1))))%", "Est. GMI")
+    }
+
+    @ViewBuilder
+    private func peaks(_ shown: [GlucosePoint]) -> some View {
+        if let high = shown.highestPeak(meals: state.meals) {
+            peakCard(
+                title: "Highest peak",
+                value: high.point.value,
+                change: "↑ +\(high.change) mg/dL",
+                time: high.point.time,
+                detail: high.meal.map { String(localized: "After \($0.displayName)") }
+            )
+        }
+        if let low = shown.lowestPeak() {
+            peakCard(
+                title: "Lowest peak",
+                value: low.point.value,
+                change: "↓ \(low.change) mg/dL",
+                time: low.point.time,
+                detail: nil
+            )
+        }
+    }
+
+    private func peakCard(title: LocalizedStringKey, value: Double, change: String, time: Date, detail: String?) -> some View {
+        let timeStyle: Date.FormatStyle = range == .week
+            ? .dateTime.weekday(.abbreviated).hour().minute()
+            : .dateTime.hour().minute()
+        return VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .scaledFont(size: 13)
+                .foregroundStyle(Color.muted)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(value, format: .number.precision(.fractionLength(0)))
+                    .scaledFont(size: 26, weight: .bold)
+                    .foregroundStyle(Color.ink)
+                Text("mg/dL")
+                    .scaledFont(size: 12)
+                    .foregroundStyle(Color.muted)
+            }
+            Text(change)
+                .scaledFont(size: 15, weight: .semibold)
+                .foregroundStyle(Color.terracotta)
+            Text(time, format: timeStyle)
+                .scaledFont(size: 13)
+                .foregroundStyle(Color.forest)
+            if let detail {
+                Text(detail)
+                    .scaledFont(size: 12)
+                    .foregroundStyle(Color.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .anurjaCard()
+    }
+
     private var nextHourCard: some View {
-        let hourValue = Int((state.forecast.last?.value ?? state.points.currentValue).rounded())
-        let tone = GlucoseForecast.tone(last: state.points.currentValue, forecast: state.forecast)
+        let tone = state.forecastTone
         return VStack(alignment: .leading, spacing: 6) {
             Text("Next hour")
                 .scaledFont(size: 13)
                 .foregroundStyle(Color.muted)
-            Text(hourValue, format: .number.precision(.fractionLength(0)))
-                .scaledFont(size: 32, weight: .bold)
-                .foregroundStyle(Color.ink)
-            Text("mg/dL")
-                .scaledFont(size: 13)
-                .foregroundStyle(Color.muted)
+            HStack(spacing: 8) {
+                Image(systemName: tone.symbol)
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(Color.terracotta)
+                    .accessibilityHidden(true)
+                Text(tone.prediction)
+                    .scaledFont(size: 20, weight: .bold)
+                    .foregroundStyle(Color.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             Text(tone.message)
                 .scaledFont(size: 15)
                 .foregroundStyle(Color.forest)
@@ -460,8 +565,8 @@ struct TrendsView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Today's log")
                 .scaledFont(size: 17, weight: .bold)
-            if state.todayMeals.isEmpty {
-                Text("Nothing logged yet. Tap + to log a meal.")
+            if state.todayMeals.isEmpty && state.todayInsulin.isEmpty {
+                Text("Nothing logged yet. Tap + to add a meal.")
                     .scaledFont(size: 14)
                     .foregroundStyle(Color.muted)
                     .fixedSize(horizontal: false, vertical: true)
@@ -473,28 +578,34 @@ struct TrendsView: View {
                                 .scaledFont(size: 13)
                                 .foregroundStyle(Color.muted)
                             Spacer()
-                            Text("+\(meal.rise)")
+                            Text("↑ \(meal.rise) mg/dL rise")
                                 .scaledFont(size: 13, weight: .semibold)
                                 .foregroundStyle(Color.forest)
                         }
-                        Text(meal.food.localizedName)
+                        Text(meal.displayName)
                             .scaledFont(size: 16, weight: .semibold)
                             .foregroundStyle(Color.ink)
-                        HStack(spacing: 12) {
-                            if let carbs = meal.carbsGrams {
-                                Text("\(carbs) g")
-                                    .scaledFont(size: 13)
-                                    .foregroundStyle(Color.muted)
-                            }
-                            if let insulin = meal.insulinUnits {
-                                Text("\(insulin.formatted(.number.precision(.fractionLength(0...1)))) units")
-                                    .scaledFont(size: 13)
-                                    .foregroundStyle(Color.muted)
-                            }
-                        }
+                        Text("\(meal.carbsEstimate) g carbs")
+                            .scaledFont(size: 13)
+                            .foregroundStyle(Color.muted)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 4)
+                }
+                ForEach(state.todayInsulin) { log in
+                    HStack {
+                        Image(systemName: "syringe")
+                            .foregroundStyle(Color.maroon)
+                            .accessibilityHidden(true)
+                        Text("\(log.units.formatted(.number.precision(.fractionLength(0...1)))) units · \(log.relation.title)")
+                            .scaledFont(size: 14)
+                            .foregroundStyle(Color.ink)
+                        Spacer()
+                        Text(log.date, format: .dateTime.hour().minute())
+                            .scaledFont(size: 13)
+                            .foregroundStyle(Color.muted)
+                    }
+                    .padding(.vertical, 2)
                 }
             }
         }
@@ -504,7 +615,7 @@ struct TrendsView: View {
     private func trendStat(_ value: String, _ label: LocalizedStringKey) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .scaledFont(size: 24, weight: .bold)
+                .scaledFont(size: 21, weight: .bold)
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
             Text(label)
@@ -542,7 +653,9 @@ struct GlucoseLineChart: View {
     var points: [GlucosePoint]
     var forecast: [GlucosePoint] = []
     var meals: [MealLog] = []
+    var range: TimeRange = .day
     var showsAxes: Bool
+    var compact = false
 
     var body: some View {
         let forecastLine = anchorForecast()
@@ -559,17 +672,17 @@ struct GlucoseLineChart: View {
             ForEach(points) { point in
                 LineMark(
                     x: .value("Time", point.time),
-                    y: .value("Glucose", point.value),
+                    y: .value("Glucose (mg/dL)", point.value),
                     series: .value("Series", "Actual")
                 )
                 .interpolationMethod(.catmullRom)
                 .foregroundStyle(Color.terracotta)
-                .lineStyle(StrokeStyle(lineWidth: 2.5, lineJoin: .round))
+                .lineStyle(StrokeStyle(lineWidth: range == .week ? 1.5 : 2.5, lineJoin: .round))
             }
             ForEach(forecastLine) { point in
                 LineMark(
                     x: .value("Time", point.time),
-                    y: .value("Glucose", point.value),
+                    y: .value("Glucose (mg/dL)", point.value),
                     series: .value("Series", "Predicted")
                 )
                 .interpolationMethod(.linear)
@@ -579,7 +692,7 @@ struct GlucoseLineChart: View {
             ForEach(mealMarks) { mark in
                 PointMark(
                     x: .value("Time", mark.time),
-                    y: .value("Glucose", mark.value)
+                    y: .value("Glucose (mg/dL)", mark.value)
                 )
                 .foregroundStyle(Color.maroon)
                 .symbolSize(50)
@@ -588,9 +701,13 @@ struct GlucoseLineChart: View {
         .chartYScale(domain: 50...250)
         .chartXAxis {
             if showsAxes {
-                AxisMarks(values: .stride(by: .hour, count: 6)) { _ in
+                AxisMarks(values: axisValues) { _ in
                     AxisGridLine().foregroundStyle(Color.sand)
-                    AxisValueLabel(format: .dateTime.hour())
+                    if range == .week {
+                        AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+                    } else {
+                        AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .abbreviated)))
+                    }
                 }
             }
         }
@@ -602,7 +719,20 @@ struct GlucoseLineChart: View {
                 }
             }
         }
+        .chartYAxisLabel(position: .leading) {
+            if !compact {
+                Text("mg/dL")
+            }
+        }
         .chartLegend(.hidden)
+    }
+
+    private var axisValues: AxisMarkValues {
+        switch range {
+        case .twelve: .stride(by: .hour, count: compact ? 4 : 3)
+        case .day: .stride(by: .hour, count: 6)
+        case .week: .stride(by: .day, count: 1)
+        }
     }
 
     private var mealMarks: [GlucosePoint] {

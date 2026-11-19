@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anurja preview</title>
+<style>
+:root{--page:#E9E1D8;--cream:#FAF3EB;--terra:#AA5A43;--maroon:#7A1F2B;--forest:#3B5B4B;--sage:#5E7466;--sand:#EEE2D6;--blush:#E0BBA8;--ink:#2E241F;--muted:#8A7B70;--pill:#24382E;--pale:#F5EDE2;--note:#5b4d44}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#1d1815;--note:#d9cdc2}}
+:root[data-theme="dark"]{--page:#1d1815;--note:#d9cdc2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--page);font-family:-apple-system,"SF Pro Text","Segoe UI",Inter,system-ui,sans-serif;display:flex;align-items:flex-start;justify-content:center;gap:22px;padding:16px;flex-wrap:wrap}
+.side{max-width:260px;color:var(--note);font-size:13px;line-height:1.45}
+.side h3{margin:0 0 6px;font-size:15px;color:var(--note)}
+.side button{display:block;width:100%;margin:6px 0;padding:9px 12px;border-radius:12px;border:1px solid #c9b9aa;background:#fff;color:#2E241F;font:600 13px inherit;font-family:inherit;cursor:pointer;text-align:left}
+.side button:hover{border-color:var(--terra)}
+#wrap{flex:none}
+.phone{width:390px;height:812px;border-radius:56px;background:#111;padding:11px;box-shadow:0 0 0 2px #8a8a8f,0 24px 50px rgba(0,0,0,.35);position:relative;transform-origin:top center}
+.screen{position:relative;width:100%;height:100%;border-radius:46px;overflow:hidden;background:var(--cream);color:var(--ink)}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:104px;height:30px;border-radius:20px;background:#000;z-index:60}
+.status{position:absolute;top:14px;left:30px;right:30px;display:flex;justify-content:space-between;font-size:14px;font-weight:600;z-index:55;pointer-events:none}
+.view{position:absolute;inset:0;display:flex;flex-direction:column}
+.scroll{flex:1;overflow-y:auto;padding:54px 18px 120px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.bgcircle{position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(238,226,214,.85);right:-90px;top:-100px;pointer-events:none}
+.warm{background:linear-gradient(180deg,#AA5A43 0%,#D9A68F 45%,#3B5B4B 100%);color:var(--cream)}
+.warm:before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(94,116,102,.75);right:-110px;top:-110px}
+.warm:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(231,181,106,.28);left:-110px;bottom:120px}
+.pad{position:relative;z-index:1;flex:1;padding:54px 22px 20px;display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none}
+.pad::-webkit-scrollbar{display:none}
+.serif{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif}
+h1{font-size:34px;line-height:1.1;margin:0;font-weight:700}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:1.1px;margin-top:8px}
+.sub{font-size:15px;color:var(--muted);margin:6px 0 0;line-height:1.35}
+.warm .sub{color:var(--cream)}
+.back{border:0;background:none;color:inherit;font-size:24px;width:44px;height:44px;text-align:left;padding:0;cursor:pointer}
+.btn{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:58px;border:0;border-radius:30px;background:var(--terra);color:#fff;font-weight:600;font-size:17px;font-family:inherit;padding:0 26px;cursor:pointer;margin-top:12px}
+.btn[disabled]{opacity:.45;cursor:default}
+.link{border:0;background:none;color:var(--terra);font:600 16px inherit;font-family:inherit;width:100%;min-height:44px;cursor:pointer}
+.opt{display:flex;align-items:center;gap:14px;width:100%;background:#fff;border:2px solid transparent;border-radius:26px;padding:12px;text-align:left;font-family:inherit;color:var(--ink);cursor:pointer;margin-top:10px}
+.opt.on{border-color:var(--terra)}
+.ico{width:54px;height:54px;border-radius:16px;background:rgba(224,187,168,.6);display:grid;place-items:center;font-size:22px;flex:none}
+.opt b{display:block;font-size:17px}.opt small{color:var(--muted);font-size:13px}
+.radio{margin-left:auto;width:28px;height:28px;border-radius:50%;border:2px solid var(--terra);display:grid;place-items:center;color:#fff;flex:none;font-size:13px}
+.on .radio{background:var(--terra)}
+.card{background:#fff;border:1px solid var(--sand);border-radius:22px;padding:15px;margin-top:12px}
+.formcard{background:var(--cream);color:var(--ink);border-radius:26px;padding:16px;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1.5px solid var(--sand);background:transparent;border-radius:22px;min-height:40px;padding:0 14px;font-size:14px;font-family:inherit;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--terra);border-color:var(--terra);color:#fff;font-weight:600}
+.chip.g.on{background:var(--forest);border-color:var(--forest)}
+.seg{display:flex;background:var(--sand);border-radius:24px;padding:4px;margin-top:10px}
+.seg button{flex:1;border:0;background:none;height:38px;border-radius:20px;font-size:14px;font-family:inherit;color:var(--muted);cursor:pointer}
+.seg button.on{background:#fff;color:var(--ink);font-weight:600}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--terra);color:var(--cream);display:grid;place-items:center;font-size:20px;border:0;cursor:pointer;flex:none}
+.stepper{display:flex;align-items:center;gap:6px;margin-top:8px}
+.stepper span.t{flex:1;font-size:15px}
+.stepper button{width:40px;height:40px;border-radius:50%;border:0;background:#fff;font-size:20px;cursor:pointer;color:var(--ink);box-shadow:0 0 0 1px var(--sand)}
+.stepper b{min-width:76px;text-align:center;font-size:17px}
+.input{width:100%;min-height:46px;border-radius:24px;border:1px solid var(--sand);background:#fff;padding:0 16px;font-size:16px;font-family:inherit;color:var(--ink);margin-top:6px}
+.lbl{font-size:13px;color:var(--muted);margin-top:10px}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.stat{background:#fff;border:1px solid var(--sand);border-radius:20px;padding:12px;margin-top:12px}
+.stat b{font-size:21px;display:block}.stat .l{font-size:13px;font-weight:600}.stat small{color:var(--muted);font-size:11px;display:block}
+.big{font-size:54px;font-weight:700;line-height:1}
+.pillchip{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--sand);border-radius:24px;min-height:44px;padding:0 16px;margin-top:12px;font-size:15px;font-weight:600}
+.pillchip small{margin-left:auto;font-weight:400;color:var(--muted);font-size:12px}
+.act{display:flex;gap:10px;align-items:flex-start;background:var(--cream);border-radius:14px;padding:10px;margin-top:8px}
+.act b{font-size:15px;display:block}.act small{color:var(--muted);font-size:13px}
+.badge{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:700}
+.plan{background:var(--terra);color:#fff;border-radius:26px;padding:18px;margin-top:12px}
+.plan hr{border:0;border-top:1px solid rgba(255,255,255,.4);margin:10px 0}
+.bar{height:8px;background:var(--sand);border-radius:6px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%}
+.listrow{display:flex;align-items:center;gap:12px;padding:6px 0;cursor:pointer}
+.thumb{width:44px;height:44px;border-radius:12px;background:rgba(224,187,168,.5);display:grid;place-items:center;flex:none}
+.muted{color:var(--muted)}.forest{color:var(--forest)}.terra{color:var(--terra)}
+.tiny{font-size:12px;color:var(--muted);line-height:1.4;margin-top:10px}
+.tabwrap{position:absolute;left:0;right:0;bottom:0;padding:0 10px 18px;display:flex;gap:8px;align-items:center;z-index:30}
+.tabs{flex:1;display:flex;background:var(--pill);border-radius:40px;padding:4px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.tabs button{flex:1;height:58px;border:0;background:none;color:var(--cream);font-family:inherit;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;border-radius:50%}
+.tabs button span{font-size:19px;line-height:1}
+.tabs button.on{background:var(--blush);color:var(--ink);font-weight:600}
+.plus{width:58px;height:58px;border-radius:50%;border:0;background:var(--terra);color:#fff;font-size:30px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.2);flex:none}
+.menu{position:absolute;right:14px;bottom:92px;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:40;min-width:210px;overflow:hidden}
+.menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:13px 16px;font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--sand)}
+.sheet{position:absolute;inset:0;z-index:45;display:flex;flex-direction:column;justify-content:flex-end;background:rgba(0,0,0,.25)}
+.sheet .body{background:var(--cream);border-radius:28px 28px 0 0;max-height:94%;overflow-y:auto;padding:12px 20px 30px;scrollbar-width:none}
+.sheet .body::-webkit-scrollbar{display:none}
+.sheet.full .body{height:100%;max-height:100%;border-radius:0;padding-top:52px}
+.grab{width:40px;height:5px;border-radius:3px;background:#cdbfb2;margin:0 auto 10px}
+.x{width:44px;height:44px;border-radius:50%;background:#fff;border:0;font-size:16px;cursor:pointer;flex:none}
+.toast{position:absolute;top:48px;left:10px;right:10px;background:rgba(250,250,250,.97);border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:12px 14px;z-index:58;display:flex;gap:10px;animation:drop .35s ease-out;cursor:pointer}
+.toast img{width:38px;height:38px;border-radius:9px}
+.toast b{font-size:14px}.toast p{margin:2px 0 0;font-size:13px;color:#333}
+@keyframes drop{from{transform:translateY(-120%)}to{transform:none}}
+.food{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--sand);border-radius:18px;padding:12px;margin-top:8px;cursor:pointer}
+.food b{display:block;font-size:15px}.food small{font-size:12px;color:var(--muted)}
+select.dd{min-height:46px;border-radius:24px;border:0;background:var(--terra);color:#fff;font:600 14px inherit;font-family:inherit;padding:0 12px;margin-top:6px}
+.coachstage{background:#2E3A33;border-radius:26px;position:relative;aspect-ratio:3/4;margin-top:12px;overflow:hidden}
+.coachstage .fb{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:var(--terra);color:#fff;border-radius:20px;padding:8px 16px;font-weight:600;font-size:15px;white-space:nowrap}
+.coachstage .mv{position:absolute;left:12px;top:12px;background:rgba(0,0,0,.35);color:#fff;border-radius:14px;padding:4px 10px;font-size:12px;font-weight:600}
+.num{width:28px;height:28px;border-radius:50%;background:var(--terra);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.alert{position:absolute;inset:0;background:rgba(0,0,0,.3);z-index:70;display:grid;place-items:center}
+.alert div{background:rgba(245,245,245,.98);width:270px;border-radius:16px;text-align:center;padding:18px 16px 0}
+.alert p{font-size:13px;margin:6px 0 14px}
+.alert button{width:100%;border:0;border-top:1px solid #ddd;background:none;padding:12px;color:#0a64d8;font-size:16px;font-weight:600;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="side">
+  <h3>Anurja · clickable preview</h3>
+  A browser mock-up of the updated iPhone app. It runs the same trained models as the app (meal rise and activity), so suggestions and predictions are real outputs. Camera, step counting and HealthKit are simulated.
+  <h3 style="margin-top:14px">Try it</h3>
+  <button onclick="demo('high')">Simulate high glucose → pop-up</button>
+  <button onclick="demo('low')">Simulate a low → pop-up</button>
+  <button onclick="demo('normal')">Back to normal glucose</button>
+  <button onclick="demo('skip')">Skip onboarding with a sample profile</button>
+  <button onclick="demo('restart')">Restart from the landing page</button>
+</div>
+<div id="wrap"><div class="phone" id="phone"><div class="screen" id="screen"></div></div></div>
+
+<script>
+const MODELS = /*MODELS*/null;
+const FOODS = /*FOODS*/null;
+const LOGO = "../Anurja/Assets.xcassets/AnurjaMark.imageset/AnurjaMark.png";
+
+// ---------------------------------------------------------------- ML (same networks as MLEngine.swift)
+function forward(net, x){
+  const h = net.b1.slice();
+  for (let i=0;i<x.length;i++){ const z=(x[i]-net.mean[i])/(net.scale[i]||1); const r=net.w1[i]; for(let j=0;j<h.length;j++) h[j]+=z*r[j]; }
+  const o = net.b2.slice();
+  for (let j=0;j<h.length;j++){ const a=Math.max(0,h[j]); if(!a) continue; for(let k=0;k<o.length;k++) o[k]+=a*net.w2[j][k]; }
+  return o;
+}
+function softmax(v){ const m=Math.max(...v); const e=v.map(x=>Math.exp(x-m)); const s=e.reduce((a,b)=>a+b,0); return e.map(x=>x/s); }
+const STRESS={Low:0,Medium:1,High:2};
+function riseFeatures(item, m){
+  const serv=m.servings||1, carbs=m.carbs!=null?m.carbs:item.carbs*serv, c=m.contexts||[];
+  return [carbs, carbs*item.gi/100, item.fiber*serv, item.protein*serv, item.fat*serv,
+    m.duration==='Under 10 min'?1:0, m.duration==='Longer'?1:0,
+    c.includes('At my desk')?1:0, c.includes('Screen on')?1:0, c.includes('On the move')?1:0, c.includes('Walked after')?1:0, c.includes('Lay down after')?1:0,
+    m.drink==='Juice / soft drink'?1:0, m.sugar||0, Math.max(0,7-(m.sleep??7)), STRESS[m.stress||'Medium'], (m.hour>=5&&m.hour<11)?1:0];
+}
+const food = id => FOODS.find(f=>f.id===id);
+function popRise(item,m){ return Math.max(0, forward(MODELS.rise, riseFeatures(item,m))[0]); }
+function personaliser(meals){
+  const res={}; let all=[];
+  meals.forEach(m=>{ const it=food(m.foodId); const r=m.rise-popRise(it,m); (res[m.foodId]=res[m.foodId]||[]).push(r); all.push(r); });
+  const user = all.length? all.reduce((a,b)=>a+b,0)/(all.length+5):0;
+  const per={}; for(const k in res) per[k]=res[k].reduce((a,b)=>a+b,0)/(res[k].length+3);
+  return {count:all.length, adjust:(id,raw)=> raw + (id in per ? per[id] : user)};
+}
+function riseTitle(r){ return r<30?'A gentle rise':r<55?'A moderate rise':'A sharp rise'; }
+const ACTIONS={
+  high:[["🚶","Brisk walk, 10–15 minutes","Working muscles pull glucose out of your blood."],["🪜","Climb stairs for 5 minutes","Short, strong bursts help bring it down."],["💧","Drink a glass of water","Staying hydrated helps your body clear extra glucose."]],
+  rising:[["🚶","Light walk, 5–10 minutes","A short walk now can flatten the rise."],["🏋️","10 slow squats","Big leg muscles soak up glucose.","squat"],["💧","Drink a glass of water","Skip sweet drinks for now."]],
+  low:[["🧃","Eat 15 g of quick carbs","Half a glass of juice, 3 glucose tablets or 1 tbsp sugar."],["🪑","Sit down and rest","Recheck in 15 minutes. Follow your care team's plan."]],
+  in_range:[["🌿","Keep doing what you're doing","A short walk after your next meal keeps it steady."]]
+};
+const STATUS_TITLE={in_range:"You're in your target range",rising:"Heading towards your upper target",high:"Above your target range",low:"Below your target range"};
+function activity(){
+  const pts=S.points, g=pts[pts.length-1].v, now=pts[pts.length-1].t;
+  const w=pts.filter(p=>now-p.t<=30*60e3); const slope=(w[w.length-1].v-w[0].v)/((w[w.length-1].t-w[0].t)/60e3)*5;
+  const last=S.meals.length?Math.max(...S.meals.map(m=>m.date)):null;
+  const minutes= last? Math.max(0,(Date.now()-last)/60e3):600;
+  const fasting=minutes>=240, d=new Date(), hour=d.getHours()+d.getMinutes()/60, a=2*Math.PI*hour/24;
+  const p=softmax(forward(MODELS.activity,[g,slope,Math.min(minutes,600)/60,fasting?1:0,S.stepsLastHour/1000,Math.sin(a),Math.cos(a)]));
+  const classes=["in_range","rising","high","low"]; let best=p.indexOf(Math.max(...p)); let status=classes[best];
+  if(g<70) status='low';
+  return {status, conf:p[best], fasting, low:70, high:fasting?130:180, g};
+}
+
+// ---------------------------------------------------------------- glucose simulation (GlucoseMath.simulated)
+function simulate(offset=0){
+  const events=[[3.5,-20],[8.5,52],[13,78],[16.5,28],[20.5,60]], steps=96*7, now=Date.now(), pts=[];
+  for(let i=-steps;i<=0;i++){
+    const t=now+i*900e3, d=new Date(t), hour=d.getHours()+d.getMinutes()/60, day=Math.floor((i+steps)/96), scale=1+.18*Math.sin(day*1.7);
+    let v=104+5*Math.sin(hour*.9)+2*Math.sin(i*1.7);
+    for(const [h,amp] of events){ let dl=((hour-h)%24+24)%24; if(dl<4) v+=amp*scale*(dl/.9)*Math.exp(1-dl/.9); }
+    pts.push({t,v});
+  }
+  if(offset){ const n=pts.length; for(let k=0;k<8;k++){ pts[n-8+k].v += offset*(k+1)/8; } }
+  return pts;
+}
+const within=(h)=>{ const end=S.points[S.points.length-1].t; return S.points.filter(p=>end-p.t<=h*3600e3); };
+const tir=pts=>Math.round(pts.filter(p=>p.v>=70&&p.v<=180).length/pts.length*100);
+const mean=pts=>pts.reduce((a,p)=>a+p.v,0)/pts.length;
+const gmi=pts=>(3.31+0.02392*mean(pts));
+function forecastTone(){
+  const pts=S.points, last=pts[pts.length-1]; const w=pts.filter(p=>last.t-p.t<=30*60e3);
+  const xs=w.map(p=>(p.t-last.t)/60e3), ys=w.map(p=>p.v), mx=xs.reduce((a,b)=>a+b)/xs.length, my=ys.reduce((a,b)=>a+b)/ys.length;
+  let num=0,den=0; xs.forEach((x,i)=>{num+=(x-mx)*(ys[i]-my);den+=(x-mx)**2}); const slope=den?num/den:0;
+  const end=last.v+slope*20*(1-Math.exp(-60/20));
+  const fc=[]; for(let s=1;s<=12;s++){ const m=s*5; fc.push({t:last.t+m*60e3,v:Math.min(350,Math.max(40,last.v+slope*20*(1-Math.exp(-m/20))))}); }
+  return {tone:end>last.v+3?'rising':end<last.v-3?'falling':'steady', fc};
+}
+const TONE={rising:["↗","Next hour: likely to rise","Heading up after your last meal"],falling:["↘","Next hour: likely to fall","Easing down"],steady:["→","Next hour: likely to stay steady","Looking steady"]};
+function peaks(pts){
+  let top=pts[0],bot=pts[0]; pts.forEach(p=>{if(p.v>top.v)top=p; if(p.v<bot.v)bot=p;});
+  const before=pts.filter(p=>top.t-p.t<=2*3600e3&&p.t<=top.t); const base=Math.min(...before.map(p=>p.v));
+  const b2=pts.filter(p=>bot.t-p.t<=2*3600e3&&p.t<bot.t); const base2=b2.length?mean(b2):bot.v;
+  const meal=S.meals.filter(m=>top.t-m.date>=0&&top.t-m.date<=3*3600e3).sort((a,b)=>b.date-a.date)[0];
+  return {top, up:Math.round(top.v-base), meal, bot, down:Math.round(bot.v-base2)};
+}
+
+// ---------------------------------------------------------------- chart
+function chart(pts, range, h, opts={}){
+  const W=330, H=h, L=opts.axes?28:4, R=6, T=6, B=opts.axes?22:6;
+  const fc=opts.forecast||[]; const t0=pts[0].t, t1=(fc.length?fc[fc.length-1].t:pts[pts.length-1].t);
+  const x=t=>L+(t-t0)/(t1-t0)*(W-L-R), y=v=>T+(1-(v-50)/200)*(H-T-B);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" style="display:block">`;
+  s+=`<rect x="${L}" y="${y(180)}" width="${W-L-R}" height="${y(70)-y(180)}" fill="rgba(59,91,75,.09)"/>`;
+  if(opts.axes){
+    [70,180].forEach(v=>{s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#EEE2D6"/><text x="${L-4}" y="${y(v)+4}" font-size="10" fill="#8A7B70" text-anchor="end">${v}</text>`});
+    const step = range==='week'?24:range==='twelve'?3:6; const d=new Date(t0); d.setMinutes(0,0,0);
+    if(range==='week'){d.setHours(0);}
+    for(let t=d.getTime(); t<=t1; t+=3600e3){
+      const dd=new Date(t); if(t<t0) continue;
+      if(range==='week'? dd.getHours()!==0 : dd.getHours()%step!==0) continue;
+      const lab= range==='week'? dd.toLocaleDateString('en',{weekday:'short'}) : dd.toLocaleTimeString('en',{hour:'numeric'}).replace(' ',' ');
+      s+=`<line x1="${x(t)}" x2="${x(t)}" y1="${T}" y2="${H-B}" stroke="#EEE2D6"/><text x="${x(t)}" y="${H-6}" font-size="10" fill="#8A7B70" text-anchor="middle">${lab}</text>`;
+    }
+    if(opts.unit) s+=`<text x="2" y="${T+8}" font-size="9" fill="#8A7B70">mg/dL</text>`;
+  }
+  s+=`<path d="${pts.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p.v).toFixed(1)).join('')}" fill="none" stroke="#AA5A43" stroke-width="${range==='week'?1.4:2.4}" stroke-linejoin="round"/>`;
+  if(fc.length){ const f=[pts[pts.length-1],...fc]; s+=`<path d="${f.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p.v).toFixed(1)).join('')}" fill="none" stroke="#3B5B4B" stroke-width="2" stroke-dasharray="5 4"/>`; }
+  (opts.meals||[]).forEach(m=>{ if(m.date<t0) return; const p=pts.reduce((a,b)=>Math.abs(b.t-m.date)<Math.abs(a.t-m.date)?b:a); s+=`<circle cx="${x(p.t)}" cy="${y(p.v)}" r="4" fill="#7A1F2B"/>`; });
+  return s+'</svg>';
+}
+
+// ---------------------------------------------------------------- state
+const now0=Date.now();
+const SAMPLE_MEALS=[
+ {foodId:'roti_sabzi',date:now0-6*864e5,duration:'10–20 min',contexts:['Walked after'],drink:'Water',sugar:0,sleep:7.5,stress:'Low',rise:22},
+ {foodId:'salad_curd',date:now0-5*864e5,duration:'Under 10 min',contexts:['On the move'],drink:'Water',sugar:0,sleep:7,stress:'Low',rise:28},
+ {foodId:'rice_dal',date:now0-4*864e5,duration:'10–20 min',contexts:['At my desk'],drink:'Tea',sugar:1,sleep:6.5,stress:'Medium',rise:48},
+ {foodId:'khichdi',date:now0-3*864e5,duration:'Longer',contexts:['At my desk','Screen on'],drink:'Coffee',sugar:0,sleep:5.5,stress:'Medium',rise:55},
+ {foodId:'idli',date:now0-2*864e5,duration:'Under 10 min',contexts:['Screen on'],drink:'Coffee',sugar:0,sleep:6,stress:'High',rise:69},
+ {foodId:'veg_biryani',date:now0-1*864e5,duration:'Longer',contexts:['Lay down after'],drink:'Juice / soft drink',sugar:0,sleep:5,stress:'High',rise:72}
+].map((m,i)=>({...m,id:'s'+i,servings:1,hour:13}));
+let S;
+function fresh(){
+  return {stage:'welcome',tab:'home',watch:'idle',cgm:'idle',
+    profile:{name:'',age:35,h:165,w:65,allergies:[],other:'',insulin:false,itype:null,meds:[],carbTarget:150,alerts:true},
+    points:simulate(0), meals:[], insulin:[], checkins:[], sessions:[], range:'day', trange:'day',
+    plan:{variant:0,start:5,grow:10}, reminder:'off', did:'yes', feel:'Lighter', effort:'easy', steps:1240,
+    stepsToday:4820, kcal:312, stepsLastHour:180, menu:false, sheet:null, add:null, toast:null, coach:null, offset:0};
+}
+S=fresh();
+const learning=()=>S.meals.length?S.meals:SAMPLE_MEALS;
+
+// ---------------------------------------------------------------- helpers
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtTime=t=>new Date(t).toLocaleTimeString('en',{hour:'numeric',minute:'2-digit'});
+const bmi=()=>S.profile.w/((S.profile.h/100)**2);
+const bmiLabel=b=>b<18.5?'Below the healthy range':b<23?'Healthy range':b<25?'Slightly above':'Above the healthy range';
+const first=()=>S.profile.name.trim().split(' ')[0]||'';
+function chips(list, isOn, fn, g=''){ return `<div class="chips">${list.map((v,i)=>`<button class="chip ${g} ${isOn(v)?'on':''}" onclick="${fn}(${i})">${esc(v)}</button>`).join('')}</div>`; }
+function stepper(t,val,dec,inc){ return `<div class="stepper"><span class="t">${t}</span><button onclick="${dec}">−</button><b>${val}</b><button onclick="${inc}">+</button></div>`; }
+function header(title,sub,profile=true){ return `<div class="head"><h1 style="font-size:32px">${title}</h1>${profile?`<button class="avatar" onclick="go('me')" aria-label="Profile">👤</button>`:''}</div>${sub?`<p class="sub">${sub}</p>`:''}`; }
+const ALLERGIES=[['nuts','Tree nuts'],['peanut','Peanuts'],['dairy','Dairy / lactose'],['gluten','Gluten / wheat'],['egg','Eggs'],['soy','Soy'],['seafood','Fish & seafood']];
+const MEDS=["Metformin","Glimepiride","Sitagliptin","Vildagliptin","Empagliflozin","Dapagliflozin","Pioglitazone","Teneligliptin"];
+const safe=f=>!f.allergens.some(a=>S.profile.allergies.includes(a)) && !(S.profile.other && f.name.toLowerCase().includes(S.profile.other.toLowerCase()));
+
+// ---------------------------------------------------------------- onboarding screens
+function welcome(){ return `<div class="view"><div class="bgcircle"></div><div class="pad" style="align-items:center;text-align:center">
+ <div class="serif" style="font-style:italic;font-size:30px;color:var(--terra)">Anurja</div>
+ <div style="width:270px;height:270px;border-radius:50%;background:var(--pale);display:grid;place-items:center;margin:26px 0"><img src="${LOGO}" alt="Anurja" style="width:232px;height:232px;border-radius:50%"></div>
+ <h1 class="serif" style="color:var(--maroon);font-size:34px">Your rhythm, quietly understood</h1>
+ <p style="color:var(--forest);font-size:16px;line-height:1.4">Anurja learns how your everyday meals shape your energy. No judgment, just your own natural pattern.</p>
+ <button class="btn" onclick="stage('connect')">Begin your journey <span>→</span></button></div></div>`; }
+function device(ic,name,st,fn){ const sub=st==='idle'?'Tap to connect':st==='connecting'?'Connecting…':'Calibrating in the background';
+ const tr=st==='idle'?`<button class="mini" onclick="${fn}">Connect</button>`:st==='connecting'?'<span style="margin-left:auto">⏳</span>':'<span class="dot"></span>';
+ return `<div class="dev" style="display:flex;align-items:center;gap:14px;background:var(--cream);border-radius:28px;padding:14px;margin-top:14px"><div class="ico" style="width:60px;height:60px;background:rgba(224,187,168,.8)">${ic}</div><div><b style="font-weight:500;font-size:18px;color:var(--ink);display:block">${name}${st==='connected'?' Connected':''}</b><small style="color:var(--forest);font-size:13px">${sub}</small></div>${tr.replace('class="mini"','style="margin-left:auto;border:0;background:var(--terra);color:#fff;border-radius:22px;min-height:40px;padding:0 14px;font-weight:600;cursor:pointer"')}</div>`; }
+function connect(){ const both=S.watch==='connected'&&S.cgm==='connected'; return `<div class="view warm"><div class="pad">
+ <button class="back" onclick="stage('welcome')">‹</button><div class="eyebrow">YOUR FIRST TWO WEEKS</div>
+ <h1 class="serif" style="font-size:38px;margin-top:8px">Let's learn your pattern,</h1>
+ <p class="sub" style="font-size:16px">For two weeks, simply live your life. We'll quietly calibrate around your natural routine.</p>
+ ${device('⌚','Apple Watch',S.watch,"link('watch')")}${device('📡','CGM Device',S.cgm,"link('cgm')")}
+ <div style="flex:1;min-height:24px"></div>
+ <button class="link" style="color:var(--cream);font-weight:400" onclick="S.watch=S.cgm='connected';stage('about')">Skip for now, use demo data</button>
+ <button class="btn" ${both?'':'disabled'} onclick="stage('about')">Next <span>→</span></button></div></div>`; }
+function obPage(step,title,sub,body,enabled=true){ return `<div class="view warm"><div class="pad">
+ <button class="back" onclick="backStage()">‹</button><div class="eyebrow">STEP ${step} OF 4</div>
+ <h1 class="serif" style="font-size:36px;margin-top:8px">${title}</h1><p class="sub" style="font-size:16px">${sub}</p>${body}
+ <div style="flex:1;min-height:20px"></div><button class="btn" ${enabled?'':'disabled'} onclick="nextStage()">Next <span>→</span></button></div></div>`; }
+function aboutFields(){ const p=S.profile, b=bmi(); return `<div class="lbl">Your name</div><input class="input" placeholder="Name" value="${esc(p.name)}" oninput="S.profile.name=this.value;refreshNext()">
+ ${stepper('Age',p.age+' yrs',"adj('age',-1)","adj('age',1)")}${stepper('Height',p.h+' cm',"adj('h',-1)","adj('h',1)")}${stepper('Weight',p.w+' kg',"adj('w',-1)","adj('w',1)")}
+ <div style="display:flex;align-items:baseline;gap:8px;margin-top:10px"><span style="flex:1">BMI</span><b style="font-size:22px">${b.toFixed(1)}</b><span class="forest" style="font-size:13px">${bmiLabel(b)}</span></div>`; }
+function about(){ return obPage(1,'Tell us about you','This helps Anurja read your numbers in context. It stays on your phone.',`<div class="formcard">${aboutFields()}</div>`,S.profile.name.trim()!==''); }
+function allergyFields(){ const p=S.profile; return `<div class="chips"><button class="chip ${!p.allergies.length&&!p.other?'on':''}" onclick="S.profile.allergies=[];S.profile.other='';render()">No allergies</button>${ALLERGIES.map(([k,n])=>`<button class="chip ${p.allergies.includes(k)?'on':''}" onclick="toggleAllergy('${k}')">${n}</button>`).join('')}</div>
+ <div class="lbl">Anything else?</div><input class="input" placeholder="For example, mushrooms" value="${esc(p.other)}" onchange="S.profile.other=this.value;render()">`; }
+function allergies(){ return obPage(2,'Any allergies?',"We'll keep these out of every food and snack we suggest.",`<div class="formcard">${allergyFields()}</div>`); }
+function opt(ic,t,s,on,fn){ return `<button class="opt ${on?'on':''}" onclick="${fn}"><div class="ico">${ic}</div><div><b>${t}</b><small>${s}</small></div><div class="radio">${on?'✓':''}</div></button>`; }
+const ITYPES=[['rapid','Rapid-acting','Taken around meals','⚡'],['basal','Long-acting (basal)','Once or twice a day','🕐'],['both','Both','Basal plus meal-time doses','🗂️'],['pump','Insulin pump','Continuous delivery','💉']];
+function insulinQ(){ const p=S.profile; return obPage(3,'Do you take insulin?','If you do, Anurja adds a quick way to log the units you take next to your meals.',
+ opt('💉','Yes, I take insulin','Show insulin logging next to meals',p.insulin,"S.profile.insulin=true;S.profile.itype=S.profile.itype||'rapid';render()")+
+ opt('✕','No','You can turn it on later in Me',!p.insulin,"S.profile.insulin=false;S.profile.itype=null;render()")+
+ (p.insulin?`<div style="font-weight:600;margin-top:12px">Which kind?</div>`+ITYPES.map(([k,t,s,i])=>opt(i,t,s,p.itype===k,`S.profile.itype='${k}';render()`)).join(''):'')+
+ `<p style="font-size:13px;margin-top:12px">Log only what you actually took. Anurja never suggests a dose.</p>`); }
+function medFields(){ const p=S.profile; return `<div class="lbl" style="margin-top:0">Common prescriptions</div>
+ <div class="chips">${MEDS.map(m=>`<button class="chip ${p.meds.some(x=>x.name===m)?'on':''}" onclick="toggleMed('${m}')">${m}</button>`).join('')}</div>
+ <div style="display:flex;gap:8px;margin-top:10px"><input class="input" id="custommed" placeholder="Another medicine" style="margin:0"><button class="plus" style="width:46px;height:46px;font-size:22px" onclick="addMed()">+</button></div>
+ ${p.meds.map((m,i)=>`<div style="background:#fff;border-radius:18px;padding:12px;margin-top:10px"><div style="display:flex;justify-content:space-between"><b>${esc(m.name)}</b><button style="border:0;background:none;color:var(--terra);cursor:pointer" onclick="S.profile.meds.splice(${i},1);render()">🗑</button></div>
+  <div style="display:flex;gap:8px;margin-top:6px"><input class="input" style="margin:0;background:var(--cream);border:0" placeholder="Dose, e.g. 500 mg" value="${esc(m.dose)}" onchange="S.profile.meds[${i}].dose=this.value">
+  <select class="dd" style="margin:0" onchange="S.profile.meds[${i}].timing=this.value">${['Morning','With meals','Night','Twice a day'].map(t=>`<option ${m.timing===t?'selected':''}>${t}</option>`).join('')}</select></div></div>`).join('')}`; }
+function medicines(){ return obPage(4,'Your prescribed medicine','Add what your doctor prescribed. Anurja only keeps the list; it never changes or suggests doses.',`<div class="formcard">${medFields()}</div>`); }
+function allset(){ const p=S.profile, b=bmi(); const al=[...p.allergies.map(k=>ALLERGIES.find(a=>a[0]===k)[1]),...(p.other?[p.other]:[])];
+ const row=(i,t,v)=>`<div style="display:flex;gap:10px;padding:7px 0;align-items:baseline"><span style="width:24px">${i}</span><span class="muted" style="font-size:15px">${t}</span><b style="margin-left:auto;text-align:right;font-size:15px">${esc(v)}</b></div>`;
+ return `<div class="view"><div class="bgcircle"></div><div class="pad"><button class="back" style="color:var(--terra)" onclick="backStage()">‹</button>
+ <div style="width:150px;height:150px;border-radius:50%;background:var(--pale);display:grid;place-items:center;margin:0 auto"><img src="${LOGO}" alt="" style="width:126px;height:126px;border-radius:50%"></div>
+ <h1 class="serif" style="color:var(--maroon);margin-top:14px">You're all set${first()?', '+esc(first()):''}</h1>
+ <p style="color:var(--forest);font-size:16px">Here is what Anurja will watch for. You can change any of it from Me.</p>
+ <div class="card">${row('🎯','Fasting target','70–130 mg/dL')}${row('🍴','After meals','under 180 mg/dL')}${row('🧍','BMI',b.toFixed(1)+' · '+bmiLabel(b))}${row('⚠️','Allergies',al.length?al.join(', '):'None')}${row('💉','Insulin',p.insulin?'Yes':'No')}${row('💊','Medicines',p.meds.length?p.meds.map(m=>m.name).join(', '):'None added')}</div>
+ <div style="flex:1;min-height:12px"></div><button class="btn" onclick="finish()">Go to my dashboard <span>→</span></button></div></div>`; }
+
+// ---------------------------------------------------------------- main tabs
+function home(){
+  const pts=within(S.range==='twelve'?12:S.range==='day'?24:168), g=S.points[S.points.length-1].v, prev=S.points[S.points.length-2].v;
+  const arrow=g-prev>3?'↗':g-prev<-3?'↘':'→', a=activity(), ft=forecastTone(), h=new Date().getHours();
+  const greet=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+(first()?', '+esc(first()):'');
+  const acts=ACTIONS[a.status], warn=a.status==='high'||a.status==='low';
+  const lastMeal=S.meals[0];
+  return `<div class="scroll">${header(greet,'Your rhythm today')}
+  <div class="card"><div style="display:flex;align-items:baseline;gap:6px"><span class="big">${Math.round(g)}</span><span class="muted">mg/dL</span><span class="terra" style="font-size:20px;font-weight:700">${arrow}</span>
+   <div style="margin-left:auto;text-align:right"><b class="forest" style="font-size:24px">${tir(pts)}%</b><div class="muted" style="font-size:12px">Time in Target range</div></div></div>
+   <div class="seg">${[['twelve','12 hr'],['day','24 hr'],['week','1 week']].map(([k,t])=>`<button class="${S.range===k?'on':''}" onclick="S.range='${k}';render()">${t}</button>`).join('')}</div>
+   <div style="margin-top:8px">${chart(pts,S.range,130,{axes:true})}</div></div>
+  <div class="pillchip"><span class="terra">${TONE[ft.tone][0]}</span>${TONE[ft.tone][1]}<small>${a.low}–${a.high} mg/dL</small></div>
+  <div class="card"><div style="display:flex;gap:10px"><div class="badge" style="background:${warn?'var(--terra)':'var(--sand)'};color:${warn?'#fff':'var(--forest)'}">${a.status==='low'?'↓':a.status==='high'?'↑':a.status==='rising'?'↗':'✓'}</div>
+   <div><div class="muted" style="font-size:12px">Right now</div><b style="font-size:17px">${STATUS_TITLE[a.status]}</b><div class="forest" style="font-size:13px">${a.fasting?`Fasting target ${a.low}–${a.high} mg/dL`:`After-meal target under ${a.high} mg/dL`}</div></div></div>
+   ${acts.map(x=>`<div class="act"><span style="font-size:20px">${x[0]}</span><div style="flex:1"><b>${x[1]}</b><small>${x[2]}</small></div>${x[3]?`<button class="mini" style="border:0;background:none;font-size:24px;cursor:pointer" onclick="openCoach('squat')">▶️</button>`:''}</div>`).join('')}
+   ${a.status==='low'?'<div class="tiny">Follow your care team\'s plan for lows.</div>':''}<div class="tiny" style="margin-top:6px">Activity model · ${(a.conf*100).toFixed(0)}% confident</div></div>
+  <div class="row"><div class="stat"><b>${gmi(S.points).toFixed(1)}%</b><span class="l">Est. GMI</span><small>↓ 0.1 vs last month</small></div>
+   <div class="stat"><b>${S.stepsToday.toLocaleString()}</b><span class="l">Steps</span><small>Today</small></div>
+   <div class="stat"><b>${S.kcal}</b><span class="l">Calories</span><small>Active kcal, Health</small></div></div>
+  ${lastMeal?`<div class="card" style="cursor:pointer" onclick="openInsight('${lastMeal.id}')"><div class="muted" style="font-size:13px">Latest insight</div><b style="font-size:17px">${riseTitle(lastMeal.rise)} after ${esc(food(lastMeal.foodId).name.toLowerCase())}</b></div>`:''}
+  <button class="btn" onclick="openAdd()">Log a meal <span>→</span></button>
+  <div class="tiny">Predictions are estimates, not medical advice.</div></div>`;
+}
+function trends(){
+  const r=S.trange, pts=within(r==='twelve'?12:r==='day'?24:168), ft=forecastTone(), pk=peaks(pts);
+  const tf=t=>r==='week'?new Date(t).toLocaleString('en',{weekday:'short',hour:'numeric',minute:'2-digit'}):fmtTime(t);
+  const today=S.meals.filter(m=>new Date(m.date).toDateString()===new Date().toDateString());
+  const ti=S.insulin.filter(m=>new Date(m.date).toDateString()===new Date().toDateString());
+  return `<div class="scroll">${header('Trends',r==='twelve'?'Last 12 hours':r==='day'?'Last 24 hours':'Last 7 days')}
+  <div class="seg">${[['twelve','12 hr'],['day','24 hr'],['week','1 week']].map(([k,t])=>`<button class="${r===k?'on':''}" onclick="S.trange='${k}';render()">${t}</button>`).join('')}</div>
+  <div class="card"><b style="font-size:15px">Glucose trend (mg/dL)</b><div style="margin-top:8px">${chart(pts,r,230,{axes:true,unit:true,forecast:r==='week'?[]:ft.fc,meals:S.meals})}</div>
+   ${r!=='week'?'<div class="tiny" style="margin-top:4px">- - - Predicted direction</div>':''}</div>
+  <div class="row"><div class="stat"><b>${tir(pts)}%</b><small>Time in Target range</small></div><div class="stat"><b>${Math.round(mean(pts))} mg/dL</b><small>average</small></div><div class="stat"><b>${gmi(pts).toFixed(1)}%</b><small>Est. GMI</small></div></div>
+  <div class="row"><div class="card"><div class="muted" style="font-size:13px">Highest peak</div><b style="font-size:26px">${Math.round(pk.top.v)}</b> <span class="muted" style="font-size:12px">mg/dL</span><div class="terra" style="font-weight:600">↑ +${pk.up} mg/dL</div><div class="forest" style="font-size:13px">${tf(pk.top.t)}</div>${pk.meal?`<div class="muted" style="font-size:12px">After ${esc(food(pk.meal.foodId).name)}</div>`:''}</div>
+   <div class="card"><div class="muted" style="font-size:13px">Lowest peak</div><b style="font-size:26px">${Math.round(pk.bot.v)}</b> <span class="muted" style="font-size:12px">mg/dL</span><div class="terra" style="font-weight:600">↓ ${pk.down} mg/dL</div><div class="forest" style="font-size:13px">${tf(pk.bot.t)}</div></div></div>
+  <div class="card"><div class="muted" style="font-size:13px">Next hour</div><div style="display:flex;gap:8px;align-items:center"><span class="terra" style="font-size:22px">${TONE[ft.tone][0]}</span><b style="font-size:19px">${TONE[ft.tone][1]}</b></div><div class="forest">${TONE[ft.tone][2]}</div></div>
+  <div class="card"><b style="font-size:17px">Today's log</b>${!today.length&&!ti.length?'<p class="muted" style="font-size:14px">Nothing logged yet. Tap + to add a meal.</p>':''}
+   ${today.map(m=>`<div style="padding:6px 0"><div style="display:flex;justify-content:space-between;font-size:13px"><span class="muted">${fmtTime(m.date)}</span><b class="forest">↑ ${m.rise} mg/dL rise</b></div><b>${esc(food(m.foodId).name)}</b><div class="muted" style="font-size:13px">${m.carbs} g carbs</div></div>`).join('')}
+   ${ti.map(l=>`<div style="display:flex;gap:8px;padding:4px 0;font-size:14px">💉 ${l.units} units · ${l.relationTitle}<span class="muted" style="margin-left:auto">${fmtTime(l.date)}</span></div>`).join('')}</div>
+  <div class="tiny">Shaded band is 70–180 mg/dL. Dots mark meals you logged.<br>Predictions are estimates, not medical advice.<br>Anurja is not a medical device and does not give dosing advice. Always follow your care team's guidance.</div></div>`;
+}
+function whatHelps(){
+  const meals=learning(), per=personaliser(meals);
+  const typ={servings:1,duration:'10–20 min',contexts:[],drink:'Water',sugar:0,sleep:7,stress:'Medium',hour:13};
+  const scored=FOODS.filter(safe).map(f=>({f,rise:Math.round(Math.max(0,per.adjust(f.id,popRise(f,typ))))})).sort((a,b)=>a.rise-b.rise);
+  const mains=scored.filter(s=>!['Snacks','Drinks','Sweets','Fruits'].includes(s.f.category)).slice(0,4);
+  const snack=scored.find(s=>s.f.category==='Snacks');
+  const g={}; meals.forEach(m=>(g[m.foodId]=g[m.foodId]||[]).push(m.rise));
+  const comps=Object.entries(g).map(([id,r])=>{const f=food(id), avg=Math.round(r.reduce((a,b)=>a+b)/r.length); const sw=scored.find(s=>s.f.category===f.category&&s.f.id!==id&&s.rise<avg); return {f,avg,sw};}).sort((a,b)=>b.avg-a.avg).slice(0,4);
+  const ctx=['At my desk','Screen on','On the move','Walked after','Lay down after'];
+  const habits=ctx.map(c=>{const w=meals.filter(m=>m.contexts.includes(c)).map(m=>m.rise), wo=meals.filter(m=>!m.contexts.includes(c)).map(m=>m.rise); if(!w.length||!wo.length) return null; const a=w.reduce((x,y)=>x+y)/w.length, b=wo.reduce((x,y)=>x+y)/wo.length; return {c,w:Math.round(a),d:Math.round(a-b)};}).filter(Boolean).sort((a,b)=>a.d-b.d);
+  const maxW=Math.max(80,...habits.map(h=>h.w));
+  return {per,html:`<h2 style="font-size:21px;margin:18px 0 0">What helps you</h2>
+  ${snack?`<div class="plan" style="background:var(--forest)"><div style="font-size:13px;opacity:.85">Suggested snack</div><b style="font-size:22px">${esc(snack.f.name)}</b><div style="font-size:14px">${esc(snack.f.serving)} · keeps your glucose level steadier between meals</div><div style="font-size:13px;font-weight:600;opacity:.9;margin-top:4px">Expected ↑ ${snack.rise} mg/dL</div></div>`:''}
+  <div class="card"><b style="font-size:17px">Your meals compared</b>${comps.map(c=>`<div style="background:var(--cream);border-radius:16px;padding:12px;margin-top:8px"><div style="display:flex;justify-content:space-between"><b style="font-size:15px">${esc(c.f.name)}</b><b class="terra" style="font-size:14px">↑ ${c.avg} mg/dL</b></div><div style="font-size:13px" class="${c.sw?'forest':'muted'}">${c.sw?`Try ${esc(c.sw.f.name)}: about ${c.avg-c.sw.rise} mg/dL lower glucose level`:'Already one of your steadier choices'}</div></div>`).join('')}</div>
+  <div class="card"><b style="font-size:17px">Foods that keep your glucose level steady</b>${mains.map(s=>`<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:15px"><span>${esc(s.f.name)}</span><b class="forest" style="font-size:14px">↑ ${s.rise} mg/dL</b></div>`).join('')}</div>
+  ${habits.length?`<div class="card"><b style="font-size:17px">Average rise by habit</b>${habits.map(h=>`<div style="margin-top:8px;font-size:13px">${h.c}<div style="display:flex;align-items:center;gap:6px"><div style="height:16px;border-radius:4px;background:${h.d>0?'var(--terra)':'var(--forest)'};width:${h.w/maxW*80}%"></div><span class="muted">${h.w}</span></div></div>`).join('')}
+   ${habits[0].d<0?`<p class="forest" style="font-size:14px">“${habits[0].c}” keeps your glucose level about ${-habits[0].d} mg/dL lower.</p>`:''}</div>`:''}
+  <div class="tiny">${per.count?`Learned from ${per.count} meals by Anurja's on-device model (typical error ±6 mg/dL). Suggestions skip your allergies.`:''}</div>`};
+}
+function meals(){
+  const today=S.meals.filter(m=>new Date(m.date).toDateString()===new Date().toDateString());
+  const carbs=today.reduce((a,m)=>a+m.carbs,0), tgt=S.profile.carbTarget, recent=(S.meals.length?S.meals:SAMPLE_MEALS).slice(0,5);
+  const last=S.insulin[0];
+  return `<div class="scroll">${header('Meals','Tell us what you eat and how it sits with you. No right answers, nothing to fix.')}
+  <button onclick="openAdd()" style="display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--terra);color:#fff;border-radius:26px;min-height:72px;padding:0 16px;margin-top:12px;cursor:pointer;font-family:inherit;text-align:left">
+   <span style="width:40px;height:40px;border-radius:50%;background:#fff;color:var(--terra);display:grid;place-items:center;font-size:24px;font-weight:700">+</span><span style="flex:1"><b style="font-size:18px;display:block">Add meal</b><small style="opacity:.85">Camera or food library</small></span><span>📷</span></button>
+  ${S.profile.insulin?`<div class="card" style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:12px" onclick="openSheet('insulin')"><div class="ico" style="width:44px;height:44px;font-size:18px">💉</div><div style="flex:1"><b>Took insulin?</b><div class="muted" style="font-size:13px">${last?`Last: ${last.units} units at ${fmtTime(last.date)} · ${last.relationTitle}`:'Log the time, units and whether it was before or after a meal.'}</div></div><span style="background:var(--terra);color:#fff;border-radius:20px;padding:9px 14px;font-weight:600;font-size:14px;white-space:nowrap">Log units</span></div>`:''}
+  <div class="card"><b style="font-size:17px">Carbs today</b><div><b style="font-size:28px">${carbs} g</b> <span class="muted">of ${tgt} g target</span></div><div class="bar"><i style="width:${Math.min(100,carbs/tgt*100)}%;background:${carbs>tgt?'var(--terra)':'var(--forest)'}"></i></div></div>
+  <div class="card"><b style="font-size:17px">How your meals landed</b>${recent.map(m=>`<div class="listrow" onclick="openInsight('${m.id}')"><div class="thumb">${m.photo?'📸':'🍽️'}</div><div style="flex:1"><b style="font-size:15px">${esc(food(m.foodId).name)}</b><div class="muted" style="font-size:12px">${new Date(m.date).toLocaleString('en',{weekday:'short',hour:'numeric',minute:'2-digit'})}</div></div><b style="font-size:14px;color:${m.rise>=55?'var(--terra)':'var(--forest)'}">↑ ${m.rise} mg/dL rise</b></div>`).join('')}
+   ${S.meals.length?'':'<div class="tiny">Sample meals until you\'ve logged your own.</div>'}</div>
+  ${whatHelps().html}</div>`;
+}
+const PLAN_TITLES=[p=>`A ${p.start}-minute walk after lunch`,p=>'10 squats before dinner',p=>'A glass of water before meals'];
+const PLAN_REASON=[null,'Big leg muscles use glucose well. Short, guided sets are an easy way in.','A tiny pre-meal pause slows the first bites and is easy to repeat.'];
+function nextGoal(){ const m=learning(); const rice=m.filter(x=>['rice_dal','veg_biryani','idli','khichdi','jeera_rice','chicken_biryani','curd_rice'].includes(x.foodId)).length;
+  if(rice*2>=m.length) return ['Dietary focus','Vegetables over rice','Fill half your plate with vegetables or dal and eat them first, then a smaller portion of rice.'];
+  return ['Movement focus','A 10-minute walk after meals','Walking within 30 minutes of eating helps your muscles use the glucose from the meal.']; }
+const EX=[['squat','Bodyweight squat','Big leg muscles soak up glucose. Side-on to the camera.','🏋️',['Feet shoulder-width','Sit back and down','Chest tall','Stand up fully'],160,100,8],
+ ['chairStand','Chair sit-to-stand','Gentle start using a chair. Side-on to the camera.','🪑',['Sit at the front of the chair','Feet flat, hip-width','Lean forward and stand','Sit back down slowly'],160,110,10],
+ ['lunge','Split squat','One foot forward, lower the back knee. Side-on to the camera.','🦵',['One foot forward, one back','Lower the back knee','Front knee over the ankle','Push back up'],160,105,6],
+ ['march','Knee-raise march','Lift your knees to hip height. Face the camera.','🚶',['Stand tall','Lift one knee to hip height','Lower it with control','Switch legs'],160,115,16],
+ ['wallPushup','Wall push-up','Hands on a wall, bend your elbows. Side-on to the camera.','🧱',['Hands on the wall at shoulder height','Body in a straight line','Bend elbows, chest to the wall','Push back to straight arms'],155,105,10],
+ ['curl','Arm curl','Light weights or a water bottle. Face the camera.','💪',['Elbows by your sides','Curl up slowly','Squeeze at the top','Lower with control'],150,55,8],
+ ['press','Overhead press','Hands at shoulders, press up. Face the camera.','🙆',['Hands at shoulders','Press straight up','Arms fully straight','Lower to shoulders'],160,85,8],
+ ['lateralRaise','Side arm raise','Arms out to the side to shoulder height. Face the camera.','🤸',['Arms by your sides','Raise out to shoulder height','Pause for a breath','Lower slowly'],155,105,8]];
+function habits(){
+  const p=S.plan, done=S.checkins.filter(c=>c.did!=='Not today').length, ng=nextGoal();
+  const diff=[['easy','Not really'],['okay','A little'],['hard','Yes, it was']];
+  return `<div class="scroll">${header('Build gentler habits','One small change at a time, at your pace.')}
+  <div class="plan"><div style="font-size:13px;opacity:.85">Your change right now</div><b style="font-size:23px">${PLAN_TITLES[p.variant](p)}</b>${PLAN_REASON[p.variant]?`<div style="font-size:15px">${PLAN_REASON[p.variant]}</div>`:''}<hr>
+   <div style="display:flex;gap:40px"><div><small style="opacity:.8">Start with</small><b style="display:block">${p.variant===1?Math.max(1,p.start/5|0)+' set':p.start+' minutes'}</b></div><div><small style="opacity:.8">Grow into</small><b style="display:block">${p.variant===1?Math.max(2,p.grow/5|0)+' sets':p.grow+' minutes'}</b></div></div>
+   <div style="font-size:13px;margin-top:8px">3 times this week · aiming for a couple of times, then most days</div><div style="font-size:13px;opacity:.9">Done ${done} times this week</div></div>
+  <div class="card" style="display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openSheet('next')"><div class="ico" style="width:48px;height:48px">🚩</div><div style="flex:1"><b style="font-size:17px">Your next step</b><div class="muted" style="font-size:13px">${ng[1]}</div></div><span class="terra">›</span></div>
+  <div class="card"><b style="font-size:17px">Walk after lunch</b><div class="forest" style="font-size:13px;margin-top:4px">🚶 Motion detected: ${S.steps.toLocaleString()} steps after your last meal</div>
+   <div class="muted" style="font-size:13px;margin-top:6px">Did you do it?</div>${['Yes','A little','Not today'].map(v=>`<button class="chip ${S.did===v?'on':''}" style="margin:8px 6px 0 0" onclick="S.did='${v}';render()">${v}</button>`).join('')}
+   <div style="font-weight:700;margin-top:12px">How did you feel?</div>${['Fine','Lighter','Same','Heavy','Sleepy'].map(v=>`<button class="chip ${S.feel===v?'on':''}" style="margin:8px 6px 0 0" onclick="S.feel='${v}';render()">${v}</button>`).join('')}
+   <div style="font-weight:700;margin-top:12px">Was it difficult?</div>${diff.map(([k,v])=>`<button class="chip ${S.effort===k?'on':''}" style="margin:8px 6px 0 0" onclick="S.effort='${k}';render()">${v}</button>`).join('')}</div>
+  <div style="background:var(--sand);border-radius:22px;padding:16px;margin-top:12px;cursor:pointer" onclick="openSheet('review')"><b style="font-size:17px">Fortnightly review</b><div class="muted" style="font-size:13px">Keep it, grow it or swap it.</div></div>
+  <button class="btn" onclick="saveCheckin(this)">Save check-in <span>›</span></button>
+  <h2 style="font-size:21px;margin-top:18px">Strength & movement</h2><p class="sub">Guided by your front camera. We check your form and count clean reps. Video never leaves your phone.</p>
+  ${EX.map(e=>`<div class="card" style="display:flex;align-items:center;gap:12px;cursor:pointer" onclick="openCoach('${e[0]}')"><div class="ico">${e[3]}</div><div style="flex:1"><b style="font-size:16px">${e[1]}</b><div class="muted" style="font-size:13px">${e[2]}</div></div><span style="font-size:26px;color:var(--terra)">▶</span></div>`).join('')}</div>`;
+}
+function me(){
+  const p=S.profile, b=bmi(), al=[...p.allergies.map(k=>ALLERGIES.find(a=>a[0]===k)[1]),...(p.other?[p.other]:[])];
+  const it=ITYPES.find(t=>t[0]===p.itype);
+  const row=(i,t,v)=>`<div style="display:flex;gap:10px;align-items:center;min-height:36px"><span style="width:28px">${i}</span><span>${t}</span><span class="muted" style="margin-left:auto;font-size:14px;text-align:right">${esc(v)}</span></div>`;
+  return `<div class="scroll">${header('Me','',false)}
+  <div class="card" style="display:flex;align-items:center;gap:14px"><div class="avatar" style="width:64px;height:64px;font-size:24px;font-weight:700">${esc((p.name.split(' ').filter(Boolean).slice(0,2).map(x=>x[0]).join('')||'A').toUpperCase())}</div><div style="flex:1"><b style="font-size:20px">${esc(p.name||'Add your name')}</b><div class="muted" style="font-size:14px">Age ${p.age} · BMI ${b.toFixed(1)}</div><div class="forest" style="font-size:13px">${bmiLabel(b)}</div></div><button class="link" style="width:auto" onclick="openSheet('edit')">Edit</button></div>
+  <div class="card"><b style="font-size:17px">Medical info</b>${row('⚠️','Allergies',al.length?al.join(', '):'None')}${row('💉','Insulin',p.insulin?'Yes · '+(it?it[1].toLowerCase():''):'No')}
+   <div style="margin-top:4px">💊&nbsp;&nbsp;Prescribed medicine</div>${p.meds.length?p.meds.map(m=>`<div style="display:flex;padding:4px 0 0 38px;font-size:14px"><b>${esc(m.name)}</b>&nbsp;<span class="muted">${esc(m.dose)}</span><span class="forest" style="margin-left:auto;font-size:13px">${m.timing}</span></div>`).join(''):'<div class="muted" style="padding-left:38px;font-size:14px">None added</div>'}</div>
+  <div class="card"><b style="font-size:17px">Your targets</b>${row('🌅','Fasting','70–130 mg/dL')}${row('🍴','After meals','under 180 mg/dL')}${stepper('Carbs per day',p.carbTarget+' g',"S.profile.carbTarget=Math.max(60,S.profile.carbTarget-10);render()","S.profile.carbTarget=Math.min(350,S.profile.carbTarget+10);render()")}<div class="tiny">Agree your targets with your care team.</div></div>
+  <div class="card"><b style="font-size:17px">Devices</b>${row('⌚','Apple Watch',S.watch==='connected'?'Connected':'Not connected')}${row('📡','CGM Device',S.cgm==='connected'?'Connected':'Not connected')}</div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">Notifications</b><label style="display:flex;gap:8px;align-items:center;font-size:14px">Activity suggestions <input type="checkbox" ${p.alerts?'checked':''} onchange="S.profile.alerts=this.checked" style="width:22px;height:22px;accent-color:var(--terra)"></label></div><div class="muted" style="font-size:13px;margin-top:6px">A pop-up with what to do when your glucose goes above or below your target range.</div></div>
+  <div class="card"><b style="font-size:17px">Data & sync</b><div class="muted" style="font-size:13px;margin-top:4px">Everything you log is saved in a database on this phone and synced to your Anurja server when it's reachable.</div><input class="input" value="http://localhost:8000" style="background:var(--cream);border:0"><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span class="forest" style="font-size:13px">Synced ${fmtTime(Date.now())} · ${S.meals.length+S.insulin.length+S.checkins.length+S.sessions.length} records</span><button class="link" style="width:auto">Sync now</button></div></div>
+  <div class="tiny">Language follows your iPhone settings<br><br>Anurja is not a medical device and does not give dosing advice. Always follow your care team's guidance.</div>
+  <button class="link" onclick="demo('restart')">Restart demo</button></div>`;
+}
+
+// ---------------------------------------------------------------- sheets
+function sheetWrap(inner, full){ return `<div class="sheet ${full?'full':''}" onclick="if(event.target===this)closeSheet()"><div class="body">${full?'':'<div class="grab"></div>'}${inner}</div></div>`; }
+function addFlow(){
+  const A=S.add; let title={choose:'Add meal',library:'Food library',camera:'Camera',recognising:'Looking at your plate',review:'Review meal'}[A.step], body='';
+  if(A.step==='choose'){
+    const recent=[...new Set(S.meals.map(m=>m.foodId))].slice(0,6);
+    body=`<p class="sub">Snap your plate or pick it from the library. You can adjust everything before saving.</p>
+    ${opt('📷','Camera','Take a photo and Anurja suggests the food',false,"S.add.step='camera';render()")}${opt('📚','Food library','Search or browse by category',false,"S.add.step='library';render()")}
+    ${recent.length?`<b style="display:block;margin-top:14px">Recent</b><div class="chips">${recent.map(id=>`<button class="chip" onclick="pickFood('${id}')">${esc(food(id).name)}</button>`).join('')}</div>`:''}`;
+  } else if(A.step==='camera'){
+    body=`<div style="background:#111;border-radius:26px;aspect-ratio:3/4;margin-top:12px;display:grid;place-items:center;color:#aaa;text-align:center;position:relative">
+     <div><div style="font-size:64px">🍛</div><div style="font-size:13px;margin-top:8px">Camera viewfinder (simulated)<br>Pick what's on the plate:</div>
+     <div class="chips" style="justify-content:center;padding:0 14px">${[['rice_dal','Rice & dal'],['masala_dosa','Dosa'],['roti_sabzi','Roti & sabzi'],['chicken_biryani','Biryani'],['salad_curd','Salad']].map(([id,n])=>`<button class="chip" style="color:#fff;border-color:#555" onclick="snap('${id}')">${n}</button>`).join('')}</div></div>
+     <button onclick="snap('rice_dal')" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:66px;height:66px;border-radius:50%;border:5px solid #fff;background:rgba(255,255,255,.3);cursor:pointer" aria-label="Take photo"></button></div>`;
+  } else if(A.step==='recognising'){
+    body=`<div style="text-align:center;padding-top:60px"><div style="font-size:70px">📸</div><p class="muted">Recognising on your phone…</p></div>`;
+  } else if(A.step==='library'){
+    const cats=[...new Set(FOODS.map(f=>f.category))]; const q=(A.q||'').toLowerCase();
+    const res=FOODS.filter(f=>(!A.cat||f.category===A.cat)&&(!q||f.name.toLowerCase().includes(q)||f.keywords.some(k=>k.includes(q))));
+    body=`<div style="display:flex;gap:8px;margin-top:10px"><input class="input" id="foodq" placeholder="🔍  Search foods, e.g. dosa" value="${esc(A.q||'')}" oninput="S.add.q=this.value;renderKeep('foodq')" style="margin-top:6px">
+     <select class="dd" onchange="S.add.cat=this.value||null;render()"><option value="">All</option>${cats.map(c=>`<option ${A.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+     ${res.length?'':'<p class="muted" style="font-size:14px">No match. Try another word or pick a category.</p>'}
+     ${res.map(f=>`<div class="food" onclick="pickFood('${f.id}')"><div><b>${esc(f.name)}</b><small>${esc(f.serving)} · ${f.category}</small></div><b class="forest" style="font-size:13px">${f.carbs} g carbs</b></div>`).join('')}`;
+  } else if(A.step==='review'){
+    const f=food(A.foodId), m=draft();
+    const pred=Math.round(Math.max(0,personaliser(learning()).adjust(f.id,popRise(f,m))));
+    const C=['At my desk','Screen on','On the move','Walked after','Lay down after'];
+    body=`<div class="card"><div style="display:flex;gap:12px;align-items:center">${A.photo?'<div class="thumb" style="width:72px;height:72px;font-size:34px;border-radius:16px">🍛</div>':''}<div><b style="font-size:20px">${esc(f.name)}</b><div class="muted" style="font-size:13px">${esc(f.serving)} per serving · ${f.category}</div></div></div>
+     ${A.cands?`<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span class="muted" style="font-size:14px">Is this right?</span><select class="dd" style="background:none;color:var(--terra)" onchange="setFood(this.value)">${A.cands.map(id=>`<option value="${id}" ${id===A.foodId?'selected':''}>${esc(food(id).name)}</option>`).join('')}<option disabled>──────</option>${FOODS.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}</select></div>`:''}
+     ${stepper('Portion',A.servings+' ×',"serv(-0.5)","serv(0.5)")}${stepper('Carbs, grams',A.carbs+' g',"S.add.carbs=Math.max(0,S.add.carbs-5);S.add.edited=true;render()","S.add.carbs+=5;S.add.edited=true;render()")}
+     <div class="tiny">Carbs are estimated from the library. Adjust if you know better.</div></div>
+     <div class="card" style="display:flex;gap:12px"><div class="ico" style="width:44px;height:44px;font-size:18px">✨</div><div><div class="muted" style="font-size:13px">What to expect</div><b style="font-size:17px">${riseTitle(pred)}, about ↑ ${pred} mg/dL</b><div class="forest" style="font-size:12px">${learning().length?`Personalised from ${learning().length} of your meals`:'Based on similar meals'}</div>${pred>=55?'<div class="forest" style="font-size:13px">A 10-minute walk after eating can flatten this.</div>':''}</div></div>
+     <div class="card"><div class="chips" style="margin-top:0">${['Under 10 min','10–20 min','Longer'].map(d=>`<button class="chip ${A.duration===d?'on':''}" onclick="S.add.duration='${d}';render()">${d}</button>`).join('')}${C.map(c=>`<button class="chip ${A.contexts.includes(c)?'on':''}" onclick="toggleCtx('${c}')">${c}</button>`).join('')}</div></div>
+     <div class="card"><b style="font-size:17px">With the meal</b><div class="chips">${['Tea','Coffee','Juice / soft drink','Water'].map(d=>`<button class="chip ${A.drink===d?'on':''}" onclick="S.add.drink=S.add.drink==='${d}'?null:'${d}';render()">${d}</button>`).join('')}</div>${stepper('Sugar, spoons',A.sugar,"S.add.sugar=Math.max(0,S.add.sugar-1);render()","S.add.sugar=Math.min(6,S.add.sugar+1);render()")}</div>
+     <div style="padding:12px 4px 0"><b class="forest" style="font-size:17px">How do you feel now?</b><div class="muted" style="font-size:13px">An hour or two after is best</div><div class="chips">${['Fine','Heavy','Bloated','Acidity','Sleepy','Hungry soon'].map(x=>`<button class="chip g ${A.feel.includes(x)?'on':''}" onclick="toggleFeel('${x}')">${x}</button>`).join('')}</div></div>
+     <div class="card"><b style="font-size:17px">Around this meal</b>${stepper('Sleep last night',Math.floor(A.sleep)+' h '+(A.sleep%1?30:0)+' m',"S.add.sleep=Math.max(2,S.add.sleep-.5);render()","S.add.sleep=Math.min(12,S.add.sleep+.5);render()")}
+      <div class="lbl">Stress today</div><div class="chips">${['Low','Medium','High'].map(x=>`<button class="chip ${A.stress===x?'on':''}" onclick="S.add.stress='${x}';render()">${x}</button>`).join('')}</div>
+      <div style="display:inline-block;background:var(--terra);color:#fff;border-radius:22px;padding:11px 14px;font-weight:600;margin-top:10px">From sensor: ↑ ${sensorRise()} mg/dL</div></div>
+     <button class="btn" onclick="saveMeal()">Save this meal <span>›</span></button><div style="height:20px"></div>`;
+  }
+  const back=A.step!=='choose'?`<button class="x" onclick="S.add.step=(S.add.step==='review'&&!S.add.photo&&!S.add.fromRecent)?'library':'choose';render()">‹</button>`:'';
+  return sheetWrap(`<div style="display:flex;align-items:center;gap:8px">${back}<h1 style="font-size:28px;flex:1">${title}</h1><button class="x" onclick="closeSheet()">✕</button></div>${body}`, true);
+}
+function insulinSheet(){
+  const I=S.ins, link=linkInsulin(I.time), rel=I.override||link.rel;
+  const local=new Date(I.time-new Date().getTimezoneOffset()*60e3).toISOString().slice(0,16);
+  const RT={pre_meal:'Before a meal',post_meal:'After a meal',activity:'Around activity',standalone:'Not linked'};
+  return sheetWrap(`<div style="display:flex;align-items:center"><h1 style="font-size:28px;flex:1">Log insulin</h1><button class="x" onclick="closeSheet()">✕</button></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>When did you take it?</span><input type="datetime-local" value="${local}" onchange="S.ins.time=new Date(this.value).getTime();render()" style="border:0;background:var(--sand);border-radius:10px;padding:8px;font-family:inherit"></div>
+   ${stepper('Units taken',I.units,"S.ins.units=Math.max(.5,S.ins.units-.5);render()","S.ins.units=Math.min(100,S.ins.units+.5);render()")}</div>
+  <div class="card"><b style="font-size:17px">Linked to</b><div class="forest" style="font-size:14px;margin-top:4px">${link.text}</div>
+   <div class="chips">${Object.entries(RT).map(([k,v])=>`<button class="chip ${rel===k?'on':''}" onclick="S.ins.override='${k}'===('${link.rel}')?null:'${k}';render()">${v}</button>`).join('')}</div>
+   <div class="tiny">Anurja matches the time with your meals and activity. Tap to change it.</div></div>
+  <p class="muted" style="font-size:13px">Log only what you actually took. Anurja never suggests a dose.</p>
+  <button class="btn" onclick="saveInsulin('${RT[rel]}','${rel}')">Save insulin <span>✓</span></button>`);
+}
+function linkInsulin(t){
+  const nm=m=>food(m.foodId).name;
+  const before=S.meals.map(m=>[m,(m.date-t)/60e3]).filter(x=>x[1]>=0&&x[1]<=45).sort((a,b)=>a[1]-b[1])[0];
+  const after=S.meals.map(m=>[m,(t-m.date)/60e3]).filter(x=>x[1]>=0&&x[1]<=120).sort((a,b)=>a[1]-b[1])[0];
+  if(before&&(!after||before[1]<=after[1])) return {rel:'pre_meal',text:`Taken ${Math.round(before[1])} min before ${nm(before[0])}`};
+  if(after) return {rel:'post_meal',text:`Taken ${Math.round(after[1])} min after ${nm(after[0])}`};
+  const act=[...S.sessions.map(s=>s.date),...S.checkins.map(c=>c.date)].map(d=>Math.abs(d-t)/60e3).filter(x=>x<=60);
+  if(act.length) return {rel:'activity',text:`Within ${Math.round(Math.min(...act))} min of your exercise`};
+  return {rel:'standalone',text:'No meal or activity close by'};
+}
+function insightSheet(){
+  const m=[...S.meals,...SAMPLE_MEALS].find(x=>x.id===S.insightId), f=food(m.foodId), items=[], sug=[];
+  if(m.duration==='Under 10 min'){items.push(['🐇','Eaten quickly','Meals under 10 minutes tend to give a faster, higher rise.',2]);sug.push('Put your fork down between bites; aim for 15 minutes.');}
+  if(m.contexts.includes('Screen on')||m.contexts.includes('On the move')){items.push(['📱','Distracted eating','Screens and eating on the move make it easier to miss fullness cues.',1]);sug.push('Keep screens away for the first five minutes of the meal.');}
+  if(m.sugar>0||m.drink==='Juice / soft drink'){items.push(['💧','Sweet drink with the meal','Sugar in tea, juice or soft drinks reaches your blood quickly.',3]);sug.push('Swap the sweet drink for water or unsweetened tea with this meal.');}
+  if(m.contexts.includes('Lay down after')) items.push(['🛏️','Lying down right after','Staying still gives your muscles no chance to use the glucose.',2]);
+  if(m.contexts.includes('Walked after')) items.push(['🚶','You walked afterwards','Light movement after eating usually flattens the curve. Nicely done.',1]); else sug.push('Take a 5-minute walk within 30 minutes after eating.');
+  if(m.sleep<6) items.push(['🌙','Short sleep','A night under 6 hours can make your body respond less smoothly to food.',2]);
+  if(m.stress==='High'){items.push(['〰️','High stress today','Stress hormones can nudge glucose up on their own.',2]);sug.push('Three slow breaths before eating can help you settle.');}
+  if(!items.length) items.push(['✓','Nothing stands out','This meal looks balanced. We will keep learning your pattern.',1]);
+  return sheetWrap(`<h1 class="serif" style="color:var(--maroon)">${riseTitle(m.rise)}</h1><p class="forest" style="font-size:15px">Your glucose moved ↑ ${m.rise} mg/dL around this meal. Here is what may have played a part.</p>
+  <div class="card"><b>${esc(f.name)} · ${m.carbs??f.carbs} g carbs</b>${m.pred!=null?`<div class="muted" style="font-size:13px">Anurja expected ↑ ${m.pred} mg/dL; your sensor showed ↑ ${m.rise} mg/dL. Anurja learns from the difference.</div>`:''}</div>
+  ${items.map(i=>`<div class="card" style="display:flex;gap:12px"><div class="ico" style="width:44px;height:44px;font-size:18px">${i[0]}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><b>${i[1]}</b><span>${[0,1,2].map(k=>`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:3px;background:${k<i[3]?'var(--terra)':'var(--sand)'}"></span>`).join('')}</span></div><div class="muted" style="font-size:13px">${i[2]}</div></div></div>`).join('')}
+  ${sug.length?`<b style="display:block;margin-top:14px;font-size:17px">Gentle things to try</b>${sug.slice(0,4).map(s=>`<div style="background:rgba(238,226,214,.65);border-radius:18px;padding:14px;margin-top:8px;font-size:14px">${s}</div>`).join('')}`:''}
+  <div class="tiny">Anurja is not a medical device and does not give dosing advice. Always follow your care team's guidance.</div>
+  ${S.profile.insulin?`<button class="btn" style="background:none;color:var(--terra);border:1.5px solid var(--terra);justify-content:center" onclick="openSheet('insulin')">💉 Log insulin for this meal</button>`:''}
+  <button class="btn" onclick="closeSheet();go('habits')">Build this into a habit <span>→</span></button><button class="link" onclick="closeSheet()">Done</button>`);
+}
+function nextSheet(){ const g=nextGoal(), p=S.plan;
+  return sheetWrap(`<div style="display:flex;align-items:center"><h1 style="flex:1">Your next step</h1><button class="x" onclick="closeSheet()">✕</button></div>
+  <div class="plan"><div style="font-size:13px;opacity:.85">Right now</div><b style="font-size:23px">${PLAN_TITLES[p.variant](p)}</b><div style="font-size:14px">Start with ${p.start} minutes, grow into ${p.grow} minutes.</div></div>
+  <div class="card"><b style="font-size:17px">Next Goal</b><div class="muted" style="font-size:13px;margin-top:4px">${g[0]}</div><b class="forest" style="font-size:20px">${g[1]}</b><div style="font-size:14px;margin-top:4px">${g[2]}</div></div>
+  <div class="card"><b style="font-size:17px">Remind me</b><div class="chips">${[['nextMeal','Next meal'],['tomorrow','Tomorrow morning'],['off','Off']].map(([k,v])=>`<button class="chip ${S.reminder===k?'on':''}" onclick="S.reminder='${k}';render()">${v}</button>`).join('')}</div>${S.reminder!=='off'?'<div class="tiny">We\'ll send a gentle nudge. You can turn it off any time.</div>':''}</div>`); }
+function reviewSheet(){ return sheetWrap(`<h1>Fortnightly review</h1><p class="forest" style="font-size:16px">You checked in ${S.checkins.length} times and found it hard ${S.checkins.filter(c=>c.effort==='hard').length} times. Whatever you pick is the right call.</p>
+  ${opt('✔︎','Keep it','Continue with this same change',false,'closeSheet()')}${opt('↗','Grow it','Take the next size up',false,"S.plan.start=S.plan.grow;S.plan.grow+=5;closeSheet()")}${opt('⟳','Swap it','Try a different gentle change',false,"S.plan.variant=(S.plan.variant+1)%3;S.plan.start=5;S.plan.grow=10;closeSheet()")}`); }
+function editSheet(){ return sheetWrap(`<div style="display:flex;align-items:center"><h1 style="flex:1;font-size:26px">Edit profile</h1><button class="link" style="width:auto" onclick="closeSheet()">Done</button></div>
+  <div class="card"><b style="font-size:17px">About you</b>${aboutFields()}</div><div class="card"><b style="font-size:17px">Allergies</b>${allergyFields()}</div>
+  <div class="card"><label style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">I take insulin</b><input type="checkbox" ${S.profile.insulin?'checked':''} onchange="S.profile.insulin=this.checked;S.profile.itype=this.checked?'rapid':null;render()" style="width:22px;height:22px;accent-color:var(--terra)"></label></div>
+  <div class="card"><b style="font-size:17px">Prescribed medicine</b><div style="margin-top:8px">${medFields()}</div></div>`); }
+
+// ---------------------------------------------------------------- coach
+function stickSVG(kind, p, color){
+  const L=(a,b,c)=>a+(b-a)*c, P=(x,y)=>[x,y], lp=(a,b)=>[L(a[0],b[0],p),L(a[1],b[1],p)];
+  let seg=[], head=[0,3.5], props=[];
+  const squat=q=>{const sh=35*q*Math.PI/180,th=75*q*Math.PI/180,to=40*q*Math.PI/180,ar=85*q*Math.PI/180;const an=[-.1,0],kn=[an[0]+Math.sin(sh),Math.cos(sh)],hp=[kn[0]-Math.sin(th),kn[1]+Math.cos(th)],so=[hp[0]+1.1*Math.sin(to),hp[1]+1.1*Math.cos(to)],ha=[so[0]+.8*Math.sin(ar),so[1]-.8*Math.cos(ar)];return {seg:[[an,kn],[kn,hp],[hp,so],[so,ha]],head:[so[0]+.4*Math.sin(to),so[1]+.4*Math.cos(to)]};};
+  const torso=()=>[[P(-.5,3),P(.5,3)],[P(0,3),P(0,1.6)],[P(0,1.6),P(-.3,0)],[P(0,1.6),P(.3,0)]];
+  if(kind==='squat'||kind==='chairStand'){const r=squat(kind==='squat'?p:p*.8);seg=r.seg;head=r.head;if(kind==='chairStand')props=[[P(-1.25,1.1),P(-.4,1.1)],[P(-1.25,1.1),P(-1.25,0)],[P(-.45,1.1),P(-.45,0)],[P(-1.25,1.1),P(-1.25,2.3)]];}
+  else if(kind==='lunge'){const hip=lp(P(0,1.95),P(0,1.4)),fk=lp(P(.4,1),P(.78,.8)),bk=lp(P(-.42,1),P(-.6,.4)),sh=[hip[0]+.05,hip[1]+1.1];seg=[[P(.75,0),fk],[fk,hip],[P(-.85,0),bk],[bk,hip],[hip,sh],[sh,[sh[0]+.1,sh[1]-.85]]];head=[sh[0]+.05,sh[1]+.4];}
+  else if(kind==='wallPushup'){const ft=P(-.9,0),hd=P(1.35,2.6),sh=lp(P(.45,2.75),P(.9,2.55)),hp=[(ft[0]+sh[0])/2,(ft[1]+sh[1])/2],el=lp(P(.9,2.68),P(1.05,2.15)),dx=sh[0]-ft[0],dy=sh[1]-ft[1],l=Math.hypot(dx,dy);seg=[[ft,hp],[hp,sh],[sh,el],[el,hd]];head=[sh[0]+dx/l*.4,sh[1]+dy/l*.4];props=[[P(1.5,0),P(1.5,4.2)]];}
+  else if(kind==='march'){const kl=lp(P(-.28,.85),P(-.3,1.75)),fl=lp(P(-.3,0),P(-.35,.9));seg=[[P(-.5,3),P(.5,3)],[P(0,3),P(0,1.7)],[P(-.25,1.7),P(.25,1.7)],[P(-.25,1.7),kl],[kl,fl],[P(.25,1.7),P(.28,.85)],[P(.28,.85),P(.3,0)],[P(-.5,3),P(-.7,2.2)],[P(.5,3),P(.7,2.2)]];}
+  else if(kind==='lateralRaise'){seg=torso();const r=L(12,88,p)*Math.PI/180;for(const s of[-1,1]){const sh=P(.5*s,3);seg.push([sh,[sh[0]+s*.7*Math.sin(r),sh[1]-.7*Math.cos(r)]]);seg.push([[sh[0]+s*.7*Math.sin(r),sh[1]-.7*Math.cos(r)],[sh[0]+s*1.35*Math.sin(r),sh[1]-1.35*Math.cos(r)]]);}}
+  else {seg=torso();for(const s of[-1,1]){const sh=P(.5*s,3);if(kind==='press'){const el=[L(sh[0]+.6*s,sh[0]+.25*s,p),L(2.7,4,p)],wr=[L(sh[0]+.6*s,sh[0]+.15*s,p),L(3.7,5,p)];seg.push([sh,el],[el,wr]);}else{const c=140*p*Math.PI/180,el=[sh[0]+.1*s,2],wr=[el[0]-s*.3*Math.sin(c),el[1]-Math.cos(c)];seg.push([sh,el],[el,wr]);}}}
+  const m=q=>[(100+q[0]*50)*1.6,(260-q[1]*50)*1.2]; let s=`<svg viewBox="0 0 320 330" width="100%" style="display:block"><line x1="16" x2="304" y1="${m([0,0])[1]}" y2="${m([0,0])[1]}" stroke="#EEE2D6" stroke-width="3"/>`;
+  props.forEach(([a,b])=>{const A=m(a),B=m(b);s+=`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#EEE2D6" stroke-width="6" stroke-linecap="round"/>`});
+  seg.forEach(([a,b])=>{const A=m(a),B=m(b);s+=`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${color}" stroke-width="9" stroke-linecap="round"/><circle cx="${B[0]}" cy="${B[1]}" r="4.5" fill="#AA5A43"/>`});
+  const H=m(head); return s+`<circle cx="${H[0]}" cy="${H[1]}" r="17" fill="none" stroke="${color}" stroke-width="6"/></svg>`;
+}
+function coachScreen(){
+  const C=S.coach, e=EX.find(x=>x[0]===C.kind);
+  const top=`<div style="display:flex;align-items:center"><button class="x" onclick="closeCoach()">✕</button><b style="flex:1;text-align:center;font-size:19px">${e[1]}</b><span style="width:44px"></span></div>
+  <div class="seg"><button class="${C.mode==='demo'?'on':''}" onclick="coachMode('demo')">Watch demo</button><button class="${C.mode==='live'?'on':''}" onclick="coachMode('live')">Check my form</button></div>`;
+  let body;
+  if(C.mode==='demo') body=`<div class="card" style="padding:4px" id="stick"></div><div class="card">${e[4].map((c,i)=>`<div style="display:flex;gap:10px;align-items:center;min-height:42px"><span class="num">${i+1}</span>${c}</div>`).join('')}</div><button class="btn" onclick="coachMode('live')">Try it with the camera <span>📷</span></button>`;
+  else body=`<div class="coachstage"><div id="stick" style="position:absolute;inset:0;padding-top:40px"></div><div class="mv" id="mv">● Movement detected</div><div class="fb" id="fb">${C.fb}</div></div>
+   <div class="tiny">Camera unavailable here, running a simulated session</div>
+   <div class="card"><div style="display:flex;align-items:center"><div style="flex:1"><b style="font-size:28px" id="cnt">${C.count} / ${e[7]}</b><div class="muted" style="font-size:13px">clean reps</div></div><button class="mini" style="border:0;background:var(--terra);color:#fff;border-radius:24px;min-height:46px;padding:0 16px;font-weight:600;cursor:pointer" onclick="finishSet()">Finish set ✓</button></div><div class="bar"><i id="cbar" style="width:${C.count/e[7]*100}%;background:var(--terra)"></i></div></div>`;
+  return `<div class="view" style="z-index:50;background:var(--cream)"><div class="scroll" style="padding-bottom:30px">${top}${body}</div>${C.alert?`<div class="alert"><div><b>Nice work!</b><p>${C.count} clean reps. Muscles that just worked help your body use glucose.</p><button onclick="closeCoach(true)">Done</button></div></div>`:''}</div>`;
+}
+let raf=null;
+function coachLoop(){
+  const C=S.coach; if(!C){raf=null;return;} const e=EX.find(x=>x[0]===C.kind), el=document.getElementById('stick');
+  const t=(performance.now()-C.t0)/1000;
+  if(C.mode==='demo'){ if(el) el.innerHTML=stickSVG(C.kind,(1-Math.cos(2*Math.PI*t/3.2))/2,'#3B5B4B'); }
+  else {
+    const hi=e[5], lo=e[6], period=4, phase=(t%period)/period, cycle=Math.floor(t/period)+1, shallow=cycle%4===0;
+    const bottom=shallow?(hi+lo)/2+6:lo-4, ang=bottom+(hi+5-bottom)*(1+Math.cos(2*Math.PI*phase))/2;
+    const prog=Math.min(1,Math.max(0,(hi+5-ang)/(hi+5-(lo-4))));
+    if(el) el.innerHTML=stickSVG(C.kind,prog,'#FAF3EB');
+    // RepCounter (smoothing + full range + tempo)
+    const prev=C.sm??ang, a=prev+.45*(ang-prev); C.sm=a;
+    if(!C.inRep&&a<hi-15){C.inRep=true;C.reached=false;C.start=t;C.fb='Keep going…';}
+    if(C.inRep&&a<lo){C.reached=true;C.fb=({squat:'Good depth, now stand tall',chairStand:'Nice, now stand up tall',lunge:'Good depth, push back up',march:'Good height, lower slowly',wallPushup:'Nice, push back out',curl:'Nice squeeze, lower slowly',press:'Strong press, lower back down',lateralRaise:'Shoulder height, now lower slowly'})[C.kind];}
+    if(C.inRep&&a>hi){ if(C.reached){C.count++;C.fb=C.count>=e[7]?`Set complete! ${C.count} reps`:`Rep ${C.count}!`;} else C.fb=({squat:'Go a little lower next time',chairStand:'Stand all the way up, then sit',lunge:'Drop the back knee a little more',march:'Lift your knee a bit higher',wallPushup:'Bring your chest closer to the wall',curl:'Curl a bit higher',press:'Lower your hands to shoulder level',lateralRaise:'Raise your arms to shoulder height'})[C.kind]; C.inRep=false;C.reached=false;}
+    const fb=document.getElementById('fb'); if(fb) fb.textContent=C.fb;
+    const cnt=document.getElementById('cnt'); if(cnt) cnt.textContent=`${C.count} / ${e[7]}`;
+    const bar=document.getElementById('cbar'); if(bar) bar.style.width=Math.min(100,C.count/e[7]*100)+'%';
+  }
+  raf=requestAnimationFrame(coachLoop);
+}
+
+// ---------------------------------------------------------------- render + actions
+function tabbar(){ const T=[['home','⌂','Home'],['trends','▥','Trends'],['meals','🍴','Meals'],['habits','🌿','Habits'],['me','👤','Me']];
+  return `<div class="tabwrap"><div class="tabs">${T.map(([k,i,n])=>`<button class="${S.tab===k?'on':''}" onclick="go('${k}')"><span>${i}</span>${n}</button>`).join('')}</div><button class="plus" onclick="S.menu=!S.menu;render()" aria-label="Quick add">+</button></div>
+  ${S.menu?`<div class="menu"><button onclick="S.menu=false;openAdd()">🍴  Add meal</button>${S.profile.insulin?`<button onclick="S.menu=false;openSheet('insulin')">💉  Log insulin</button>`:''}<button onclick="S.menu=false;go('habits')">✅  Habit check-in</button><button onclick="S.menu=false;openCoach('squat')">🏋️  Coached exercise</button></div>`:''}`; }
+function render(){
+  const scr=document.getElementById('screen'); const keep=scr.querySelector('.scroll,.pad,.sheet .body'); const y=keep?keep.scrollTop:0;
+  let h=`<div class="island"></div><div class="status"><span>${new Date().toLocaleTimeString('en',{hour:'numeric',minute:'2-digit'}).replace(/ ?[AP]M/,'')}</span><span>●●● ▮</span></div>`;
+  if(S.stage!=='main') h+=({welcome,connect,about,allergies,insulin:insulinQ,medicines,allset})[S.stage]();
+  else {
+    h+=`<div class="view"><div class="bgcircle"></div>${({home,trends,meals,habits,me})[S.tab]()}</div>${tabbar()}`;
+    if(S.sheet==='add') h+=addFlow(); else if(S.sheet==='insulin') h+=insulinSheet(); else if(S.sheet==='insight') h+=insightSheet();
+    else if(S.sheet==='next') h+=nextSheet(); else if(S.sheet==='review') h+=reviewSheet(); else if(S.sheet==='edit') h+=editSheet();
+    if(S.coach) h+=coachScreen();
+  }
+  if(S.toast) h+=`<div class="toast" onclick="S.toast=null;go('home')"><img src="${LOGO}" alt=""><div><b>${S.toast.t}</b><p>${S.toast.b}</p></div></div>`;
+  scr.innerHTML=h;
+  const k2=scr.querySelector(S.sheet?'.sheet .body':'.scroll,.pad'); if(k2&&S._keepScroll) k2.scrollTop=y; S._keepScroll=false;
+  if(S.coach&&!raf) raf=requestAnimationFrame(coachLoop);
+}
+// keep scroll for in-place edits
+const _render=render; render=function(){ S._keepScroll=true; _render(); };
+function renderKeep(id){ const el=document.getElementById(id), pos=el.selectionStart; render(); const n=document.getElementById(id); n.focus(); n.setSelectionRange(pos,pos); }
+function refreshNext(){ const b=document.querySelector('.warm .btn'); if(b) b.disabled=S.profile.name.trim()===''; }
+function stage(s){ S.stage=s; S._keepScroll=false; _render(); }
+const ORDER=['welcome','connect','about','allergies','insulin','medicines','allset'];
+function nextStage(){ stage(ORDER[ORDER.indexOf(S.stage)+1]); }
+function backStage(){ stage(ORDER[ORDER.indexOf(S.stage)-1]); }
+function link(which){ S[which]='connecting'; render(); setTimeout(()=>{S[which]='connected';render();},which==='watch'?1200:1400); }
+function adj(k,d){ const lim={age:[12,100],h:[120,220],w:[30,200]}[k]; S.profile[k]=Math.min(lim[1],Math.max(lim[0],S.profile[k]+d)); render(); }
+function toggleAllergy(k){ const a=S.profile.allergies; a.includes(k)?a.splice(a.indexOf(k),1):a.push(k); render(); }
+function toggleMed(n){ const m=S.profile.meds, i=m.findIndex(x=>x.name===n); i>=0?m.splice(i,1):m.push({name:n,dose:'',timing:'Morning'}); render(); }
+function addMed(){ const v=document.getElementById('custommed').value.trim(); if(v&&!S.profile.meds.some(m=>m.name.toLowerCase()===v.toLowerCase())) S.profile.meds.push({name:v,dose:'',timing:'Morning'}); render(); }
+function finish(){ S.stage='main'; S.tab='home'; S._keepScroll=false; _render(); setTimeout(maybeNotify,900); }
+function go(t){ S.tab=t; S.menu=false; S.sheet=null; S._keepScroll=false; _render(); }
+function openSheet(s){ if(s==='insulin') S.ins={time:Date.now(),units:4,override:null}; S.sheet=s; S.menu=false; S._keepScroll=false; _render(); }
+function closeSheet(){ S.sheet=null; render(); }
+function openAdd(){ S.tab='meals'; S.add={step:'choose',q:'',cat:null,servings:1,duration:'10–20 min',contexts:['At my desk'],drink:'Water',sugar:0,feel:[],sleep:6.5,stress:'Medium'}; openSheet('add'); }
+function pickFood(id,cands){ const f=food(id); Object.assign(S.add,{foodId:id,carbs:f.carbs*S.add.servings,edited:false,step:'review',cands:cands||null,fromRecent:!S.add.photo&&S.add.step==='choose'}); S._keepScroll=false; _render(); }
+function snap(id){ S.add.photo=true; S.add.step='recognising'; render();
+  setTimeout(()=>{ const f=food(id); const cands=FOODS.filter(x=>x.id!==id && x.keywords.some(k=>f.keywords.includes(k))).filter(safe).slice(0,4).map(x=>x.id); pickFood(id,[id,...cands]); },1100); }
+function setFood(id){ const f=food(id); S.add.foodId=id; S.add.edited=false; S.add.carbs=Math.round(f.carbs*S.add.servings); if(S.add.cands&&!S.add.cands.includes(id)) S.add.cands.unshift(id); render(); }
+function serv(d){ S.add.servings=Math.min(4,Math.max(.5,S.add.servings+d)); if(!S.add.edited) S.add.carbs=Math.round(food(S.add.foodId).carbs*S.add.servings); render(); }
+function toggleCtx(c){ const a=S.add.contexts; a.includes(c)?a.splice(a.indexOf(c),1):a.push(c); render(); }
+function toggleFeel(c){ const a=S.add.feel; a.includes(c)?a.splice(a.indexOf(c),1):a.push(c); render(); }
+function draft(){ const A=S.add; return {servings:A.servings,carbs:A.carbs,duration:A.duration,contexts:A.contexts,drink:A.drink,sugar:A.sugar,sleep:A.sleep,stress:A.stress,hour:new Date().getHours()}; }
+function sensorRise(){ const w=within(2); return Math.round(Math.max(...w.map(p=>p.v))-Math.min(...w.map(p=>p.v))); }
+function saveMeal(){ const A=S.add, f=food(A.foodId), m=draft(); const pred=Math.round(Math.max(0,personaliser(learning()).adjust(f.id,popRise(f,m))));
+  // demo: the "sensor" rise is the model's view plus a little personal noise
+  const rise=Math.max(5,Math.round(pred+(Math.random()*16-8)));
+  const meal={...m,id:'m'+Date.now(),date:Date.now(),foodId:A.foodId,rise,pred,photo:!!A.photo,feel:A.feel};
+  S.meals.unshift(meal); S.sheet=null; render(); setTimeout(()=>{S.insightId=meal.id; openSheet('insight');},350); }
+function saveInsulin(title,rel){ const l=linkInsulin(S.ins.time); S.insulin.unshift({date:S.ins.time,units:S.ins.units,relation:rel,relationTitle:title}); closeSheet(); }
+function openInsight(id){ S.insightId=id; openSheet('insight'); }
+function saveCheckin(btn){ S.checkins.unshift({date:Date.now(),did:S.did,feel:S.feel,effort:S.effort,steps:S.steps}); btn.innerHTML='Saved <span>✓</span>'; setTimeout(render,1300); }
+function openCoach(kind){ S.menu=false; S.coach={kind,mode:'demo',t0:performance.now(),count:0,fb:'Step into frame',alert:false}; if(S.tab!=='home') S.tab='habits'; S._keepScroll=false; _render(); }
+function coachMode(m){ Object.assign(S.coach,{mode:m,t0:performance.now(),count:0,fb:'Step into frame',sm:null,inRep:false,reached:false}); _render(); }
+function finishSet(){ S.coach.alert=true; if(S.coach.count) S.sessions.unshift({date:Date.now(),kind:S.coach.kind,reps:S.coach.count}); cancelAnimationFrame(raf); raf=null; _render(); }
+function closeCoach(){ S.coach=null; cancelAnimationFrame(raf); raf=null; _render(); }
+function maybeNotify(){ const a=activity(); if(S.stage!=='main'||!S.profile.alerts||(a.status!=='high'&&a.status!=='low')) return;
+  S.toast={t:STATUS_TITLE[a.status],b:`${Math.round(a.g)} mg/dL. ${ACTIONS[a.status].slice(0,2).map(x=>x[1]).join(' · ')}`}; render(); setTimeout(()=>{S.toast=null;render();},6000); }
+function demo(kind){
+  if(kind==='restart'){ cancelAnimationFrame(raf); raf=null; S=fresh(); _render(); return; }
+  if(kind==='skip'){ Object.assign(S.profile,{name:'Asha Rao',age:41,h:160,w:62,allergies:['peanut'],insulin:true,itype:'rapid',meds:[{name:'Metformin',dose:'500 mg',timing:'With meals'}]}); S.watch=S.cgm='connected'; finish(); return; }
+  S.points=simulate(kind==='high'?110:kind==='low'?-60:0);
+  if(S.stage!=='main') demo('skip'); else { S.tab='home'; S.sheet=null; S._keepScroll=false; _render(); setTimeout(maybeNotify,400); }
+}
+function fit(){ const ph=document.getElementById('phone'), s=Math.min(1,(window.innerHeight-32)/834); ph.style.transform=`scale(${s})`; document.getElementById('wrap').style.height=(834*s)+'px'; document.getElementById('wrap').style.width=(412*s)+'px'; ph.style.transformOrigin='top left'; }
+window.addEventListener('resize',fit); fit(); _render();
+</script>
+</body>
+</html>

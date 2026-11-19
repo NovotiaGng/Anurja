@@ -1,12 +1,11 @@
 import Foundation
 
+/// Settings and a JSON snapshot of the app. Logged records also live in the
+/// SQLite store (LocalDatabase). Fields added after 1.0 are optional so older
+/// files still load.
 struct PersistedState: Codable {
     var didFinishOnboarding: Bool
-    var gamified: Bool
-    var goal: Goal
     var tab: AppTab
-    var xp: Int
-    var streak: Int
     var watchConnected: Bool
     var cgmConnected: Bool
     var meals: [MealLog]
@@ -14,6 +13,10 @@ struct PersistedState: Codable {
     var sessions: [CoachSession]
     var plan: HabitPlan
     var handledWatchIDs: [String]
+    var profile: UserProfile?
+    var insulinLogs: [InsulinLog]?
+    var reminder: ReminderSlot?
+    var gmiHistory: [String: Double]?
 }
 
 enum Persistence {

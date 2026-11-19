@@ -292,44 +292,15 @@ struct WarmBackground: View {
     }
 }
 
+/// The Anurja logo (Assets: AnurjaMark), shown inside the pale disc.
 struct SunburstMark: View {
     var body: some View {
-        Canvas { context, size in
-            let center = CGPoint(x: size.width / 2, y: size.height / 2)
-            let radius = min(size.width, size.height) / 2
-            var path = Path()
-            let count = 32
-            for index in 0..<count {
-                let angle = CGFloat(index) * 2 * .pi / CGFloat(count) - .pi / 2
-                let spike: CGFloat
-                if index % 2 == 1 {
-                    spike = radius * 0.42
-                } else if index % 4 == 0 {
-                    spike = radius
-                } else {
-                    spike = radius * 0.78
-                }
-                let point = CGPoint(x: center.x + spike * cos(angle), y: center.y + spike * sin(angle))
-                if index == 0 {
-                    path.move(to: point)
-                } else {
-                    path.addLine(to: point)
-                }
-            }
-            path.closeSubpath()
-            context.fill(path, with: .color(.forest))
-            let creamRadius = radius * 0.42
-            context.fill(Path(ellipseIn: CGRect(x: center.x - creamRadius, y: center.y - creamRadius, width: creamRadius * 2, height: creamRadius * 2)), with: .color(.cream))
-            let ringRadius = radius * 0.30
-            context.stroke(
-                Path(ellipseIn: CGRect(x: center.x - ringRadius, y: center.y - ringRadius, width: ringRadius * 2, height: ringRadius * 2)),
-                with: .color(.sand),
-                lineWidth: max(3, radius * 0.035)
-            )
-            let core = radius * 0.27
-            context.fill(Path(ellipseIn: CGRect(x: center.x - core, y: center.y - core, width: core * 2, height: core * 2)), with: .color(.maroon))
-        }
-        .accessibilityLabel(Text("Anurja"))
+        Image("AnurjaMark")
+            .resizable()
+            .interpolation(.high)
+            .scaledToFit()
+            .clipShape(Circle())
+            .accessibilityLabel(Text("Anurja"))
     }
 }
 
@@ -365,7 +336,7 @@ struct ProfileButton: View {
 
     var body: some View {
         Button {
-            state.showMe = true
+            state.tab = .me
         } label: {
             Image(systemName: "person.crop.circle.fill")
                 .symbolRenderingMode(.palette)

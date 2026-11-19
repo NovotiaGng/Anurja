@@ -38,20 +38,25 @@ enum MealFood: String, Codable, CaseIterable, Identifiable, Sendable {
 }
 
 enum GlucoseMath {
-    static func simulated(endingAt now: Date = Date()) -> [GlucosePoint] {
+    /// Demo trace used until a CGM is connected. `days` > 1 gives the week
+    /// view something to show; each day varies a little.
+    static func simulated(endingAt now: Date = Date(), days: Int = 1) -> [GlucosePoint] {
         let events: [(hour: Double, amplitude: Double)] = [
-            (8.5, 52), (13.0, 78), (16.5, 28), (20.5, 60)
+            (3.5, -20), (8.5, 52), (13.0, 78), (16.5, 28), (20.5, 60)
         ]
+        let steps = 96 * max(1, days)
         var points: [GlucosePoint] = []
-        points.reserveCapacity(97)
-        for index in -96...0 {
+        points.reserveCapacity(steps + 1)
+        for index in -steps...0 {
             let time = now.addingTimeInterval(Double(index) * 900)
             let hour = hourOfDay(time)
+            let dayIndex = Double(index + steps) / 96
+            let dayScale = 1 + 0.18 * sin(floor(dayIndex) * 1.7)
             var value = 104 + 5 * sin(hour * 0.9) + 2 * sin(Double(index) * 1.7)
             for event in events {
                 let delta = positiveMod(hour - event.hour, 24)
                 if delta < 4 {
-                    value += event.amplitude * (delta / 0.9) * exp(1 - delta / 0.9)
+                    value += event.amplitude * dayScale * (delta / 0.9) * exp(1 - delta / 0.9)
                 }
             }
             points.append(GlucosePoint(time: time, value: value))

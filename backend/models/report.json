@@ -1,0 +1,18 @@
+{
+  "rise": {
+    "ridge_mae": 6.54,
+    "mlp_mae": 5.69,
+    "noise_floor_mae": 5.59,
+    "samples": 16000
+  },
+  "activity": {
+    "accuracy": 0.957,
+    "samples": 20000,
+    "classes": [
+      "in_range",
+      "rising",
+      "high",
+      "low"
+    ]
+  }
+}

@@ -33,5 +33,9 @@ struct RootView: View {
                 state.refreshClock()
             }
         }
+        // Re-read glucose and re-run the activity model every five minutes.
+        .onReceive(Timer.publish(every: 300, on: .main, in: .common).autoconnect()) { _ in
+            state.refreshClock()
+        }
     }
 }
