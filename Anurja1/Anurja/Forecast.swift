@@ -47,6 +47,15 @@ enum ForecastTone {
         }
     }
 
+    /// Abstract direction only; the dashboard never shows a predicted number.
+    var prediction: LocalizedStringKey {
+        switch self {
+        case .steady: "Next hour: likely to stay steady"
+        case .rising: "Next hour: likely to rise"
+        case .falling: "Next hour: likely to fall"
+        }
+    }
+
     var symbol: String {
         switch self {
         case .steady: "arrow.right"

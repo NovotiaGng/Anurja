@@ -8,8 +8,9 @@ final class HealthKitService {
         guard HKHealthStore.isHealthDataAvailable() else { return }
         guard let glucose = HKObjectType.quantityType(forIdentifier: .bloodGlucose),
               let steps = HKObjectType.quantityType(forIdentifier: .stepCount),
-              let sleep = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) else { return }
-        try? await store.requestAuthorization(toShare: [], read: [glucose, steps, sleep])
+              let sleep = HKObjectType.categoryType(forIdentifier: .sleepAnalysis),
+              let energy = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
+        try? await store.requestAuthorization(toShare: [], read: [glucose, steps, sleep, energy])
     }
 
     func fetchGlucose(hours: Int) async -> [GlucosePoint] {
@@ -39,6 +40,20 @@ final class HealthKitService {
             let query = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
                 let count = stats?.sumQuantity()?.doubleValue(for: .count()) ?? 0
                 continuation.resume(returning: Int(count.rounded()))
+            }
+            store.execute(query)
+        }
+    }
+
+    func fetchActiveCaloriesToday() async -> Int {
+        guard HKHealthStore.isHealthDataAvailable(),
+              let type = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return 0 }
+        let start = Calendar.current.startOfDay(for: Date())
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: .strictStartDate)
+        return await withCheckedContinuation { continuation in
+            let query = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
+                let kcal = stats?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
+                continuation.resume(returning: Int(kcal.rounded()))
             }
             store.execute(query)
         }

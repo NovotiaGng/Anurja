@@ -2,11 +2,11 @@ import Foundation
 import SwiftUI
 
 enum Stage: Equatable {
-    case welcome, connect, dashboard, goal, main
+    case welcome, connect, aboutYou, allergies, insulin, medicines, allSet, main
 }
 
 enum AppTab: String, Codable, CaseIterable, Identifiable {
-    case home, trends, meals, habits
+    case home, trends, meals, habits, me
 
     var id: String { rawValue }
 
@@ -16,6 +16,7 @@ enum AppTab: String, Codable, CaseIterable, Identifiable {
         case .trends: "Trends"
         case .meals: "Meals"
         case .habits: "Habits"
+        case .me: "Me"
         }
     }
 
@@ -25,40 +26,7 @@ enum AppTab: String, Codable, CaseIterable, Identifiable {
         case .trends: "chart.bar"
         case .meals: "fork.knife"
         case .habits: "leaf"
-        }
-    }
-}
-
-enum Goal: String, Codable, CaseIterable, Identifiable {
-    case meals, habits
-
-    var id: String { rawValue }
-
-    var title: LocalizedStringKey {
-        switch self {
-        case .meals: "Understand my meals"
-        case .habits: "Build gentler habits"
-        }
-    }
-
-    var subtitle: LocalizedStringKey {
-        switch self {
-        case .meals: "Learn what keeps my energy steady"
-        case .habits: "Find a rhythm I can sustain"
-        }
-    }
-
-    var symbol: String {
-        switch self {
-        case .meals: "fork.knife"
-        case .habits: "figure.walk"
-        }
-    }
-
-    var shortTitle: LocalizedStringKey {
-        switch self {
-        case .meals: "Meals"
-        case .habits: "Habits"
+        case .me: "person"
         }
     }
 }
@@ -145,34 +113,58 @@ enum Effort: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
     var localizedName: String { String(localized: String.LocalizationValue(stringLiteral: rawValue)) }
+
+    /// Answers to "Was it difficult?"
+    var difficultyName: String {
+        switch self {
+        case .easy: String(localized: "Not really")
+        case .okay: String(localized: "A little")
+        case .hard: String(localized: "Yes, it was")
+        }
+    }
 }
 
 enum ExerciseKind: String, Codable, CaseIterable, Identifiable {
-    case squat, curl, press
+    case squat, chairStand, lunge, march, wallPushup, curl, press, lateralRaise
 
     var id: String { rawValue }
 
     var title: LocalizedStringKey {
         switch self {
         case .squat: "Bodyweight squat"
+        case .chairStand: "Chair sit-to-stand"
+        case .lunge: "Split squat"
+        case .march: "Knee-raise march"
+        case .wallPushup: "Wall push-up"
         case .curl: "Arm curl"
         case .press: "Overhead press"
+        case .lateralRaise: "Side arm raise"
         }
     }
 
     var blurb: LocalizedStringKey {
         switch self {
         case .squat: "Big leg muscles soak up glucose. Side-on to the camera."
+        case .chairStand: "Gentle start using a chair. Side-on to the camera."
+        case .lunge: "One foot forward, lower the back knee. Side-on to the camera."
+        case .march: "Lift your knees to hip height. Face the camera."
+        case .wallPushup: "Hands on a wall, bend your elbows. Side-on to the camera."
         case .curl: "Light weights or a water bottle. Face the camera."
         case .press: "Hands at shoulders, press up. Face the camera."
+        case .lateralRaise: "Arms out to the side to shoulder height. Face the camera."
         }
     }
 
     var symbol: String {
         switch self {
         case .squat: "figure.strengthtraining.functional"
+        case .chairStand: "chair"
+        case .lunge: "figure.step.training"
+        case .march: "figure.walk.motion"
+        case .wallPushup: "figure.strengthtraining.traditional"
         case .curl: "dumbbell"
         case .press: "figure.arms.open"
+        case .lateralRaise: "figure.cooldown"
         }
     }
 
@@ -180,42 +172,85 @@ enum ExerciseKind: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .squat:
             ["Feet shoulder-width", "Sit back and down", "Chest tall", "Stand up fully"]
+        case .chairStand:
+            ["Sit at the front of the chair", "Feet flat, hip-width", "Lean forward and stand", "Sit back down slowly"]
+        case .lunge:
+            ["One foot forward, one back", "Lower the back knee", "Front knee over the ankle", "Push back up"]
+        case .march:
+            ["Stand tall", "Lift one knee to hip height", "Lower it with control", "Switch legs"]
+        case .wallPushup:
+            ["Hands on the wall at shoulder height", "Body in a straight line", "Bend elbows, chest to the wall", "Push back to straight arms"]
         case .curl:
             ["Elbows by your sides", "Curl up slowly", "Squeeze at the top", "Lower with control"]
         case .press:
             ["Hands at shoulders", "Press straight up", "Arms fully straight", "Lower to shoulders"]
+        case .lateralRaise:
+            ["Arms by your sides", "Raise out to shoulder height", "Pause for a breath", "Lower slowly"]
         }
     }
 
+    /// Joint angle (degrees) when the body is at rest / fully extended.
     var extendedAngle: Double {
         switch self {
-        case .squat: 160
+        case .squat, .press, .chairStand, .lunge, .march: 160
         case .curl: 150
-        case .press: 160
+        case .wallPushup, .lateralRaise: 155
         }
     }
 
+    /// Angle that counts as a full-range rep.
     var depthAngle: Double {
         switch self {
         case .squat: 100
+        case .chairStand: 110
+        case .lunge: 105
+        case .march: 115
+        case .wallPushup: 105
         case .curl: 55
         case .press: 85
+        case .lateralRaise: 105
+        }
+    }
+
+    var targetReps: Int {
+        switch self {
+        case .march: 16
+        case .chairStand, .wallPushup: 10
+        case .lunge: 6
+        default: 8
+        }
+    }
+
+    var sideOn: Bool {
+        switch self {
+        case .squat, .chairStand, .lunge, .wallPushup: true
+        default: false
         }
     }
 
     var furtherCue: String {
         switch self {
         case .squat: String(localized: "Go a little lower next time")
+        case .chairStand: String(localized: "Stand all the way up, then sit")
+        case .lunge: String(localized: "Drop the back knee a little more")
+        case .march: String(localized: "Lift your knee a bit higher")
+        case .wallPushup: String(localized: "Bring your chest closer to the wall")
         case .curl: String(localized: "Curl a bit higher")
         case .press: String(localized: "Lower your hands to shoulder level")
+        case .lateralRaise: String(localized: "Raise your arms to shoulder height")
         }
     }
 
     var goodCue: String {
         switch self {
         case .squat: String(localized: "Good depth, now stand tall")
+        case .chairStand: String(localized: "Nice, now stand up tall")
+        case .lunge: String(localized: "Good depth, push back up")
+        case .march: String(localized: "Good height, lower slowly")
+        case .wallPushup: String(localized: "Nice, push back out")
         case .curl: String(localized: "Nice squeeze, lower slowly")
         case .press: String(localized: "Strong press, lower back down")
+        case .lateralRaise: String(localized: "Shoulder height, now lower slowly")
         }
     }
 
@@ -245,6 +280,22 @@ struct MealLog: Codable, Identifiable, Hashable {
     var carbsGrams: Int?
     var insulinUnits: Double?
     var sourceID: String?
+    var foodID: String?
+    var servings: Double?
+    var photoFile: String?
+    var predictedRise: Int?
+
+    var foodItem: FoodItem {
+        FoodLibrary.item(id: foodID) ?? FoodLibrary.defaultItem(for: food)
+    }
+
+    var displayName: String {
+        foodID == nil ? food.localizedName : foodItem.name
+    }
+
+    var carbsEstimate: Int {
+        carbsGrams ?? foodItem.carbs(servings: servings ?? 1)
+    }
 
     static let samples: [MealLog] = [
         MealLog(date: .distantPastOffset(6), food: .roti, duration: .medium, contexts: [.walked], drink: .water, sugarSpoons: 0, feelings: [.fine], sleepHours: 7.5, stress: .low, rise: 22, carbsGrams: 40, insulinUnits: nil, sourceID: nil),
@@ -285,6 +336,7 @@ struct HabitCheckIn: Codable, Identifiable, Hashable {
     var did: DidIt
     var feel: HabitFeel
     var effort: Effort
+    var steps: Int?
 }
 
 struct CoachSession: Codable, Identifiable, Hashable {
@@ -311,14 +363,14 @@ struct HabitPlan: Codable, Hashable {
         }
     }
 
-    var reason: LocalizedStringKey {
+    var reason: LocalizedStringKey? {
         switch variant {
         case 1:
-            "Big leg muscles use glucose well. Short, guided sets are an easy way in."
+            return "Big leg muscles use glucose well. Short, guided sets are an easy way in."
         case 2:
-            "A tiny pre-meal pause slows the first bites and is easy to repeat."
+            return "A tiny pre-meal pause slows the first bites and is easy to repeat."
         default:
-            "You eat at your desk and the canteen sets the menu, so we start after the meal."
+            return nil
         }
     }
 

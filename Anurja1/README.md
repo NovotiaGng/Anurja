@@ -1,8 +1,76 @@
 # Anurja
 
-Anurja is a native SwiftUI prototype for people recently diagnosed with diabetes. It explains meal and activity patterns in a calm voice. It does not give medication or insulin dosing advice.
+Anurja is a native SwiftUI app for people recently diagnosed with diabetes. It explains meal and activity patterns in a calm voice, suggests what to do when glucose leaves the target range, and never gives medication or insulin dosing advice.
 
 Open `Anurja.xcodeproj` in Xcode 15 or later. The app targets iOS 17, portrait, iPhone only. The paired watch app targets watchOS 10. There are no third-party packages.
+
+## App flow
+
+```
+Landing → Let's learn your pattern (Watch + CGM) → Tell us about you (name, age, height, weight → BMI)
+→ Any allergies? → Do you take insulin? → Your prescribed medicine → You're all set → Dashboard (Home)
+Tabs: Home · Trends · Meals · Habits · Me
+  Meals  → Add meal → Camera / Food library → Review meal → insight → Log insulin pop-up
+  Habits → Your next step (Next Goal, Remind me)
+  Me     → Profile page
+```
+
+- **Home**: current glucose in mg/dL, Time in Target range, chart with an am/pm axis and a 12 hr / 24 hr / 1 week zoom, an abstract next-hour prediction (rise / fall / steady, no number), an immediate activity suggestion from the activity model (also sent as a pop-up notification when glucose is high or low), Est. GMI with a month-on-month comparison, Steps and Calories.
+- **Trends**: opens instantly from the tab bar; glucose trend in mg/dL with the same zoom, Time in Target range, average, Est. GMI, Highest peak and Lowest peak (value, time, ↑/↓ change in mg/dL, and the meal before a peak).
+- **Meals**: Add meal (camera, or food library with a search box and category drop-down), a Log insulin pop-up right below it (time, units, and whether it was before a meal, after a meal or around activity, matched automatically), Carbs today vs target, How your meals landed (↑ mg/dL rise), and What helps you (suggested snack, your meals compared with a lower-rise swap, foods that keep your glucose level steady, average rise by habit). Suggestions skip the person's allergies.
+- **Habits**: Your change right now, Your next step, Walk after lunch (pre-filled from step counting), Was it difficult?, fortnightly review, and 8 camera-coached exercises.
+- **Me**: profile, medical info, targets (fasting 70–130 mg/dL, after meals < 180 mg/dL, carbs per day), devices, notifications, server address and sync status.
+
+## Machine learning
+
+Two small neural networks are trained in `backend/ml/train.py` and run **on the phone** (weights exported into `Anurja/GeneratedModel.swift`, inference in `Anurja/MLEngine.swift`). The same models run on the server.
+
+| Model | Input | Output | Holdout |
+|---|---|---|---|
+| Meal rise (MLP regressor, 17→24→1) | food nutrients × portion (carbs, glycaemic load, fibre, protein, fat), eating speed, desk / screen / on the move / walked / lay down, sweet drink, sugar, sleep, stress, time of day | expected glucose rise, mg/dL | MAE 5.7 mg/dL (noise floor 5.6) |
+| Activity (MLP classifier, 7→16→4) | glucose, slope, time since last meal, fasting, steps in the last hour, time of day | in range / rising / high / low → suggested actions | 95.7 % accuracy |
+
+Both start from synthetic data shaped by glycaemic-load physiology and the targets in the brief, then **personalise from the person's own logged meals**: each saved meal keeps the model's prediction and the sensor's real rise, and the residual (actual − predicted) is learned per food with shrinkage (`Personaliser` in `MLEngine.swift` and `backend/anurja_api/ml.py`). Activity suggestions are re-ranked by how much the person's own walks vs. strength sets lowered their glucose. A real low (< 70 mg/dL) always shows the low guidance, whatever the model says.
+
+Photo recognition uses Apple's on-device image classifier (`VNClassifyImageRequest`) mapped onto the food library; the person confirms the food on Review meal. For stronger Indian-food recognition, train a Create ML image classifier on labelled photos and swap it into `FoodRecognizer` (`Anurja/FoodLibrary.swift`).
+
+Retrain and re-export after changing `backend/data/foods.json` or the features:
+
+```bash
+cd backend
+python -m ml.train   # writes models/*.joblib, Anurja/GeneratedModel.swift, Anurja/FoodLibraryData.swift
+```
+
+## Database and backend
+
+- **On the phone**: every meal, insulin dose, check-in and exercise session is saved in SQLite (`Anurja/LocalDatabase.swift`, `Application Support/Anurja/anurja.sqlite`) with a `synced` flag, so the app works offline. Settings stay in `state.json`.
+- **Server** (`backend/`): FastAPI + SQLite. The app calls `POST /api/users/{id}/sync` after each change and `POST /api/ml/predict-rise` on Review meal, falling back to the on-device model when the server can't be reached.
+
+```bash
+cd backend
+pip install -r requirements.txt
+python -m ml.train                                        # only if models/ is missing
+uvicorn anurja_api.main:app --host 0.0.0.0 --port 8000
+python -m pytest -q                                       # API tests
+```
+
+API docs: http://localhost:8000/docs. The simulator reaches `http://localhost:8000` (the default). On an iPhone, set the server in **Me → Data & sync** to your Mac's Bonjour name, for example `http://my-mac.local:8000` (allowed by `NSAllowsLocalNetworking`). Use HTTPS for anything beyond local testing.
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /health` | status |
+| `GET /api/foods?q=&category=` | food library |
+| `PUT` / `GET /api/users/{id}` | profile |
+| `POST /api/users/{id}/sync` | upsert meals, insulin, check-ins, sessions, glucose |
+| `GET /api/users/{id}/{meals,insulin,checkins,sessions,glucose}` | list records |
+| `POST /api/ml/predict-rise` | personalised meal rise |
+| `POST /api/ml/recommend-activity` | status, target range, actions |
+| `GET /api/users/{id}/insights/what-helps` | snack, swaps, steady foods, habit effects |
+
+## Motion detection
+
+- **Exercise coach**: Vision body pose on the front camera, one joint angle per exercise, smoothing, a full-range check, a tempo check ("Too quick"), a visibility check and a live "Movement detected" indicator. Exercises: bodyweight squat, chair sit-to-stand, split squat, knee-raise march, wall push-up, arm curl, overhead press, side arm raise.
+- **Walk after a meal**: `CMPedometer` counts steps in the 90 minutes after the last meal and pre-fills "Did you do it?". Steps in the last hour also feed the activity model.
 
 ## Targets
 
@@ -13,57 +81,38 @@ Open `Anurja.xcodeproj` in Xcode 15 or later. The app targets iOS 17, portrait, 
 | AnurjaWidget | Home and Lock Screen widget | `com.anurja.app.widget` |
 | AnurjaWatchWidget | Watch complications | `com.anurja.app.watchkitapp.widget` |
 
-WidgetKit complications need their own `@main` extension, so the watch face widgets live in `AnurjaWatchWidget` and are embedded in the watch app. The three schemes named in the product brief are Anurja, AnurjaWatch, and AnurjaWidget.
-
-Regenerate the project the same way with [XcodeGen](https://github.com/yonaskolb/XcodeGen):
-
-```bash
-xcodegen generate
-```
-
-`project.yml` is the source of that project file.
+Regenerate the project with [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`xcodegen generate`); `project.yml` is its source. The checked-in `Anurja.xcodeproj` already includes the new source files.
 
 ## Signing
 
-Set a Development Team on Anurja, AnurjaWatch, AnurjaWidget, and AnurjaWatchWidget before running on a device. The App Group `group.com.anurja.app` must be enabled for the iPhone app, the widget, the watch app, and the watch widget. HealthKit must be enabled on the iPhone app. The entitlements file already requests HealthKit and the App Group.
-
-Unsigned simulator builds (`CODE_SIGNING_ALLOWED=NO`) cannot create the App Group container. Widgets and the watch then show the “Open Anurja” placeholder until the app is signed.
+Set a Development Team on Anurja, AnurjaWatch, AnurjaWidget, and AnurjaWatchWidget before running on a device. The App Group `group.com.anurja.app` must be enabled for the iPhone app, the widget, the watch app, and the watch widget. HealthKit must be enabled on the iPhone app.
 
 ## Info.plist
 
-`Anurja/Info.plist` includes:
-
-- `NSCameraUsageDescription`: Anurja uses the front camera to check your exercise form. Video stays on your device.
-- `NSHealthShareUsageDescription`: Anurja reads glucose, steps and sleep to explain your meal patterns.
+- `NSCameraUsageDescription`, `NSPhotoLibraryUsageDescription`: meal photos and exercise form, processed on device.
+- `NSHealthShareUsageDescription`: glucose, steps, active calories and sleep.
+- `NSMotionUsageDescription`: step counting for the walk after a meal.
+- `NSLocalNetworkUsageDescription`, `NSAppTransportSecurity › NSAllowsLocalNetworking`: syncing with a server on your network.
 - Portrait only, light appearance, localizations `en`, `hi`, and `ta`.
 
 ## Real HealthKit
 
-Glucose is simulated by default. In `Anurja/AppState.swift`, set `useRealHealthKit` to `true`, sign the app with the HealthKit capability, and connect the CGM card. Anurja then requests read access for blood glucose, step count, and sleep, and loads the last 24 hours of glucose in mg/dL. If that query is empty, the simulated trace stays in place.
+Glucose is simulated by default (seven days, so the week view has data). In `Anurja/AppState.swift`, set `useRealHealthKit` to `true`, sign the app with the HealthKit capability, and connect the CGM card. Anurja then reads blood glucose, step count, active energy and sleep, and loads the last 7 days of glucose in mg/dL. If that query is empty, the simulated trace stays in place.
 
 ## Camera coach on a device
 
-The simulator always runs the coached session as a simulated angle cycle and labels it “Camera unavailable here, running a simulated session”. On a real iPhone, Check my form uses the front camera and Vision body pose. Video is processed on device and is not stored or uploaded. Allow camera access when asked.
-
-To swap in MediaPipe Pose Landmarker later, replace `VisionPoseHandler` (or assign `PoseCameraController.frameHandler`) with another `PoseFrameHandling` type. That handler only needs to fill `joints` and `angle` on each frame. The rep counter, cues, and overlay stay the same.
-
-## Language
-
-English, Hindi, and Tamil ship in `Shared/Localizable.xcstrings`. The language follows the iPhone language setting. Me says so. Food names stay recognisable (dal, idli, dosa, roti, sabzi, biryani, curd).
+The simulator runs the coached session as a simulated angle cycle and labels it “Camera unavailable here, running a simulated session”. On a real iPhone, Check my form uses the front camera and Vision body pose. Video is processed on device and is not stored or uploaded. To swap in MediaPipe Pose Landmarker, assign another `PoseFrameHandling` type to `PoseCameraController.frameHandler`.
 
 ## Decisions
 
-- The medical disclaimer on Trends, the meal insight sheet, and Me is the longer safety sentence from the product brief.
-- Insight suggestion copy follows the HTML preview: “Add vegetables or curd and eat them first, then the rice.” and “Here is what may have played a part.”
-- Sample meals are shown in How I eat only until the first meal the user saves.
-- Squat plan sizes are shown as sets: start is `max(1, minutes / 5)`, grow is `max(2, grow minutes / 5)`.
-- The camera connection uses `videoRotationAngle` when 90° is supported. The deprecated `videoOrientation` fallback is omitted so the iOS 17 SDK build stays warning-free. iOS 17 supports the angle API.
+- The gamified dashboard and the "What brings you here" choice were removed; everyone lands on Home after onboarding.
+- Est. GMI (Glucose Management Indicator, 3.31 + 0.02392 × mean mg/dL) replaces HbA1c and is stored once a month for the comparison.
+- BMI labels use the WHO Asian cut-offs (23 and 25).
 - `Anurja1App.swift` and `ContentView.swift` are the old template and are not part of any target.
 
 ## Limitations
 
-- Predictions are a short least-squares projection. They are estimates, not medical advice, and Anurja never suggests a dose.
-- Carbs and insulin are stored exactly as entered. Nothing is calculated from them.
-- A learned insight model is only an `InsightProviding` extension point. The shipped engine is the deterministic rule set.
+- Predictions are estimates, not medical advice, and Anurja never suggests a dose. The ML models start from synthetic training data and become personal as meals are logged.
+- The "why this rise" explanations on the meal insight sheet are still the deterministic rule set (`InsightEngine.swift`).
+- New strings are in English; Hindi and Tamil fall back to English until translated in `Localizable.xcstrings`.
 - Watch “I ate” needs a paired, signed install so WatchConnectivity and the App Group can deliver the meal.
-- Widget timelines refresh every 15 minutes and also when the app writes a new snapshot.
