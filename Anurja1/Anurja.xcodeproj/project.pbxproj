@@ -1,0 +1,963 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04E9E92E69320C9E37DA0EC9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDA091E4779F38EDFC40C1F /* Theme.swift */; };
+		04EC4359EEB1E1B6A16D0718 /* FlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165F1629CA99D279232162C2 /* FlowUITests.swift */; };
+		097BA427E61F89E6E0BB0D99 /* AnurjaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A2EA17671B40D7FE601FDB3A /* AnurjaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0EC6D6DC12576668C57D3B26 /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
+		157BE7CA70DD146F4E29E183 /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
+		1947CC523592E14C4732197F /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6198331983EFE66EFB559FB0 /* HabitsView.swift */; };
+		1F311CD31968B878F842E4B7 /* MealsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1553525C76496E4522D58DF5 /* MealsView.swift */; };
+		2E58CEEA62D09064207A9171 /* AnurjaWatchWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3DF328F3734478EC5C8D40F2 /* AnurjaWatchWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		36BF87EDF59687E7FB45448F /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
+		39C6898E9442A6DF98C8DF24 /* AnurjaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8740C5E5595601702D88625 /* AnurjaWidget.swift */; };
+		3A9999E58DCAFFB3D19EEC30 /* AnurjaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1AD3CA561DBB1B97FB9CA /* AnurjaApp.swift */; };
+		4815CE927B0DDD68CFD9AAD1 /* AnurjaWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2790943CE16FEC60B0C57995 /* AnurjaWatchApp.swift */; };
+		4DAC15234CC243DCA9EE8103 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
+		4ECD095AF8744A493DD549F4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 289A6B248383111FD2126856 /* Localizable.xcstrings */; };
+		4F718FD3E1762B2FDD62CCEA /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
+		5196CF7473CF2A637C561F0E /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
+		562AB83B3FABF7E4B3C0FC9F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 289A6B248383111FD2126856 /* Localizable.xcstrings */; };
+		567B1DF19E957BFB97DEC4A1 /* Coach.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9624B905DEFA657A4E9CCE /* Coach.swift */; };
+		5E630712E145EBC5E97A2D7B /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E2A478FE1363135F063730 /* Onboarding.swift */; };
+		6106DB98A20054D35BC6A780 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE88A7D0245E9BEA7DF1303 /* AppState.swift */; };
+		61733B4CFA842D4059C44EA4 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
+		61E8AADB1D565BA372DCEAC6 /* AnurjaWatchWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B11CADAD7B6161EEC7A49C /* AnurjaWatchWidget.swift */; };
+		62FA8DD973CF02306711EFD1 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
+		69D2DE728420A1018A7252DE /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B48AEC492E7950FE9A3670 /* PreviewData.swift */; };
+		6D384364B51E88D7561362E1 /* GlucoseEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC783D4CCF9E51EE7AD37484 /* GlucoseEntryView.swift */; };
+		7C422E8FB37E530D963F053D /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
+		7CFBDD02B6028CD2A5F1119A /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
+		7FDB4C9FF05E7E2A80D6F1D1 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
+		81371CEFCCD60C8D8DBE2588 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9091C7DC1C98EFE7ADEEDA /* Models.swift */; };
+		8305743505C225CE3F8A4126 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 289A6B248383111FD2126856 /* Localizable.xcstrings */; };
+		842F8EC3E8363D4613F16553 /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
+		86FF473EAC0C56D39AC10C04 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 33080C10611C01AA8A0D99BF /* PrivacyInfo.xcprivacy */; };
+		8C03B6441C753152CDAC00B3 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06452E7E22A54CEB03576439 /* Forecast.swift */; };
+		8F96B03EED46B7145A6547EB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 289A6B248383111FD2126856 /* Localizable.xcstrings */; };
+		A07D73AC9C320B8AD9463DE3 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
+		A099D961AE0078ED389A4303 /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
+		A58DBDD5EA8C65C039151694 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E15E70C5ACB84FD0683CA5B /* InsightEngine.swift */; };
+		A77B6D1B619AF59FB9E97CA4 /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
+		AC7AF2AC55549D470AFD8672 /* AnurjaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 53B4ED0FC389A6D3F13AA505 /* AnurjaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B1426F27BC28C33C0AC019A9 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
+		C65B4C1CA79A9A734518D7B6 /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
+		C84B3D0095782C2D63490DE9 /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD027168559904D4FBCE53FE /* WatchConnectivityManager.swift */; };
+		D3CD0A19DD8DD04163DCDEFA /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D4B076A45456C61E7B73AC /* Persistence.swift */; };
+		D4674775CF1627651B193FE7 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F469BBA78D27676C104CA2E /* MainTabView.swift */; };
+		D91EA4A4312088C9F5C90838 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC700785017DF975363425C /* HealthKitService.swift */; };
+		DB8568236517B855604F75ED /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE6C2761B9A4CBCD90940D /* WatchConnectivityManager.swift */; };
+		DEF5B03B2C71FB4E8773FB2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09E6153FF0A2D17808B66BAE /* Assets.xcassets */; };
+		E175CC03DA02216197DB4EE3 /* WatchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD91A1E5692A8123275B355 /* WatchHomeView.swift */; };
+		E476D37D951C22E2DCCAB159 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
+		EC8890DC74A281474485916E /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
+		F3669A6B939534E18BA58C64 /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
+		FED4A64A655150C16BFD240D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C544B4939976BBA753BBD1 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		118475D77BE0B4CF6EB72F11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C3AAE0EDB56882DA35B020 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA2DCEA1239353AA54C5A399;
+			remoteInfo = Anurja;
+		};
+		94226E94E7E32714EC88B423 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C3AAE0EDB56882DA35B020 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0732856C142F68C37D9C40C4;
+			remoteInfo = AnurjaWidget;
+		};
+		988E1EFC011202851F189380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C3AAE0EDB56882DA35B020 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 32BEBC874E924959973BF050;
+			remoteInfo = AnurjaWatchWidget;
+		};
+		B2F2B949D904AEC7942F0626 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83C3AAE0EDB56882DA35B020 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AFD8E4DEC93EB9A520761CD5;
+			remoteInfo = AnurjaWatch;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		36683BB95092AB60AFCABEFE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2E58CEEA62D09064207A9171 /* AnurjaWatchWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		988452CF13636D4B11845886 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AC7AF2AC55549D470AFD8672 /* AnurjaWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2162F0D665B08D73497670A /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				097BA427E61F89E6E0BB0D99 /* AnurjaWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0095AB763AF30108ADB7EFF2 /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
+		06452E7E22A54CEB03576439 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
+		06D4B076A45456C61E7B73AC /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		09E6153FF0A2D17808B66BAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		11E2A478FE1363135F063730 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		1553525C76496E4522D58DF5 /* MealsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealsView.swift; sourceTree = "<group>"; };
+		165F1629CA99D279232162C2 /* FlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowUITests.swift; sourceTree = "<group>"; };
+		24C544B4939976BBA753BBD1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2790943CE16FEC60B0C57995 /* AnurjaWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaWatchApp.swift; sourceTree = "<group>"; };
+		27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModels.swift; sourceTree = "<group>"; };
+		289A6B248383111FD2126856 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		2BDF414911EE73A316DD87D4 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		2DB1AD3CA561DBB1B97FB9CA /* AnurjaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaApp.swift; sourceTree = "<group>"; };
+		33080C10611C01AA8A0D99BF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3DF328F3734478EC5C8D40F2 /* AnurjaWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AnurjaWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E15E70C5ACB84FD0683CA5B /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
+		3FDA091E4779F38EDFC40C1F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		53B4ED0FC389A6D3F13AA505 /* AnurjaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AnurjaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6198331983EFE66EFB559FB0 /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
+		68FDC14977304B96BA9BCC27 /* Anurja.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anurja.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CD91A1E5692A8123275B355 /* WatchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHomeView.swift; sourceTree = "<group>"; };
+		7F469BBA78D27676C104CA2E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		971DA13517403084FB875C39 /* SparklineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineChart.swift; sourceTree = "<group>"; };
+		9EE88A7D0245E9BEA7DF1303 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A2EA17671B40D7FE601FDB3A /* AnurjaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnurjaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB9091C7DC1C98EFE7ADEEDA /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		C1F3EA81749B9DC985D6AD5A /* AnurjaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnurjaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD027168559904D4FBCE53FE /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		D0B48AEC492E7950FE9A3670 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		D8740C5E5595601702D88625 /* AnurjaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaWidget.swift; sourceTree = "<group>"; };
+		DC783D4CCF9E51EE7AD37484 /* GlucoseEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseEntryView.swift; sourceTree = "<group>"; };
+		DE9624B905DEFA657A4E9CCE /* Coach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coach.swift; sourceTree = "<group>"; };
+		E9DE6C2761B9A4CBCD90940D /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		EBC700785017DF975363425C /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		F9B11CADAD7B6161EEC7A49C /* AnurjaWatchWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaWatchWidget.swift; sourceTree = "<group>"; };
+		FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionMessage.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1104A553757AC89D9EFCB87C /* AnurjaWatch */ = {
+			isa = PBXGroup;
+			children = (
+				2790943CE16FEC60B0C57995 /* AnurjaWatchApp.swift */,
+				24C544B4939976BBA753BBD1 /* Assets.xcassets */,
+				CD027168559904D4FBCE53FE /* WatchConnectivityManager.swift */,
+				6CD91A1E5692A8123275B355 /* WatchHomeView.swift */,
+			);
+			path = AnurjaWatch;
+			sourceTree = "<group>";
+		};
+		3FAAF95A65FEB0CF4FD4111F = {
+			isa = PBXGroup;
+			children = (
+				F42B398B88DB828389B418F8 /* Anurja */,
+				9CF668D9BAD0E420AB83469E /* AnurjaUITests */,
+				1104A553757AC89D9EFCB87C /* AnurjaWatch */,
+				5359DFC80A6A100AA9082E55 /* AnurjaWatchWidget */,
+				A48791EF29AB1762D251FD33 /* AnurjaWidget */,
+				F4A5E74F927306AE9B2EC4F9 /* Shared */,
+				C48794B1A67871C31259580E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5359DFC80A6A100AA9082E55 /* AnurjaWatchWidget */ = {
+			isa = PBXGroup;
+			children = (
+				F9B11CADAD7B6161EEC7A49C /* AnurjaWatchWidget.swift */,
+			);
+			path = AnurjaWatchWidget;
+			sourceTree = "<group>";
+		};
+		9CF668D9BAD0E420AB83469E /* AnurjaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				165F1629CA99D279232162C2 /* FlowUITests.swift */,
+			);
+			path = AnurjaUITests;
+			sourceTree = "<group>";
+		};
+		A48791EF29AB1762D251FD33 /* AnurjaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D8740C5E5595601702D88625 /* AnurjaWidget.swift */,
+				DC783D4CCF9E51EE7AD37484 /* GlucoseEntryView.swift */,
+			);
+			path = AnurjaWidget;
+			sourceTree = "<group>";
+		};
+		C48794B1A67871C31259580E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				68FDC14977304B96BA9BCC27 /* Anurja.app */,
+				C1F3EA81749B9DC985D6AD5A /* AnurjaUITests.xctest */,
+				A2EA17671B40D7FE601FDB3A /* AnurjaWatch.app */,
+				3DF328F3734478EC5C8D40F2 /* AnurjaWatchWidget.appex */,
+				53B4ED0FC389A6D3F13AA505 /* AnurjaWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F42B398B88DB828389B418F8 /* Anurja */ = {
+			isa = PBXGroup;
+			children = (
+				2DB1AD3CA561DBB1B97FB9CA /* AnurjaApp.swift */,
+				9EE88A7D0245E9BEA7DF1303 /* AppState.swift */,
+				09E6153FF0A2D17808B66BAE /* Assets.xcassets */,
+				DE9624B905DEFA657A4E9CCE /* Coach.swift */,
+				06452E7E22A54CEB03576439 /* Forecast.swift */,
+				6198331983EFE66EFB559FB0 /* HabitsView.swift */,
+				EBC700785017DF975363425C /* HealthKitService.swift */,
+				3E15E70C5ACB84FD0683CA5B /* InsightEngine.swift */,
+				7F469BBA78D27676C104CA2E /* MainTabView.swift */,
+				1553525C76496E4522D58DF5 /* MealsView.swift */,
+				AB9091C7DC1C98EFE7ADEEDA /* Models.swift */,
+				11E2A478FE1363135F063730 /* Onboarding.swift */,
+				06D4B076A45456C61E7B73AC /* Persistence.swift */,
+				D0B48AEC492E7950FE9A3670 /* PreviewData.swift */,
+				33080C10611C01AA8A0D99BF /* PrivacyInfo.xcprivacy */,
+				3FDA091E4779F38EDFC40C1F /* Theme.swift */,
+				E9DE6C2761B9A4CBCD90940D /* WatchConnectivityManager.swift */,
+			);
+			path = Anurja;
+			sourceTree = "<group>";
+		};
+		F4A5E74F927306AE9B2EC4F9 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */,
+				289A6B248383111FD2126856 /* Localizable.xcstrings */,
+				2BDF414911EE73A316DD87D4 /* Palette.swift */,
+				27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */,
+				0095AB763AF30108ADB7EFF2 /* SharedStore.swift */,
+				971DA13517403084FB875C39 /* SparklineChart.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0732856C142F68C37D9C40C4 /* AnurjaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DB69D7C47A142781A61EB48 /* Build configuration list for PBXNativeTarget "AnurjaWidget" */;
+			buildPhases = (
+				09CA3FD2801E83119AB4FD47 /* Sources */,
+				FA9D84E8F2ACC703284F9FB3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AnurjaWidget;
+			packageProductDependencies = (
+			);
+			productName = AnurjaWidget;
+			productReference = 53B4ED0FC389A6D3F13AA505 /* AnurjaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		29D5CBA8C4433CD3815257B7 /* AnurjaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 206BD50F6B58178E7512889B /* Build configuration list for PBXNativeTarget "AnurjaUITests" */;
+			buildPhases = (
+				EB530657E60C23CDFB51DAD3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5025D9A24D3C1AE1A7FFFC9D /* PBXTargetDependency */,
+			);
+			name = AnurjaUITests;
+			packageProductDependencies = (
+			);
+			productName = AnurjaUITests;
+			productReference = C1F3EA81749B9DC985D6AD5A /* AnurjaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		32BEBC874E924959973BF050 /* AnurjaWatchWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9954CAEF3A951F389DA6904E /* Build configuration list for PBXNativeTarget "AnurjaWatchWidget" */;
+			buildPhases = (
+				CFF5B09F22B8B4CBDC86B8BB /* Sources */,
+				5711307F2D166023B1DDCAF4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AnurjaWatchWidget;
+			packageProductDependencies = (
+			);
+			productName = AnurjaWatchWidget;
+			productReference = 3DF328F3734478EC5C8D40F2 /* AnurjaWatchWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		AFD8E4DEC93EB9A520761CD5 /* AnurjaWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF5599E5D880A5F7166BBF71 /* Build configuration list for PBXNativeTarget "AnurjaWatch" */;
+			buildPhases = (
+				4D45A912E36506F504C52179 /* Sources */,
+				E7AAAE8FB8F95BF823AD83BA /* Resources */,
+				36683BB95092AB60AFCABEFE /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4B4128667AD2789E582293E0 /* PBXTargetDependency */,
+			);
+			name = AnurjaWatch;
+			packageProductDependencies = (
+			);
+			productName = AnurjaWatch;
+			productReference = A2EA17671B40D7FE601FDB3A /* AnurjaWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EA2DCEA1239353AA54C5A399 /* Anurja */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA114B8F4E23844C0A332E78 /* Build configuration list for PBXNativeTarget "Anurja" */;
+			buildPhases = (
+				DBBAAE182D879FDF2BB58AAE /* Sources */,
+				24143B76485AF716C48F228C /* Resources */,
+				988452CF13636D4B11845886 /* Embed Foundation Extensions */,
+				F2162F0D665B08D73497670A /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000D9F8319045AC4143B4451 /* PBXTargetDependency */,
+				EF4B288D1C48418BB86EFDDA /* PBXTargetDependency */,
+			);
+			name = Anurja;
+			packageProductDependencies = (
+			);
+			productName = Anurja;
+			productReference = 68FDC14977304B96BA9BCC27 /* Anurja.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83C3AAE0EDB56882DA35B020 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2720;
+				TargetAttributes = {
+					0732856C142F68C37D9C40C4 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					29D5CBA8C4433CD3815257B7 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = EA2DCEA1239353AA54C5A399;
+					};
+					32BEBC874E924959973BF050 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					AFD8E4DEC93EB9A520761CD5 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					EA2DCEA1239353AA54C5A399 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 085803541E236E0C98B43BCA /* Build configuration list for PBXProject "Anurja" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				hi,
+				ta,
+			);
+			mainGroup = 3FAAF95A65FEB0CF4FD4111F;
+			minimizedProjectReferenceProxies = 1;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA2DCEA1239353AA54C5A399 /* Anurja */,
+				29D5CBA8C4433CD3815257B7 /* AnurjaUITests */,
+				AFD8E4DEC93EB9A520761CD5 /* AnurjaWatch */,
+				32BEBC874E924959973BF050 /* AnurjaWatchWidget */,
+				0732856C142F68C37D9C40C4 /* AnurjaWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		24143B76485AF716C48F228C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEF5B03B2C71FB4E8773FB2A /* Assets.xcassets in Resources */,
+				8F96B03EED46B7145A6547EB /* Localizable.xcstrings in Resources */,
+				86FF473EAC0C56D39AC10C04 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5711307F2D166023B1DDCAF4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8305743505C225CE3F8A4126 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7AAAE8FB8F95BF823AD83BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FED4A64A655150C16BFD240D /* Assets.xcassets in Resources */,
+				4ECD095AF8744A493DD549F4 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA9D84E8F2ACC703284F9FB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				562AB83B3FABF7E4B3C0FC9F /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		09CA3FD2801E83119AB4FD47 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39C6898E9442A6DF98C8DF24 /* AnurjaWidget.swift in Sources */,
+				EC8890DC74A281474485916E /* CompanionMessage.swift in Sources */,
+				6D384364B51E88D7561362E1 /* GlucoseEntryView.swift in Sources */,
+				E476D37D951C22E2DCCAB159 /* Palette.swift in Sources */,
+				C65B4C1CA79A9A734518D7B6 /* SharedModels.swift in Sources */,
+				62FA8DD973CF02306711EFD1 /* SharedStore.swift in Sources */,
+				7C422E8FB37E530D963F053D /* SparklineChart.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D45A912E36506F504C52179 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4815CE927B0DDD68CFD9AAD1 /* AnurjaWatchApp.swift in Sources */,
+				F3669A6B939534E18BA58C64 /* CompanionMessage.swift in Sources */,
+				A07D73AC9C320B8AD9463DE3 /* Palette.swift in Sources */,
+				157BE7CA70DD146F4E29E183 /* SharedModels.swift in Sources */,
+				7FDB4C9FF05E7E2A80D6F1D1 /* SharedStore.swift in Sources */,
+				842F8EC3E8363D4613F16553 /* SparklineChart.swift in Sources */,
+				C84B3D0095782C2D63490DE9 /* WatchConnectivityManager.swift in Sources */,
+				E175CC03DA02216197DB4EE3 /* WatchHomeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFF5B09F22B8B4CBDC86B8BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61E8AADB1D565BA372DCEAC6 /* AnurjaWatchWidget.swift in Sources */,
+				0EC6D6DC12576668C57D3B26 /* CompanionMessage.swift in Sources */,
+				4DAC15234CC243DCA9EE8103 /* Palette.swift in Sources */,
+				A77B6D1B619AF59FB9E97CA4 /* SharedModels.swift in Sources */,
+				B1426F27BC28C33C0AC019A9 /* SharedStore.swift in Sources */,
+				A099D961AE0078ED389A4303 /* SparklineChart.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBBAAE182D879FDF2BB58AAE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A9999E58DCAFFB3D19EEC30 /* AnurjaApp.swift in Sources */,
+				6106DB98A20054D35BC6A780 /* AppState.swift in Sources */,
+				567B1DF19E957BFB97DEC4A1 /* Coach.swift in Sources */,
+				5196CF7473CF2A637C561F0E /* CompanionMessage.swift in Sources */,
+				8C03B6441C753152CDAC00B3 /* Forecast.swift in Sources */,
+				1947CC523592E14C4732197F /* HabitsView.swift in Sources */,
+				D91EA4A4312088C9F5C90838 /* HealthKitService.swift in Sources */,
+				A58DBDD5EA8C65C039151694 /* InsightEngine.swift in Sources */,
+				D4674775CF1627651B193FE7 /* MainTabView.swift in Sources */,
+				1F311CD31968B878F842E4B7 /* MealsView.swift in Sources */,
+				81371CEFCCD60C8D8DBE2588 /* Models.swift in Sources */,
+				5E630712E145EBC5E97A2D7B /* Onboarding.swift in Sources */,
+				61733B4CFA842D4059C44EA4 /* Palette.swift in Sources */,
+				D3CD0A19DD8DD04163DCDEFA /* Persistence.swift in Sources */,
+				69D2DE728420A1018A7252DE /* PreviewData.swift in Sources */,
+				7CFBDD02B6028CD2A5F1119A /* SharedModels.swift in Sources */,
+				36BF87EDF59687E7FB45448F /* SharedStore.swift in Sources */,
+				4F718FD3E1762B2FDD62CCEA /* SparklineChart.swift in Sources */,
+				04E9E92E69320C9E37DA0EC9 /* Theme.swift in Sources */,
+				DB8568236517B855604F75ED /* WatchConnectivityManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB530657E60C23CDFB51DAD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04EC4359EEB1E1B6A16D0718 /* FlowUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		000D9F8319045AC4143B4451 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0732856C142F68C37D9C40C4 /* AnurjaWidget */;
+			targetProxy = 94226E94E7E32714EC88B423 /* PBXContainerItemProxy */;
+		};
+		4B4128667AD2789E582293E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 32BEBC874E924959973BF050 /* AnurjaWatchWidget */;
+			targetProxy = 988E1EFC011202851F189380 /* PBXContainerItemProxy */;
+		};
+		5025D9A24D3C1AE1A7FFFC9D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA2DCEA1239353AA54C5A399 /* Anurja */;
+			targetProxy = 118475D77BE0B4CF6EB72F11 /* PBXContainerItemProxy */;
+		};
+		EF4B288D1C48418BB86EFDDA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AFD8E4DEC93EB9A520761CD5 /* AnurjaWatch */;
+			targetProxy = B2F2B949D904AEC7942F0626 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0746245A8298CA6AEB047C67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AnurjaWatch/AnurjaWatch.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnurjaWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp;
+				PRODUCT_NAME = AnurjaWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		1831B3E28DD737E6F2DB81B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Anurja;
+			};
+			name = Release;
+		};
+		1C97EE4D60CE5CED2B45D980 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		2AD5D532E12655BFE64F8B74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Anurja/Anurja.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Anurja/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app;
+				PRODUCT_NAME = Anurja;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		3AFB5719CA75BEA4A1054378 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AnurjaWatch/AnurjaWatch.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnurjaWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp;
+				PRODUCT_NAME = AnurjaWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		43BC1E52B87AB2FDAD74A354 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Anurja;
+			};
+			name = Debug;
+		};
+		6901A082E3C4683C0597D121 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		7FB9CBE1F1B626FF4CA812AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AnurjaWidget/AnurjaWidget.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnurjaWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.widget;
+				PRODUCT_NAME = AnurjaWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		88FF069DADDDD279822EB26F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AnurjaWidget/AnurjaWidget.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnurjaWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.widget;
+				PRODUCT_NAME = AnurjaWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		B1E9C3494273F4BAAAD7C6A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Anurja/Anurja.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Anurja/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app;
+				PRODUCT_NAME = Anurja;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C6E1FC10623C389EFEFBB072 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AnurjaWatchWidget/AnurjaWatchWidget.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnurjaWatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp.widget;
+				PRODUCT_NAME = AnurjaWatchWidget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		F94D2A28E08D3151AE61DC19 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AnurjaWatchWidget/AnurjaWatchWidget.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AnurjaWatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp.widget;
+				PRODUCT_NAME = AnurjaWatchWidget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		085803541E236E0C98B43BCA /* Build configuration list for PBXProject "Anurja" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C97EE4D60CE5CED2B45D980 /* Debug */,
+				6901A082E3C4683C0597D121 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1DB69D7C47A142781A61EB48 /* Build configuration list for PBXNativeTarget "AnurjaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FB9CBE1F1B626FF4CA812AE /* Debug */,
+				88FF069DADDDD279822EB26F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		206BD50F6B58178E7512889B /* Build configuration list for PBXNativeTarget "AnurjaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BC1E52B87AB2FDAD74A354 /* Debug */,
+				1831B3E28DD737E6F2DB81B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9954CAEF3A951F389DA6904E /* Build configuration list for PBXNativeTarget "AnurjaWatchWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6E1FC10623C389EFEFBB072 /* Debug */,
+				F94D2A28E08D3151AE61DC19 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DA114B8F4E23844C0A332E78 /* Build configuration list for PBXNativeTarget "Anurja" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1E9C3494273F4BAAAD7C6A7 /* Debug */,
+				2AD5D532E12655BFE64F8B74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EF5599E5D880A5F7166BBF71 /* Build configuration list for PBXNativeTarget "AnurjaWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3AFB5719CA75BEA4A1054378 /* Debug */,
+				0746245A8298CA6AEB047C67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83C3AAE0EDB56882DA35B020 /* Project object */;
+}

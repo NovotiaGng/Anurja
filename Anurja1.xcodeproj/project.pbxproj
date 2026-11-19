@@ -7,12 +7,65 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		47832AB030AF1EF60049F0D8 /* Anurja.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Anurja.xcodeproj; sourceTree = "<group>"; };
 		47C4FEC6307A044B00EC3C0C /* Anurja1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anurja1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		47C4FF23307A0BBC00EC3C0C /* Anurja.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Anurja.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		47C4FF30307A0BBC00EC3C0C /* Exceptions for "Anurja1" folder in "Anurja1" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Anurja u2013 iPhone preview.html",
+				Anurja/AnurjaApp.swift,
+				Anurja/AppState.swift,
+				Anurja/Assets.xcassets,
+				Anurja/Coach.swift,
+				Anurja/Forecast.swift,
+				Anurja/HabitsView.swift,
+				Anurja/HealthKitService.swift,
+				Anurja/Info.plist,
+				Anurja/InsightEngine.swift,
+				Anurja/MainTabView.swift,
+				Anurja/MealsView.swift,
+				Anurja/Models.swift,
+				Anurja/Onboarding.swift,
+				Anurja/Persistence.swift,
+				Anurja/PreviewData.swift,
+				Anurja/PrivacyInfo.xcprivacy,
+				Anurja/Theme.swift,
+				Anurja/WatchConnectivityManager.swift,
+				AnurjaUITests/FlowUITests.swift,
+				AnurjaWatch/AnurjaWatchApp.swift,
+				AnurjaWatch/Assets.xcassets,
+				AnurjaWatch/Info.plist,
+				AnurjaWatch/WatchConnectivityManager.swift,
+				AnurjaWatch/WatchHomeView.swift,
+				AnurjaWatchWidget/AnurjaWatchWidget.swift,
+				AnurjaWatchWidget/Info.plist,
+				AnurjaWidget/AnurjaWidget.swift,
+				AnurjaWidget/GlucoseEntryView.swift,
+				AnurjaWidget/Info.plist,
+				project.yml,
+				README.md,
+				Shared/CompanionMessage.swift,
+				Shared/Localizable.xcstrings,
+				Shared/Palette.swift,
+				Shared/SharedModels.swift,
+				Shared/SharedStore.swift,
+				Shared/SparklineChart.swift,
+				tools/make_catalog.py,
+			);
+			target = 47C4FEC5307A044B00EC3C0C /* Anurja1 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		47C4FEC8307A044B00EC3C0C /* Anurja1 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				47C4FF30307A0BBC00EC3C0C /* Exceptions for "Anurja1" folder in "Anurja1" target */,
+			);
 			path = Anurja1;
 			sourceTree = "<group>";
 		};
@@ -27,11 +80,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47832A8030AF1EF60049F0D8 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				47C4FF23307A0BBC00EC3C0C /* Anurja.xcodeproj */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		47832AB830AF1EF60049F0D8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		47C4FEBD307A044B00EC3C0C = {
 			isa = PBXGroup;
 			children = (
 				47C4FEC8307A044B00EC3C0C /* Anurja1 */,
 				47C4FEC7307A044B00EC3C0C /* Products */,
+				47832A8030AF1EF60049F0D8 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -39,6 +108,13 @@
 			isa = PBXGroup;
 			children = (
 				47C4FEC6307A044B00EC3C0C /* Anurja1.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		47C4FF24307A0BBC00EC3C0C /* Products */ = {
+			isa = PBXGroup;
+			children = (
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -72,7 +148,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2700;
-				LastUpgradeCheck = 2700;
+				LastUpgradeCheck = 2720;
 				TargetAttributes = {
 					47C4FEC5307A044B00EC3C0C = {
 						CreatedOnToolsVersion = 27.0;
@@ -91,6 +167,16 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 47C4FEC7307A044B00EC3C0C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 47832AB830AF1EF60049F0D8 /* Products */;
+					ProjectRef = 47832AB030AF1EF60049F0D8 /* Anurja.xcodeproj */;
+				},
+				{
+					ProductGroup = 47C4FF24307A0BBC00EC3C0C /* Products */;
+					ProjectRef = 47C4FF23307A0BBC00EC3C0C /* Anurja.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				47C4FEC5307A044B00EC3C0C /* Anurja1 */,
@@ -174,6 +260,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -231,6 +318,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
