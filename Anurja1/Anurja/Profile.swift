@@ -8,6 +8,9 @@ enum Allergy: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    /// Shown as checkboxes in onboarding; the rest stay selectable via Add Custom.
+    static let common: [Allergy] = [.nuts, .peanut, .dairy, .gluten]
+
     var title: String {
         switch self {
         case .nuts: String(localized: "Tree nuts")

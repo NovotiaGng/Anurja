@@ -222,62 +222,113 @@ private struct DeviceCard: View {
 
 // MARK: - Personalisation pages
 
-/// Shared frame for the four "about you" steps, in the same warm style as
-/// Let's learn your pattern.
+/// Shared frame for the four "about you" steps: light sage page, segmented
+/// step progress, white form card and a green Next button.
 struct OnboardingPage<Content: View>: View {
     @EnvironmentObject private var state: AppState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     var step: Int
     var title: LocalizedStringKey
-    var subtitle: LocalizedStringKey
+    var subtitle: LocalizedStringKey?
     var enabled: Bool
+    var skippable: Bool
     let content: Content
 
-    init(step: Int, title: LocalizedStringKey, subtitle: LocalizedStringKey, enabled: Bool = true, @ViewBuilder content: () -> Content) {
+    init(step: Int, title: LocalizedStringKey, subtitle: LocalizedStringKey? = nil, enabled: Bool = true, skippable: Bool = false, @ViewBuilder content: () -> Content) {
         self.step = step
         self.title = title
         self.subtitle = subtitle
         self.enabled = enabled
+        self.skippable = skippable
         self.content = content()
     }
 
     var body: some View {
         ZStack {
-            WarmBackground()
+            Color.mist.ignoresSafeArea()
             GeometryReader { geo in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 14) {
-                        BackButton {
-                            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.35)) { state.goBack() }
-                        }
-                        .padding(.leading, -10)
-                        Text("STEP \(step) OF 4")
-                            .scaledFont(size: 13, weight: .semibold)
-                            .tracking(1.1)
-                            .foregroundStyle(Color.cream)
-                            .padding(.top, 8)
+                        header
                         Text(title)
-                            .scaledFont(size: 36, weight: .bold, design: .serif, relativeTo: .largeTitle)
-                            .foregroundStyle(Color.cream)
+                            .scaledFont(size: 34, weight: .heavy, relativeTo: .largeTitle)
+                            .foregroundStyle(Color.deepInk)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text(subtitle)
-                            .scaledFont(size: 16)
-                            .foregroundStyle(Color.cream)
-                            .lineSpacing(3)
-                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.top, 12)
+                        if let subtitle {
+                            Text(subtitle)
+                                .scaledFont(size: 16)
+                                .foregroundStyle(Color.deepInk.opacity(0.75))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                         content
                         Spacer(minLength: 20)
-                        PrimaryButton(title: "Next", enabled: enabled) {
-                            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.35)) { state.advance() }
+                        Button {
+                            move(state.advance)
+                        } label: {
+                            HStack(spacing: 10) {
+                                Text("Next")
+                                Image(systemName: "arrow.right").accessibilityHidden(true)
+                            }
+                            .scaledFont(size: 18, weight: .bold)
+                            .foregroundStyle(Color.white)
+                            .frame(maxWidth: .infinity, minHeight: 60)
+                            .background(Color.terracotta, in: Capsule())
                         }
+                        .buttonStyle(.plain)
+                        .disabled(!enabled)
+                        .opacity(enabled ? 1 : 0.45)
                     }
-                    .padding(.horizontal, 22)
+                    .padding(.horizontal, 16)
                     .padding(.bottom, 16)
                     .frame(minHeight: geo.size.height, alignment: .top)
                 }
                 .scrollDismissesKeyboard(.interactively)
             }
         }
+    }
+
+    private var header: some View {
+        ZStack {
+            VStack(spacing: 8) {
+                Text("Step \(step) of 4")
+                    .scaledFont(size: 15, weight: .semibold)
+                    .foregroundStyle(Color.deepInk.opacity(0.7))
+                HStack(spacing: 4) {
+                    ForEach(1...4, id: \.self) { index in
+                        Capsule()
+                            .fill(index <= step ? Color.terracotta : Color.black.opacity(0.12))
+                            .frame(width: 40, height: 4)
+                    }
+                }
+                .accessibilityHidden(true)
+            }
+            HStack {
+                Button {
+                    move(state.goBack)
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(Color.deepInk)
+                        .frame(width: 56, height: 56)
+                        .background(Color.white, in: Circle())
+                        .shadow(color: .black.opacity(0.06), radius: 6, y: 2)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("Back"))
+                Spacer()
+                if skippable {
+                    Button("Skip") { move(state.advance) }
+                        .scaledFont(size: 16, weight: .medium)
+                        .foregroundStyle(Color.deepInk.opacity(0.7))
+                        .frame(minWidth: 44, minHeight: 44)
+                }
+            }
+        }
+    }
+
+    private func move(_ action: () -> Void) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.35)) { action() }
     }
 }
 
@@ -288,11 +339,15 @@ struct AboutYouView: View {
         OnboardingPage(
             step: 1,
             title: "Tell us about you",
-            subtitle: "This helps Anurja read your numbers in context. It stays on your phone.",
+            subtitle: "This helps Anurja read your numbers in context.",
             enabled: !state.profile.name.trimmingCharacters(in: .whitespaces).isEmpty
         ) {
             AboutYouFields(profile: $state.profile)
                 .formCard()
+            Label("This stays on your phone.", systemImage: "lock")
+                .scaledFont(size: 14)
+                .foregroundStyle(Color.deepInk.opacity(0.7))
+                .padding(.leading, 12)
         }
     }
 }
@@ -301,13 +356,9 @@ struct AllergiesView: View {
     @EnvironmentObject private var state: AppState
 
     var body: some View {
-        OnboardingPage(
-            step: 2,
-            title: "Any allergies?",
-            subtitle: "We'll keep these out of every food and snack we suggest."
-        ) {
+        OnboardingPage(step: 2, title: "Do you have any allergies?", skippable: true) {
             AllergyFields(profile: $state.profile)
-                .formCard()
+                .padding(.top, 12)
         }
     }
 }
@@ -442,89 +493,199 @@ struct AboutYouFields: View {
     @Binding var profile: UserProfile
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Your name")
-                .scaledFont(size: 13)
-                .foregroundStyle(Color.muted)
-            TextField("Name", text: $profile.name)
-                .textContentType(.name)
-                .textInputAutocapitalization(.words)
-                .scaledFont(size: 17)
-                .padding(.horizontal, 16)
-                .frame(minHeight: 48)
-                .background(Color.white, in: Capsule())
-                .overlay(Capsule().stroke(Color.sand, lineWidth: 1))
-            StepperRow(
-                title: "Age",
-                value: String(localized: "\(profile.age) yrs"),
-                decreaseLabel: "Decrease age",
-                increaseLabel: "Increase age",
-                decrease: { profile.age = max(12, profile.age - 1) },
-                increase: { profile.age = min(100, profile.age + 1) }
-            )
-            StepperRow(
-                title: "Height",
-                value: String(localized: "\(Int(profile.heightCm)) cm"),
-                decreaseLabel: "Decrease height",
-                increaseLabel: "Increase height",
-                decrease: { profile.heightCm = max(120, profile.heightCm - 1) },
-                increase: { profile.heightCm = min(220, profile.heightCm + 1) }
-            )
-            StepperRow(
-                title: "Weight",
-                value: String(localized: "\(Int(profile.weightKg)) kg"),
-                decreaseLabel: "Decrease weight",
-                increaseLabel: "Increase weight",
-                decrease: { profile.weightKg = max(30, profile.weightKg - 1) },
-                increase: { profile.weightKg = min(200, profile.weightKg + 1) }
-            )
-            HStack(alignment: .firstTextBaseline) {
-                Text("BMI")
-                    .scaledFont(size: 15)
-                    .foregroundStyle(Color.ink)
-                Spacer()
-                Text(profile.bmi, format: .number.precision(.fractionLength(1)))
-                    .scaledFont(size: 22, weight: .bold)
-                    .foregroundStyle(Color.ink)
-                Text(profile.bmiLabel)
-                    .scaledFont(size: 13)
-                    .foregroundStyle(Color.forest)
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Your name")
+                    .scaledFont(size: 14, weight: .semibold)
+                    .foregroundStyle(Color.deepInk.opacity(0.75))
+                TextField("Name", text: $profile.name)
+                    .textContentType(.name)
+                    .textInputAutocapitalization(.words)
+                    .scaledFont(size: 17)
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 52)
+                    .background(Color.fieldGray, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             }
-            .padding(.top, 2)
+            .padding(.bottom, 16)
+            Divider()
+            MeasureRow(symbol: "calendar", tile: .tileGreen, tint: .leaf, title: "Age",
+                       value: $profile.age, range: 12...100, label: { String(localized: "\($0) yrs") })
+            Divider()
+            MeasureRow(symbol: "ruler", tile: .tileBlue, tint: Color(hex: 0x3B6FB6), title: "Height",
+                       value: Binding(get: { Int(profile.heightCm) }, set: { profile.heightCm = Double($0) }),
+                       range: 120...220, label: { String(localized: "\($0) cm") })
+            Divider()
+            MeasureRow(symbol: "scalemass", tile: .tilePurple, tint: Color(hex: 0x6A55C2), title: "Weight",
+                       value: Binding(get: { Int(profile.weightKg) }, set: { profile.weightKg = Double($0) }),
+                       range: 30...200, label: { String(localized: "\($0) kg") })
+            Divider()
+            HStack(spacing: 14) {
+                IconTile(symbol: "drop", tile: .tileOrange, tint: Color(hex: 0xC0592B))
+                Text("BMI")
+                    .scaledFont(size: 17, weight: .semibold)
+                    .foregroundStyle(Color.deepInk)
+                Spacer(minLength: 8)
+                Text(profile.bmi, format: .number.precision(.fractionLength(1)))
+                    .scaledFont(size: 18, weight: .bold)
+                    .foregroundStyle(Color.deepInk)
+                Text(profile.bmiLabel)
+                    .scaledFont(size: 13, weight: .semibold)
+                    .foregroundStyle(healthy ? Color.leaf : Color(hex: 0xA5512A))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(healthy ? Color.tileGreen : Color.tileOrange, in: Capsule())
+            }
+            .padding(.vertical, 14)
+        }
+    }
+
+    private var healthy: Bool { (18.5..<23).contains(profile.bmi) }
+}
+
+private struct IconTile: View {
+    var symbol: String
+    var tile: Color
+    var tint: Color
+
+    var body: some View {
+        Image(systemName: symbol)
+            .font(.system(size: 18, weight: .medium))
+            .foregroundStyle(tint)
+            .frame(width: 46, height: 46)
+            .background(tile, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .accessibilityHidden(true)
+    }
+}
+
+/// Icon + label + value, as in the "Tell us about you" card.
+/// Tapping the value opens a scroll wheel to pick it.
+private struct MeasureRow: View {
+    var symbol: String
+    var tile: Color
+    var tint: Color
+    var title: LocalizedStringKey
+    @Binding var value: Int
+    var range: ClosedRange<Int>
+    var label: (Int) -> String
+    @State private var picking = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 14) {
+                IconTile(symbol: symbol, tile: tile, tint: tint)
+                Text(title)
+                    .scaledFont(size: 17, weight: .semibold)
+                    .foregroundStyle(Color.deepInk)
+                Spacer(minLength: 8)
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) { picking.toggle() }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(label(value))
+                            .scaledFont(size: 18, weight: .bold)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Color.muted)
+                    }
+                    .foregroundStyle(Color.deepInk)
+                    .padding(.horizontal, 14)
+                    .frame(minHeight: 48)
+                    .background(Color.fieldGray, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(title))
+                .accessibilityValue(Text(label(value)))
+                .accessibilityHint(Text("Opens a scroll wheel"))
+            }
+            .padding(.vertical, 12)
+            if picking {
+                Picker(title, selection: $value) {
+                    ForEach(Array(range), id: \.self) { Text(label($0)).tag($0) }
+                }
+                .pickerStyle(.wheel)
+                .frame(height: 150)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
     }
 }
 
+/// Grey checkbox row used by the allergies and medicines steps.
+struct CheckRow: View {
+    var title: String
+    var selected: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                Image(systemName: selected ? "checkmark.square.fill" : "square")
+                    .font(.system(size: 24))
+                    .foregroundStyle(selected ? Color.terracotta : Color.deepInk)
+                    .accessibilityHidden(true)
+                Text(title)
+                    .scaledFont(size: 18)
+                    .foregroundStyle(Color.deepInk)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 18)
+            .frame(minHeight: 60)
+            .background(Color.fieldGray, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+/// Checkbox list plus "Add custom", as in the allergies step.
 struct AllergyFields: View {
     @Binding var profile: UserProfile
+    @State private var addingCustom = false
+    @FocusState private var customFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            FlowLayout {
-                Chip(title: String(localized: "No allergies"), selected: profile.allergies.isEmpty && profile.otherAllergy.isEmpty) {
-                    profile.allergies = []
-                    profile.otherAllergy = ""
-                }
-                ForEach(Allergy.allCases) { allergy in
-                    Chip(title: allergy.title, selected: profile.allergies.contains(allergy)) {
-                        if profile.allergies.contains(allergy) {
-                            profile.allergies.remove(allergy)
-                        } else {
-                            profile.allergies.insert(allergy)
-                        }
-                    }
+            CheckRow(title: String(localized: "None"), selected: profile.allergies.isEmpty && profile.otherAllergy.isEmpty) {
+                profile.allergies = []
+                profile.otherAllergy = ""
+                addingCustom = false
+            }
+            // Common ones only, so Next stays on screen; anything else goes in Add Custom.
+            ForEach(Allergy.allCases.filter { Allergy.common.contains($0) || profile.allergies.contains($0) }) { allergy in
+                let selected = profile.allergies.contains(allergy)
+                CheckRow(title: allergy.title, selected: selected) {
+                    if selected { profile.allergies.remove(allergy) } else { profile.allergies.insert(allergy) }
                 }
             }
-            Text("Anything else?")
-                .scaledFont(size: 13)
-                .foregroundStyle(Color.muted)
-                .padding(.top, 4)
-            TextField("For example, mushrooms", text: $profile.otherAllergy)
-                .scaledFont(size: 16)
-                .padding(.horizontal, 16)
-                .frame(minHeight: 48)
-                .background(Color.white, in: Capsule())
-                .overlay(Capsule().stroke(Color.sand, lineWidth: 1))
+            if addingCustom || !profile.otherAllergy.isEmpty {
+                TextField("For example, mushrooms", text: $profile.otherAllergy)
+                    .focused($customFocused)
+                    .scaledFont(size: 18)
+                    .padding(.horizontal, 18)
+                    .frame(minHeight: 60)
+                    .background(Color.lime, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            } else {
+                Button {
+                    addingCustom = true
+                    customFocused = true
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(systemName: "plus.circle")
+                            .font(.system(size: 24))
+                            .accessibilityHidden(true)
+                        Text("Add Custom")
+                            .scaledFont(size: 18)
+                        Spacer(minLength: 0)
+                    }
+                    .foregroundStyle(Color.deepInk)
+                    .padding(.horizontal, 18)
+                    .frame(minHeight: 60)
+                    .background(Color.lime, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 }
@@ -545,7 +706,7 @@ struct InsulinFields: View {
             if profile.takesInsulin {
                 Text("Which kind?")
                     .scaledFont(size: 15, weight: .semibold)
-                    .foregroundStyle(Color.cream)
+                    .foregroundStyle(Color.deepInk)
                     .padding(.top, 6)
                 ForEach(InsulinType.allCases) { type in
                     OptionRow(symbol: type.symbol, title: type.title, subtitle: type.subtitle, selected: profile.insulinType == type) {
@@ -555,7 +716,7 @@ struct InsulinFields: View {
             }
             Text("Log only what you actually took. Anurja never suggests a dose.")
                 .scaledFont(size: 13)
-                .foregroundStyle(Color.cream)
+                .foregroundStyle(Color.deepInk.opacity(0.7))
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -567,6 +728,9 @@ struct MedicineFields: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            CheckRow(title: String(localized: "None"), selected: profile.medicines.isEmpty) {
+                profile.medicines = []
+            }
             Text("Common prescriptions")
                 .scaledFont(size: 13)
                 .foregroundStyle(Color.muted)
@@ -654,11 +818,11 @@ struct MedicineFields: View {
 }
 
 extension View {
-    /// Cream panel used for form fields on the warm onboarding background.
+    /// White panel used for form fields on the sage onboarding background.
     func formCard() -> some View {
-        padding(16)
+        padding(20)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.cream, in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+            .background(Color.white, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 }
 

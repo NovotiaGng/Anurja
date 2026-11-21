@@ -32,7 +32,19 @@ Two small neural networks are trained in `backend/ml/train.py` and run **on the 
 
 Both start from synthetic data shaped by glycaemic-load physiology and the targets in the brief, then **personalise from the person's own logged meals**: each saved meal keeps the model's prediction and the sensor's real rise, and the residual (actual − predicted) is learned per food with shrinkage (`Personaliser` in `MLEngine.swift` and `backend/anurja_api/ml.py`). Activity suggestions are re-ranked by how much the person's own walks vs. strength sets lowered their glucose. A real low (< 70 mg/dL) always shows the low guidance, whatever the model says.
 
-Photo recognition uses Apple's on-device image classifier (`VNClassifyImageRequest`) mapped onto the food library; the person confirms the food on Review meal. For stronger Indian-food recognition, train a Create ML image classifier on labelled photos and swap it into `FoodRecognizer` (`Anurja/FoodLibrary.swift`).
+Photo recognition runs on the phone, offline: Vision's image feature print, then `Anurja/FoodModels/FoodClassifier.mlmodel` (Core ML, a softmax classifier over 71 dishes, fruit and drinks). Training data is real, freely licensed photos:
+
+- 43 Indian dishes from [SohlHealth/enhanced-indian-food-classification](https://huggingface.co/datasets/SohlHealth/enhanced-indian-food-classification) (CC BY 4.0).
+- 30 world dishes, fruit, coffee, tea and juice from [Open Images V7](https://storage.googleapis.com/openimages/web/index.html): human-verified image labels (CC BY 4.0) on Flickr photos (CC BY 2.0; per-photo credits in `tools/foodvision/openimages_credits.csv`).
+
+`FoodRecognizer` (`Anurja/FoodLibrary.swift`) maps the model's labels onto the food library. When the top label is below the confidence threshold, or is a dish the library doesn't have, Add meal opens the food library instead of guessing. The person always confirms the food on Review meal. Per-dish top-1 / top-3 accuracy on held-out photos is in `tools/foodvision/report.json`. Korean, Japanese, Chinese and Thai dishes have no verified Open Images photos; `tools/foodvision/commons.py` collects them from Wikimedia Commons once you give it a contact for Wikimedia's User-Agent policy.
+
+```bash
+python3 -I tools/foodvision/prepare.py            # Indian dishes: download (~2 GB), dedupe, 70/15/15 split into tools/foodvision/data
+python3 -I tools/foodvision/openimages.py fetch   # world dishes and drinks: verified labels + Flickr thumbnails, same split
+swiftc -O -o /tmp/food-features tools/foodvision/ExtractFeatures.swift && /tmp/food-features
+uv run -p 3.12 --with coremltools==9.0 --with scikit-learn==1.5.2 python -I tools/foodvision/train.py
+```
 
 Retrain and re-export after changing `backend/data/foods.json` or the features:
 
@@ -76,16 +88,16 @@ API docs: http://localhost:8000/docs. The simulator reaches `http://localhost:80
 
 | Scheme | Product | Bundle id |
 |---|---|---|
-| Anurja | iPhone app | `com.anurja.app` |
-| AnurjaWatch | watchOS app, embedded in the iPhone app | `com.anurja.app.watchkitapp` |
-| AnurjaWidget | Home and Lock Screen widget | `com.anurja.app.widget` |
-| AnurjaWatchWidget | Watch complications | `com.anurja.app.watchkitapp.widget` |
+| Anurja | iPhone app | `com.novotia.anurja` |
+| AnurjaWatch | watchOS app, embedded in the iPhone app | `com.novotia.anurja.watchkitapp` |
+| AnurjaWidget | Home and Lock Screen widget | `com.novotia.anurja.widget` |
+| AnurjaWatchWidget | Watch complications | `com.novotia.anurja.watchkitapp.widget` |
 
 Regenerate the project with [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`xcodegen generate`); `project.yml` is its source. The checked-in `Anurja.xcodeproj` already includes the new source files.
 
 ## Signing
 
-Set a Development Team on Anurja, AnurjaWatch, AnurjaWidget, and AnurjaWatchWidget before running on a device. The App Group `group.com.anurja.app` must be enabled for the iPhone app, the widget, the watch app, and the watch widget. HealthKit must be enabled on the iPhone app.
+Set a Development Team on Anurja, AnurjaWatch, AnurjaWidget, and AnurjaWatchWidget before running on a device. The App Group `group.com.novotia.anurja` must be enabled for the iPhone app, the widget, the watch app, and the watch widget. HealthKit must be enabled on the iPhone app.
 
 ## Info.plist
 

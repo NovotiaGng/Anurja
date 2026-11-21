@@ -12,16 +12,23 @@ final class FlowUITests: XCTestCase {
     }
 
     func testWalkthrough() {
-        app.buttons["Begin your journey"].tap()
-        app.buttons["Skip for now, use demo data"].tap()
+        let begin = app.buttons["Begin your journey"]
+        XCTAssertTrue(begin.waitForExistence(timeout: 8))
+        begin.tap()
+        let skip = app.buttons["Skip for now, use demo data"]
+        XCTAssertTrue(skip.waitForExistence(timeout: 8))
+        reveal(skip)
+        skip.tap()
 
         // Tell us about you → allergies → insulin → medicine → all set
         let name = app.textFields["Name"]
-        XCTAssertTrue(name.waitForExistence(timeout: 4))
+        XCTAssertTrue(name.waitForExistence(timeout: 8))
         name.tap()
-        name.typeText("Asha")
-        app.buttons["Next"].tap()
-        XCTAssertTrue(app.staticTexts["Any allergies?"].waitForExistence(timeout: 4))
+        name.typeText("Asha\n")
+        let aboutNext = app.buttons["Next"]
+        reveal(aboutNext)
+        aboutNext.tap()
+        XCTAssertTrue(app.staticTexts["Do you have any allergies?"].waitForExistence(timeout: 4))
         app.buttons["Next"].tap()
         XCTAssertTrue(app.staticTexts["Do you take insulin?"].waitForExistence(timeout: 4))
         app.buttons["Yes, I take insulin"].tap()
@@ -37,8 +44,12 @@ final class FlowUITests: XCTestCase {
         dashboard.tap()
 
         // Meals → Add meal → Food library → Review meal
-        app.buttons["Meals"].tap()
-        app.buttons["Add meal"].firstMatch.tap()
+        let mealsTab = app.tabBars.buttons["Meals"]
+        XCTAssertTrue(mealsTab.waitForExistence(timeout: 8))
+        mealsTab.tap()
+        let addMeal = app.buttons["Add meal"].firstMatch
+        XCTAssertTrue(addMeal.waitForExistence(timeout: 4))
+        addMeal.tap()
         app.buttons["Food library"].tap()
         let food = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "Masala dosa")).firstMatch
         XCTAssertTrue(food.waitForExistence(timeout: 4))
@@ -59,30 +70,27 @@ final class FlowUITests: XCTestCase {
         reveal(saveInsulin)
         saveInsulin.tap()
 
-        app.buttons["Trends"].tap()
+        app.tabBars.buttons["Home"].tap()
+        let glucoseCard = app.buttons["glucoseCard"].firstMatch
+        XCTAssertTrue(glucoseCard.waitForExistence(timeout: 4))
+        glucoseCard.tap()
         XCTAssertTrue(app.staticTexts["Highest peak"].waitForExistence(timeout: 4))
-        XCTAssertTrue(app.staticTexts["Lowest peak"].exists)
+        XCTAssertTrue(app.staticTexts["Lowest peak"].waitForExistence(timeout: 4))
 
-        app.buttons["Habits"].tap()
-        let review = app.buttons["Fortnightly review"]
-        reveal(review)
-        XCTAssertTrue(review.waitForExistence(timeout: 4))
-        review.tap()
-        app.buttons["Keep it"].tap()
-
-        let checkIn = app.buttons["Save check-in"]
-        reveal(checkIn)
-        checkIn.tap()
-
+        app.tabBars.buttons["Train"].tap()
         let squat = app.buttons["Wall push-up"]
+        XCTAssertTrue(squat.waitForExistence(timeout: 4))
         reveal(squat)
         squat.tap()
         app.buttons["Check my form"].tap()
         XCTAssertTrue(app.staticTexts["Camera unavailable here, running a simulated session"].waitForExistence(timeout: 4))
         app.buttons["Finish set"].tap()
+        XCTAssertTrue(app.staticTexts["How to improve your form"].waitForExistence(timeout: 4))
         app.buttons["Done"].tap()
 
-        app.buttons["Me"].tap()
+        let me = app.buttons["Profile"].firstMatch
+        XCTAssertTrue(me.waitForExistence(timeout: 4))
+        me.tap()
         let restart = app.buttons["Restart demo"]
         reveal(restart)
         restart.tap()
@@ -105,7 +113,7 @@ final class FlowUITests: XCTestCase {
 
     private func reveal(_ element: XCUIElement) {
         var attempts = 0
-        while !element.exists && attempts < 6 {
+        while !element.exists && attempts < 12 {
             app.swipeUp()
             attempts += 1
         }

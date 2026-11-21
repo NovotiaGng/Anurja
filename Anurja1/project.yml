@@ -1,6 +1,6 @@
 name: Anurja
 options:
-  bundleIdPrefix: com.anurja
+  bundleIdPrefix: com.novotia
   deploymentTarget:
     iOS: "17.0"
     watchOS: "10.0"
@@ -36,7 +36,7 @@ targets:
       - path: Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.anurja.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.novotia.anurja
         PRODUCT_NAME: Anurja
         INFOPLIST_FILE: Anurja/Info.plist
         CODE_SIGN_ENTITLEMENTS: Anurja/Anurja.entitlements
@@ -64,7 +64,7 @@ targets:
       - target: Anurja
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.anurja.app.uitests
+        PRODUCT_BUNDLE_IDENTIFIER: com.novotia.anurja.uitests
         GENERATE_INFOPLIST_FILE: YES
         TEST_TARGET_NAME: Anurja
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
@@ -79,7 +79,7 @@ targets:
       - path: Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.anurja.app.widget
+        PRODUCT_BUNDLE_IDENTIFIER: com.novotia.anurja.widget
         PRODUCT_NAME: AnurjaWidget
         INFOPLIST_FILE: AnurjaWidget/Info.plist
         CODE_SIGN_ENTITLEMENTS: AnurjaWidget/AnurjaWidget.entitlements
@@ -100,7 +100,7 @@ targets:
       - path: Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.anurja.app.watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: com.novotia.anurja.watchkitapp
         PRODUCT_NAME: AnurjaWatch
         INFOPLIST_FILE: AnurjaWatch/Info.plist
         CODE_SIGN_ENTITLEMENTS: AnurjaWatch/AnurjaWatch.entitlements
@@ -126,7 +126,7 @@ targets:
       - path: Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.anurja.app.watchkitapp.widget
+        PRODUCT_BUNDLE_IDENTIFIER: com.novotia.anurja.watchkitapp.widget
         PRODUCT_NAME: AnurjaWatchWidget
         INFOPLIST_FILE: AnurjaWatchWidget/Info.plist
         CODE_SIGN_ENTITLEMENTS: AnurjaWatchWidget/AnurjaWatchWidget.entitlements

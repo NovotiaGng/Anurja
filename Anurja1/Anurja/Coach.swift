@@ -118,7 +118,7 @@ extension ExerciseKind {
     }
 }
 
-private func minimum(_ first: Double?, _ second: Double?) -> Double? {
+func minimum(_ first: Double?, _ second: Double?) -> Double? {
     switch (first, second) {
     case let (lhs?, rhs?): min(lhs, rhs)
     case let (lhs?, nil): lhs
@@ -127,7 +127,7 @@ private func minimum(_ first: Double?, _ second: Double?) -> Double? {
     }
 }
 
-private func jointAngle(_ joints: [BodyJoint: CGPoint], _ first: BodyJoint, _ middle: BodyJoint, _ last: BodyJoint) -> Double? {
+func jointAngle(_ joints: [BodyJoint: CGPoint], _ first: BodyJoint, _ middle: BodyJoint, _ last: BodyJoint) -> Double? {
     guard let a = joints[first], let b = joints[middle], let c = joints[last] else { return nil }
     let ax = (a.x - b.x) * 0.75
     let ay = a.y - b.y
@@ -138,7 +138,7 @@ private func jointAngle(_ joints: [BodyJoint: CGPoint], _ first: BodyJoint, _ mi
     return abs(atan2(cross, dot)) * 180 / .pi
 }
 
-private func averaged(left: Double?, right: Double?) -> Double? {
+func averaged(left: Double?, right: Double?) -> Double? {
     switch (left, right) {
     case let (lhs?, rhs?): (lhs + rhs) / 2
     case let (lhs?, nil): lhs
@@ -327,8 +327,32 @@ struct RepCounter {
     private var smoothed: Double?
     private var repStart: Date?
     private var lastSample: Date?
+    // Set stats for the end-of-set form report.
+    private(set) var shallowReps = 0
+    private(set) var rushedReps = 0
+    private(set) var repDurations: [Double] = []
+    private(set) var framesSeen = 0
+    private(set) var framesLost = 0
+    // Body checkpoints: live result for the current frame, and per-rep tally.
+    let checks: [FormCheck]
+    private(set) var live: [String: Bool] = [:]
+    private(set) var checkTally: [String: (hit: Int, reps: Int)] = [:]
+    private var repChecks: [String: (pass: Int, seen: Int)] = [:]
+    /// Checkpoints the last finished rep missed, for the live correction text.
+    private(set) var lastRepMissed: Set<String> = []
+    // Learned model (FormFeatures.swift): replaces the rule for checkpoints it
+    // beat on validation, and scores the whole rep where it's reliable.
+    let network: FormModel?
+    private(set) var samples: [FormSample] = []
+    private(set) var formTally: (good: Int, reps: Int) = (0, 0)
+    private var repForm: [Double] = []
+
+    /// Checkpoints read by the learned model instead of the 2D rule.
+    var modelled: Set<String> { Set(network?.useModel ?? []) }
 
     init(exercise: ExerciseKind) {
+        checks = exercise.formChecks
+        network = FormModels.model(for: exercise)
         hi = exercise.extendedAngle
         lo = exercise.depthAngle
         further = exercise.furtherCue
@@ -341,7 +365,42 @@ struct RepCounter {
         self = RepCounter(exercise: exercise)
     }
 
-    mutating func ingest(_ raw: Double?, at now: Date = Date()) {
+    /// Green/red per joint from the current frame: red if any check using it fails.
+    var jointStatus: [BodyJoint: Bool] {
+        var status: [BodyJoint: Bool] = [:]
+        for check in checks {
+            guard let passed = live[check.id] else { continue }
+            for joint in check.joints {
+                status[joint] = (status[joint] ?? true) && passed
+            }
+        }
+        return status
+    }
+
+    mutating func ingest(_ raw: Double?, joints: [BodyJoint: CGPoint]? = nil, at now: Date = Date()) {
+        if let joints {
+            live = [:]
+            let features = network == nil ? nil : FormFeatures.vector(joints)
+            let scores = features.flatMap { network?.predict($0) }
+            let named = scores.map { Dictionary(uniqueKeysWithValues: zip(network?.outputs ?? [], $0)) } ?? [:]
+            for check in checks {
+                if modelled.contains(check.id), let score = named[check.id] {
+                    live[check.id] = score >= 0.5
+                } else {
+                    live[check.id] = check.test(joints)
+                }
+            }
+            if let features, let scores, repStart != nil, samples.count < 2000 {
+                samples.append(FormSample(features: features, scores: scores))
+            }
+            if inRep, modelled.contains("form_ok"), let ok = named["form_ok"] {
+                repForm.append(ok)
+            }
+        }
+        // Only count tracking once the set has started.
+        if repStart != nil {
+            if raw == nil { framesLost += 1 } else { framesSeen += 1 }
+        }
         guard let raw else {
             feedback = String(localized: "Step into frame")
             smoothed = nil
@@ -362,24 +421,316 @@ struct RepCounter {
             repStart = now
             feedback = String(localized: "Keep going…")
         }
+        if inRep {
+            for (id, passed) in live {
+                var tally = repChecks[id] ?? (0, 0)
+                tally.seen += 1
+                if passed { tally.pass += 1 }
+                repChecks[id] = tally
+            }
+        }
         if inRep, angle < lo {
             reached = true
             feedback = good
         }
+        // Say the missed hold checkpoint and how to fix it, while it happens.
+        if inRep, let missed = checks.first(where: { $0.kind == .hold && live[$0.id] == false }) {
+            feedback = missed.correction
+        }
         if inRep, angle > hi {
             let duration = repStart.map { now.timeIntervalSince($0) } ?? 1
             if reached && duration < 0.7 {
+                rushedReps += 1
                 feedback = String(localized: "Too quick. Slow and steady counts")
             } else if reached {
                 count += 1
+                repDurations.append(duration)
                 feedback = count >= target
                     ? String(localized: "Set complete! \(count) reps")
                     : String(localized: "Rep \(count)!")
             } else {
+                shallowReps += 1
                 feedback = further
             }
+            closeRepChecks()
             inRep = false
             reached = false
+        }
+    }
+
+    private mutating func closeRepChecks() {
+        lastRepMissed = []
+        if !repForm.isEmpty {
+            formTally.reps += 1
+            if repForm.reduce(0, +) / Double(repForm.count) >= 0.5 { formTally.good += 1 }
+            repForm = []
+        }
+        for check in checks {
+            guard let frames = repChecks[check.id], frames.seen > 0 else { continue }
+            let hit = check.kind == .reach
+                ? frames.pass > 0
+                : Double(frames.pass) / Double(frames.seen) >= 0.7
+            var tally = checkTally[check.id] ?? (0, 0)
+            tally.reps += 1
+            if hit { tally.hit += 1 }
+            if !hit { lastRepMissed.insert(check.id) }
+            checkTally[check.id] = tally
+        }
+        repChecks = [:]
+    }
+}
+
+struct FormReport {
+    var good: [String] = []
+    var improve: [String] = []
+}
+
+extension RepCounter {
+    // ponytail: left/right symmetry isn't checked yet; add it as a FormCheck
+    // comparing both sides once real-device thresholds are tuned.
+    func report(for exercise: ExerciseKind) -> FormReport {
+        var report = FormReport()
+        let attempts = count + shallowReps + rushedReps
+        let tracked = framesSeen + framesLost
+        let lostShare = tracked > 0 ? Double(framesLost) / Double(tracked) : 0
+        let pace = repDurations.isEmpty ? nil : repDurations.reduce(0, +) / Double(repDurations.count)
+        // With camera checkpoints, "range" is reported per checkpoint below.
+        let rangeChecked = checkTally["range"] != nil
+
+        if count >= target {
+            report.good.append(String(localized: "You hit your target of \(target) reps"))
+        } else if count > 0 {
+            report.good.append(String(localized: "\(count) clean reps with full range of motion"))
+        }
+        if count > 0, shallowReps == 0, !rangeChecked {
+            report.good.append(String(localized: "You reached full range on every rep"))
+        }
+        if count > 0, rushedReps == 0 {
+            report.good.append(String(localized: "Controlled tempo, no rushed reps"))
+        }
+        if let pace, pace >= 1.2 {
+            report.good.append(String(localized: "Steady, controlled pace through each rep"))
+        }
+        if attempts > 0, lostShare < 0.1 {
+            report.good.append(String(localized: "You stayed in view of the camera the whole set"))
+        }
+        for check in checks {
+            guard let tally = checkTally[check.id], tally.reps > 0 else { continue }
+            let share = Double(tally.hit) / Double(tally.reps)
+            if share >= 0.8 {
+                report.good.append(String(localized: "\(check.title): \(tally.hit) of \(tally.reps) reps"))
+            } else if share < 0.6 {
+                report.improve.append(String(localized: "\(check.title): only \(tally.hit) of \(tally.reps) reps. \(check.tip)"))
+            }
+        }
+
+        if formTally.reps > 0 {
+            if Double(formTally.good) / Double(formTally.reps) >= 0.8 {
+                report.good.append(String(localized: "Form model: \(formTally.good) of \(formTally.reps) reps looked like good form"))
+            } else {
+                report.improve.append(String(localized: "Form model: only \(formTally.good) of \(formTally.reps) reps looked like good form. Slow down and follow the checkpoints"))
+            }
+        }
+        if shallowReps > 0, !rangeChecked {
+            report.improve.append(String(localized: "\(shallowReps) of \(attempts) reps were short of full range. \(exercise.furtherCue)"))
+        }
+        if rushedReps > 0 {
+            report.improve.append(String(localized: "\(rushedReps) of \(attempts) reps were too quick to count. Take about 2 seconds down and 2 seconds up"))
+        } else if let pace, pace < 1.2 {
+            report.improve.append(String(localized: "Slow down a little. Control both the way down and the way up"))
+        }
+        if lostShare >= 0.1 {
+            report.improve.append(exercise.sideOn
+                ? String(localized: "The camera lost you at times. Stand side-on with your whole body in the frame")
+                : String(localized: "The camera lost you at times. Face the camera with your whole body in the frame"))
+        }
+        if attempts == 0 {
+            report.improve.append(String(localized: "No reps were picked up. Step back until your whole body is in the frame, then start moving"))
+        } else if count < target {
+            report.improve.append(String(localized: "Build up to \(target) clean reps"))
+        }
+        if report.improve.isEmpty {
+            report.improve.append(String(localized: "Great set. Next time, try 2 more reps or a slower lowering"))
+        }
+        return report
+    }
+}
+
+struct FormSummaryView: View {
+    var exercise: ExerciseKind
+    var reps: Int
+    var report: FormReport
+    var profile: UserProfile
+    var meals: [MealLog]
+    /// The finished set, so the user can correct the coach and retrain it.
+    var counter: RepCounter? = nil
+    var done: () -> Void
+    @State private var wrong: Set<String> = []
+    @State private var note: String?
+    @State private var ideas: [MealIdea] = []
+
+    var body: some View {
+        ZStack {
+            Color.cream.ignoresSafeArea()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Nice work!")
+                        .scaledFont(size: 26, weight: .bold)
+                    Text("\(reps) clean reps. Muscles that just worked help your body use glucose.")
+                        .scaledFont(size: 15)
+                        .foregroundStyle(Color.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let note {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Label("Coach's note", systemImage: "sparkles")
+                                .scaledFont(size: 13, weight: .semibold)
+                                .foregroundStyle(Color.white.opacity(0.85))
+                            Text(note)
+                                .scaledFont(size: 16)
+                                .foregroundStyle(Color.white)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(18)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.forest, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    }
+                    section("What you did well", items: report.good, symbol: "checkmark.circle.fill", tint: .forest)
+                    section("How to improve your form", items: report.improve, symbol: "arrow.up.right.circle.fill", tint: .terracotta)
+                    if !ideas.isEmpty {
+                        refuel
+                    }
+                    if !teachable.isEmpty {
+                        teach
+                    }
+                    PrimaryButton(title: "Done", symbol: "checkmark", action: finish)
+                }
+                .padding(20)
+            }
+        }
+        .task {
+            ideas = MealIdeas.pick(profile: profile, meals: meals, exercise: exercise)
+            async let written = CoachAI.setNote(exercise: exercise, reps: reps, report: report)
+            async let personal = CoachAI.personalise(ideas, exercise: exercise, reps: reps, meals: meals)
+            note = await written
+            if let personal = await personal {
+                ideas = personal
+            }
+        }
+    }
+
+    /// Model-read checkpoints the coach scored this set.
+    private var teachable: [(check: FormCheck, coachHit: Bool, tally: (hit: Int, reps: Int))] {
+        guard let counter, !counter.samples.isEmpty else { return [] }
+        return counter.checks.compactMap { check in
+            guard counter.modelled.contains(check.id), let tally = counter.checkTally[check.id], tally.reps > 0 else { return nil }
+            return (check, tally.hit * 2 >= tally.reps, tally)
+        }
+    }
+
+    private var teach: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Did the coach read you right?")
+                .scaledFont(size: 17, weight: .bold)
+            Text("Tap any checkpoint it got wrong. Your answers retrain the coach on this phone only. No video is kept.")
+                .scaledFont(size: 13)
+                .foregroundStyle(Color.muted)
+                .fixedSize(horizontal: false, vertical: true)
+            ForEach(teachable, id: \.check.id) { item in
+                let flipped = wrong.contains(item.check.id)
+                let hit = item.coachHit != flipped
+                Button {
+                    if flipped { wrong.remove(item.check.id) } else { wrong.insert(item.check.id) }
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: hit ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(hit ? Color.forest : Color.terracotta)
+                            .font(.system(size: 18, weight: .semibold))
+                            .accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(item.check.title)
+                                .scaledFont(size: 15)
+                                .foregroundStyle(Color.ink)
+                            Text(flipped
+                                 ? (hit ? String(localized: "You say you did this") : String(localized: "You say you missed this"))
+                                 : String(localized: "Coach: \(item.tally.hit) of \(item.tally.reps) reps"))
+                                .scaledFont(size: 13)
+                                .foregroundStyle(Color.muted)
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                        Spacer(minLength: 8)
+                        Text(flipped ? "Fixed" : "Wrong?")
+                            .scaledFont(size: 13, weight: .semibold)
+                            .foregroundStyle(flipped ? Color.forest : Color.terracotta)
+                    }
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .anurjaCard()
+    }
+
+    private func finish() {
+        if let counter, !wrong.isEmpty {
+            let corrections = Dictionary(uniqueKeysWithValues: teachable
+                .filter { wrong.contains($0.check.id) }
+                .map { ($0.check.id, !$0.coachHit) })
+            let kinds = Dictionary(uniqueKeysWithValues: counter.checks.map { ($0.id, $0.kind) })
+            let samples = counter.samples
+            Task { await FormModels.personalise(exercise, samples: samples, corrections: corrections, kinds: kinds) }
+        }
+        done()
+    }
+
+    private var refuel: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Refuel ideas")
+                .scaledFont(size: 17, weight: .bold)
+            Text("Picked from your food library, without your allergens")
+                .scaledFont(size: 13)
+                .foregroundStyle(Color.muted)
+            ForEach(ideas) { idea in
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(idea.item.name)
+                        .scaledFont(size: 16, weight: .semibold)
+                        .foregroundStyle(Color.ink)
+                    Text("\(idea.item.serving) · \(Int(idea.item.carbs)) g carbs · \(Int(idea.item.protein)) g protein")
+                        .scaledFont(size: 13)
+                        .foregroundStyle(Color.muted)
+                    Text(idea.reason)
+                        .scaledFont(size: 14)
+                        .foregroundStyle(Color.forest)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .anurjaCard()
+    }
+
+    @ViewBuilder
+    private func section(_ title: LocalizedStringKey, items: [String], symbol: String, tint: Color) -> some View {
+        if !items.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(title)
+                    .scaledFont(size: 17, weight: .bold)
+                ForEach(items, id: \.self) { item in
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                        Image(systemName: symbol)
+                            .foregroundStyle(tint)
+                            .accessibilityHidden(true)
+                        Text(item)
+                            .scaledFont(size: 15)
+                            .foregroundStyle(Color.ink)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .anurjaCard()
         }
     }
 }
@@ -430,6 +781,7 @@ struct CoachScreen: View {
     @State private var showFinish = false
     @State private var awarded = false
     @State private var awardedReps = 0
+    @State private var report = FormReport()
     private let exercise: ExerciseKind
 
     init(exercise: ExerciseKind) {
@@ -491,7 +843,7 @@ struct CoachScreen: View {
         }
         .onChange(of: camera.angle) { _, angle in
             guard mode == .live, !camera.simulated else { return }
-            counter.ingest(angle)
+            counter.ingest(angle, joints: camera.joints)
         }
         .onChange(of: clock.angle) { _, angle in
             guard mode == .live, camera.simulated else { return }
@@ -501,10 +853,8 @@ struct CoachScreen: View {
             camera.stop()
             clock.stop()
         }
-        .alert("Nice work!", isPresented: $showFinish) {
-            Button("Done") { dismiss() }
-        } message: {
-            Text("\(awardedReps) clean reps. Muscles that just worked help your body use glucose.")
+        .sheet(isPresented: $showFinish, onDismiss: { dismiss() }) {
+            FormSummaryView(exercise: exercise, reps: awardedReps, report: report, profile: state.profile, meals: state.meals, counter: counter) { showFinish = false }
         }
     }
 
@@ -548,7 +898,7 @@ struct CoachScreen: View {
                 } else {
                     CameraPreview(session: camera.session)
                         .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
-                    SkeletonOverlay(joints: camera.joints)
+                    SkeletonOverlay(joints: camera.joints, status: counter.jointStatus)
                         .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
                         .allowsHitTesting(false)
                 }
@@ -580,6 +930,7 @@ struct CoachScreen: View {
             .aspectRatio(3.0 / 4.0, contentMode: .fit)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text("Form check"))
+            checkpoints
             if camera.simulated {
                 Text("Camera unavailable here, running a simulated session")
                     .scaledFont(size: 12)
@@ -630,10 +981,66 @@ struct CoachScreen: View {
         }
     }
 
+    private var checkpoints: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Form checkpoints")
+                .scaledFont(size: 15, weight: .bold)
+            ForEach(counter.checks) { check in
+                let live = counter.live[check.id]
+                let tally = counter.checkTally[check.id]
+                // Hold checks are corrected as they slip; reach checks once a rep misses them.
+                let missed = check.kind == .hold ? live == false : counter.lastRepMissed.contains(check.id)
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 10) {
+                        Image(systemName: live == true ? "checkmark.circle.fill" : live == false ? "xmark.circle.fill" : "circle.dashed")
+                            .foregroundStyle(live == true ? Color.forest : live == false ? Color.terracotta : Color.muted)
+                            .font(.system(size: 18, weight: .semibold))
+                            .accessibilityHidden(true)
+                        Text(check.title)
+                            .scaledFont(size: 14)
+                            .foregroundStyle(Color.ink)
+                            .fixedSize(horizontal: false, vertical: true)
+                        if counter.modelled.contains(check.id) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 11))
+                                .foregroundStyle(Color.muted)
+                                .accessibilityLabel(Text("Read by the form model"))
+                        }
+                        Spacer(minLength: 8)
+                        if let tally {
+                            Text("\(tally.hit)/\(tally.reps)")
+                                .scaledFont(size: 13, weight: .semibold)
+                                .foregroundStyle(Color.muted)
+                                .monospacedDigit()
+                        }
+                    }
+                    if missed {
+                        Text(check.correction)
+                            .scaledFont(size: 13)
+                            .foregroundStyle(Color.terracotta)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.leading, 28)
+                    }
+                }
+                .frame(minHeight: 28)
+                .accessibilityElement(children: .combine)
+                .accessibilityValue(Text(live == true ? "Hit" : live == false ? "Missed" : "Not visible"))
+            }
+            if camera.simulated {
+                Text("Checkpoints light up when the camera can see you")
+                    .scaledFont(size: 12)
+                    .foregroundStyle(Color.muted)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .anurjaCard()
+    }
+
     private func finish() {
         award(force: true)
         camera.stop()
         clock.stop()
+        report = counter.report(for: exercise)
         showFinish = true
     }
 
@@ -673,6 +1080,8 @@ struct StickFigure: View {
 
 struct SkeletonOverlay: View {
     var joints: [BodyJoint: CGPoint]
+    /// Checkpoint result per joint: green when hit, red when missed.
+    var status: [BodyJoint: Bool] = [:]
     private let links: [(BodyJoint, BodyJoint)] = [
         (.leftShoulder, .rightShoulder),
         (.leftShoulder, .leftElbow), (.leftElbow, .leftWrist),
@@ -693,9 +1102,15 @@ struct SkeletonOverlay: View {
                 path.addLine(to: CGPoint(x: end.x * size.width, y: end.y * size.height))
                 context.stroke(path, with: .color(.cream), style: StrokeStyle(lineWidth: 3, lineCap: .round))
             }
-            for point in joints.values {
-                let rect = CGRect(x: point.x * size.width - 4, y: point.y * size.height - 4, width: 8, height: 8)
-                context.fill(Path(ellipseIn: rect), with: .color(.terracotta))
+            for (joint, point) in joints {
+                let color: Color = switch status[joint] {
+                case true?: .green
+                case false?: .red
+                case nil: .terracotta
+                }
+                let radius: CGFloat = status[joint] == nil ? 4 : 6
+                let rect = CGRect(x: point.x * size.width - radius, y: point.y * size.height - radius, width: radius * 2, height: radius * 2)
+                context.fill(Path(ellipseIn: rect), with: .color(color))
             }
         }
     }
@@ -887,4 +1302,18 @@ private func lerp(_ start: Double, _ end: Double, _ progress: Double) -> Double 
 #Preview("Coach") {
     CoachScreen(exercise: .squat)
         .environmentObject(PreviewData.state())
+}
+
+#Preview("Form summary") {
+    var counter = RepCounter(exercise: .squat)
+    let start = Date()
+    // 3 slow clean reps, 1 shallow, 1 rushed.
+    let reps: [(depth: Double, seconds: Double)] = [(90, 2.5), (90, 2.5), (90, 2.5), (130, 2.5), (90, 0.4)]
+    var t = start
+    for rep in reps {
+        for angle in [170.0, 140, rep.depth, 140, 170] {
+            for _ in 0..<6 { counter.ingest(angle, at: t); t += rep.seconds / 30 }
+        }
+    }
+    return FormSummaryView(exercise: .squat, reps: counter.count, report: counter.report(for: .squat), profile: UserProfile(), meals: MealLog.samples) {}
 }

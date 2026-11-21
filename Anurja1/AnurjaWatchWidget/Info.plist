@@ -26,6 +26,6 @@
 		<string>com.apple.widgetkit-extension</string>
 	</dict>
 	<key>WKAppBundleIdentifier</key>
-	<string>com.anurja.app.watchkitapp</string>
+	<string>com.novotia.anurja.watchkitapp</string>
 </dict>
 </plist>

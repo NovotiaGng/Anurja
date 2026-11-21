@@ -1,0 +1,427 @@
+{
+ "dataset": "SohlHealth/enhanced-indian-food-classification (CC BY 4.0) + Open Images V7 verified labels (Flickr, CC BY 2.0)",
+ "revision": "f2dd4e889747daaa49d95f74beb9b94b75a77161",
+ "model": "logistic C=0.01",
+ "test_photos": 3547,
+ "top1": 0.87,
+ "top3": 0.96,
+ "threshold": 0.59,
+ "threshold_coverage": 0.822,
+ "threshold_precision": 0.943,
+ "per_dish": [
+  {
+   "dish": "aloo_gobi",
+   "photos": 30,
+   "top1": 0.9,
+   "top3": 1.0
+  },
+  {
+   "dish": "aloo_masala",
+   "photos": 30,
+   "top1": 0.967,
+   "top3": 1.0
+  },
+  {
+   "dish": "apple",
+   "photos": 74,
+   "top1": 0.892,
+   "top3": 0.959
+  },
+  {
+   "dish": "bagel",
+   "photos": 12,
+   "top1": 0.583,
+   "top3": 0.75
+  },
+  {
+   "dish": "banana",
+   "photos": 73,
+   "top1": 0.89,
+   "top3": 0.959
+  },
+  {
+   "dish": "bhindi_masala",
+   "photos": 60,
+   "top1": 0.983,
+   "top3": 1.0
+  },
+  {
+   "dish": "biryani",
+   "photos": 60,
+   "top1": 0.967,
+   "top3": 1.0
+  },
+  {
+   "dish": "burger",
+   "photos": 119,
+   "top1": 0.933,
+   "top3": 0.992
+  },
+  {
+   "dish": "burrito",
+   "photos": 29,
+   "top1": 0.862,
+   "top3": 0.931
+  },
+  {
+   "dish": "butter_naan",
+   "photos": 49,
+   "top1": 0.816,
+   "top3": 0.939
+  },
+  {
+   "dish": "cake",
+   "photos": 76,
+   "top1": 0.816,
+   "top3": 0.974
+  },
+  {
+   "dish": "chai",
+   "photos": 142,
+   "top1": 0.859,
+   "top3": 0.958
+  },
+  {
+   "dish": "chapati",
+   "photos": 92,
+   "top1": 0.728,
+   "top3": 0.891
+  },
+  {
+   "dish": "chicken_curry",
+   "photos": 30,
+   "top1": 0.733,
+   "top3": 0.967
+  },
+  {
+   "dish": "chole",
+   "photos": 60,
+   "top1": 0.917,
+   "top3": 1.0
+  },
+  {
+   "dish": "chole_bhature",
+   "photos": 121,
+   "top1": 0.959,
+   "top3": 0.992
+  },
+  {
+   "dish": "coconut_chutney",
+   "photos": 30,
+   "top1": 0.967,
+   "top3": 1.0
+  },
+  {
+   "dish": "coffee",
+   "photos": 32,
+   "top1": 0.344,
+   "top3": 0.875
+  },
+  {
+   "dish": "cookie",
+   "photos": 47,
+   "top1": 0.681,
+   "top3": 0.851
+  },
+  {
+   "dish": "croissant",
+   "photos": 26,
+   "top1": 0.808,
+   "top3": 0.962
+  },
+  {
+   "dish": "dal_makhani",
+   "photos": 107,
+   "top1": 0.916,
+   "top3": 0.972
+  },
+  {
+   "dish": "dhokla",
+   "photos": 74,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  {
+   "dish": "doughnut",
+   "photos": 35,
+   "top1": 0.629,
+   "top3": 0.971
+  },
+  {
+   "dish": "dum_aloo",
+   "photos": 30,
+   "top1": 0.733,
+   "top3": 0.933
+  },
+  {
+   "dish": "fish_curry",
+   "photos": 30,
+   "top1": 0.667,
+   "top3": 1.0
+  },
+  {
+   "dish": "french_fries",
+   "photos": 24,
+   "top1": 0.792,
+   "top3": 0.875
+  },
+  {
+   "dish": "fried_rice",
+   "photos": 54,
+   "top1": 0.981,
+   "top3": 1.0
+  },
+  {
+   "dish": "ghevar",
+   "photos": 30,
+   "top1": 0.967,
+   "top3": 1.0
+  },
+  {
+   "dish": "grape",
+   "photos": 49,
+   "top1": 0.837,
+   "top3": 0.898
+  },
+  {
+   "dish": "green_chutney",
+   "photos": 30,
+   "top1": 0.8,
+   "top3": 0.967
+  },
+  {
+   "dish": "guacamole",
+   "photos": 29,
+   "top1": 0.862,
+   "top3": 1.0
+  },
+  {
+   "dish": "gulab_jamun",
+   "photos": 44,
+   "top1": 0.977,
+   "top3": 1.0
+  },
+  {
+   "dish": "hot_dog",
+   "photos": 36,
+   "top1": 0.833,
+   "top3": 0.917
+  },
+  {
+   "dish": "ice_cream",
+   "photos": 66,
+   "top1": 0.803,
+   "top3": 0.939
+  },
+  {
+   "dish": "idli",
+   "photos": 101,
+   "top1": 0.921,
+   "top3": 0.96
+  },
+  {
+   "dish": "jalebi",
+   "photos": 104,
+   "top1": 0.981,
+   "top3": 0.99
+  },
+  {
+   "dish": "juice",
+   "photos": 26,
+   "top1": 0.923,
+   "top3": 0.923
+  },
+  {
+   "dish": "kaathi_rolls",
+   "photos": 43,
+   "top1": 0.837,
+   "top3": 0.953
+  },
+  {
+   "dish": "kadai_paneer",
+   "photos": 62,
+   "top1": 0.903,
+   "top3": 0.952
+  },
+  {
+   "dish": "kebab",
+   "photos": 30,
+   "top1": 0.933,
+   "top3": 0.967
+  },
+  {
+   "dish": "kheer",
+   "photos": 30,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  {
+   "dish": "kulfi",
+   "photos": 64,
+   "top1": 0.953,
+   "top3": 0.984
+  },
+  {
+   "dish": "lassi",
+   "photos": 30,
+   "top1": 0.933,
+   "top3": 1.0
+  },
+  {
+   "dish": "mango",
+   "photos": 17,
+   "top1": 0.471,
+   "top3": 0.765
+  },
+  {
+   "dish": "masala_dosa",
+   "photos": 76,
+   "top1": 0.934,
+   "top3": 0.974
+  },
+  {
+   "dish": "modak",
+   "photos": 26,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  {
+   "dish": "momos",
+   "photos": 47,
+   "top1": 0.894,
+   "top3": 0.915
+  },
+  {
+   "dish": "muffin",
+   "photos": 56,
+   "top1": 0.839,
+   "top3": 0.964
+  },
+  {
+   "dish": "mutton_curry",
+   "photos": 30,
+   "top1": 0.867,
+   "top3": 1.0
+  },
+  {
+   "dish": "noodles",
+   "photos": 44,
+   "top1": 0.886,
+   "top3": 0.977
+  },
+  {
+   "dish": "orange",
+   "photos": 31,
+   "top1": 0.742,
+   "top3": 0.839
+  },
+  {
+   "dish": "paani_puri",
+   "photos": 20,
+   "top1": 0.95,
+   "top3": 1.0
+  },
+  {
+   "dish": "pakode",
+   "photos": 72,
+   "top1": 0.917,
+   "top3": 0.972
+  },
+  {
+   "dish": "palak_paneer",
+   "photos": 60,
+   "top1": 0.983,
+   "top3": 1.0
+  },
+  {
+   "dish": "pancake",
+   "photos": 37,
+   "top1": 0.784,
+   "top3": 0.946
+  },
+  {
+   "dish": "pav_bhaji",
+   "photos": 53,
+   "top1": 0.849,
+   "top3": 0.925
+  },
+  {
+   "dish": "pizza",
+   "photos": 71,
+   "top1": 0.873,
+   "top3": 1.0
+  },
+  {
+   "dish": "poha",
+   "photos": 60,
+   "top1": 0.967,
+   "top3": 1.0
+  },
+  {
+   "dish": "rajma_curry",
+   "photos": 30,
+   "top1": 0.8,
+   "top3": 1.0
+  },
+  {
+   "dish": "ras_malai",
+   "photos": 30,
+   "top1": 0.967,
+   "top3": 1.0
+  },
+  {
+   "dish": "salad",
+   "photos": 33,
+   "top1": 0.667,
+   "top3": 0.909
+  },
+  {
+   "dish": "samosa",
+   "photos": 84,
+   "top1": 0.917,
+   "top3": 0.988
+  },
+  {
+   "dish": "sandwich",
+   "photos": 56,
+   "top1": 0.732,
+   "top3": 0.929
+  },
+  {
+   "dish": "shahi_paneer",
+   "photos": 60,
+   "top1": 0.783,
+   "top3": 0.933
+  },
+  {
+   "dish": "soup",
+   "photos": 43,
+   "top1": 0.698,
+   "top3": 0.791
+  },
+  {
+   "dish": "strawberry",
+   "photos": 43,
+   "top1": 0.837,
+   "top3": 0.953
+  },
+  {
+   "dish": "waffle",
+   "photos": 41,
+   "top1": 0.805,
+   "top3": 0.951
+  },
+  {
+   "dish": "watermelon",
+   "photos": 47,
+   "top1": 0.787,
+   "top3": 0.872
+  },
+  {
+   "dish": "white_rice",
+   "photos": 60,
+   "top1": 0.917,
+   "top3": 0.95
+  }
+ ]
+}

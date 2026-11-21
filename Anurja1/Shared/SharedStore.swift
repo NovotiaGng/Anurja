@@ -1,7 +1,7 @@
 import Foundation
 
 enum SharedStore {
-    static let appGroupID = "group.com.anurja.app"
+    static let appGroupID = "group.com.novotia.anurja"
     private static let fileName = "glucose.json"
     private static let defaultsKey = "anurja.glucose.snapshot"
 

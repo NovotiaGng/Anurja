@@ -9,12 +9,15 @@
 /* Begin PBXBuildFile section */
 		04E9E92E69320C9E37DA0EC9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDA091E4779F38EDFC40C1F /* Theme.swift */; };
 		04EC4359EEB1E1B6A16D0718 /* FlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165F1629CA99D279232162C2 /* FlowUITests.swift */; };
+		067885535B598059705385D9 /* MLEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2DE01367D6392C154D75F2 /* MLEngine.swift */; };
 		097BA427E61F89E6E0BB0D99 /* AnurjaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A2EA17671B40D7FE601FDB3A /* AnurjaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0EC6D6DC12576668C57D3B26 /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
 		157BE7CA70DD146F4E29E183 /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
 		1947CC523592E14C4732197F /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6198331983EFE66EFB559FB0 /* HabitsView.swift */; };
 		1F311CD31968B878F842E4B7 /* MealsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1553525C76496E4522D58DF5 /* MealsView.swift */; };
+		25CD7087829D68DD5BD9DE42 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826DB4E87936E467AE64311E /* Profile.swift */; };
 		2E58CEEA62D09064207A9171 /* AnurjaWatchWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3DF328F3734478EC5C8D40F2 /* AnurjaWatchWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3619A937EEFFA480CD79CDCA /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0162C4B4F396776CC2D32BE7 /* ProfileView.swift */; };
 		36BF87EDF59687E7FB45448F /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
 		39C6898E9442A6DF98C8DF24 /* AnurjaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8740C5E5595601702D88625 /* AnurjaWidget.swift */; };
 		3A9999E58DCAFFB3D19EEC30 /* AnurjaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1AD3CA561DBB1B97FB9CA /* AnurjaApp.swift */; };
@@ -25,6 +28,14 @@
 		5196CF7473CF2A637C561F0E /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
 		562AB83B3FABF7E4B3C0FC9F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 289A6B248383111FD2126856 /* Localizable.xcstrings */; };
 		567B1DF19E957BFB97DEC4A1 /* Coach.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9624B905DEFA657A4E9CCE /* Coach.swift */; };
+		A1F0C0DE00000000000000B1 /* FormCoach.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F1 /* FormCoach.swift */; };
+		A1F0C0DE00000000000000B3 /* FormSquat.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F3 /* FormSquat.mlmodel */; };
+		A1F0C0DE00000000000000B4 /* FormChairStand.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F4 /* FormChairStand.mlmodel */; };
+		A1F0C0DE00000000000000B5 /* FormLunge.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F5 /* FormLunge.mlmodel */; };
+		A1F0C0DE00000000000000B6 /* FormMarch.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F6 /* FormMarch.mlmodel */; };
+		A1F0C0DE00000000000000B7 /* FormLateralRaise.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F7 /* FormLateralRaise.mlmodel */; };
+		A1F00D0000000000000000B1 /* FoodClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A1F00D0000000000000000F1 /* FoodClassifier.mlmodel */; };
+		A1F0C0DE00000000000000B2 /* FormFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE00000000000000F2 /* FormFeatures.swift */; };
 		5E630712E145EBC5E97A2D7B /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E2A478FE1363135F063730 /* Onboarding.swift */; };
 		6106DB98A20054D35BC6A780 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE88A7D0245E9BEA7DF1303 /* AppState.swift */; };
 		61733B4CFA842D4059C44EA4 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
@@ -32,6 +43,7 @@
 		62FA8DD973CF02306711EFD1 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
 		69D2DE728420A1018A7252DE /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B48AEC492E7950FE9A3670 /* PreviewData.swift */; };
 		6D384364B51E88D7561362E1 /* GlucoseEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC783D4CCF9E51EE7AD37484 /* GlucoseEntryView.swift */; };
+		78B1C972FEB37C6D23D4533A /* AddMealFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53D9A6C9AD30EA7DF3A4EF5 /* AddMealFlow.swift */; };
 		7C422E8FB37E530D963F053D /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
 		7CFBDD02B6028CD2A5F1119A /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
 		7FDB4C9FF05E7E2A80D6F1D1 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
@@ -40,27 +52,22 @@
 		842F8EC3E8363D4613F16553 /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
 		86FF473EAC0C56D39AC10C04 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 33080C10611C01AA8A0D99BF /* PrivacyInfo.xcprivacy */; };
 		8C03B6441C753152CDAC00B3 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06452E7E22A54CEB03576439 /* Forecast.swift */; };
-		25CD7087829D68DD5BD9DE42 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826DB4E87936E467AE64311E /* Profile.swift */; };
-		B44FA96E3A347393F3BA2FC4 /* FoodLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8B25A708FCB0BA6A6C558 /* FoodLibrary.swift */; };
-		C559065BF57E736D23A9A8A6 /* FoodLibraryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7E7D3F3F7B1884AE6EB159 /* FoodLibraryData.swift */; };
-		067885535B598059705385D9 /* MLEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2DE01367D6392C154D75F2 /* MLEngine.swift */; };
-		BA9CBA649F47DCCD74833AF3 /* GeneratedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B17FE2A0BDFB6C41BA20003 /* GeneratedModel.swift */; };
-		D5C57E9FEBD0A093D3D74531 /* LocalDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6D5ABAD68C928C42C8CAA4 /* LocalDatabase.swift */; };
-		A25FED0B40C6AE5F255860FA /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB53AA18EC1333904C76CA0 /* APIClient.swift */; };
-		FD352A18C7A0B28D7DC4710D /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6252CA9871BD648CCA877E7C /* Services.swift */; };
-		78B1C972FEB37C6D23D4533A /* AddMealFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53D9A6C9AD30EA7DF3A4EF5 /* AddMealFlow.swift */; };
-		3619A937EEFFA480CD79CDCA /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0162C4B4F396776CC2D32BE7 /* ProfileView.swift */; };
 		8F96B03EED46B7145A6547EB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 289A6B248383111FD2126856 /* Localizable.xcstrings */; };
 		A07D73AC9C320B8AD9463DE3 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
 		A099D961AE0078ED389A4303 /* SparklineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DA13517403084FB875C39 /* SparklineChart.swift */; };
+		A25FED0B40C6AE5F255860FA /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB53AA18EC1333904C76CA0 /* APIClient.swift */; };
 		A58DBDD5EA8C65C039151694 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E15E70C5ACB84FD0683CA5B /* InsightEngine.swift */; };
 		A77B6D1B619AF59FB9E97CA4 /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
 		AC7AF2AC55549D470AFD8672 /* AnurjaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 53B4ED0FC389A6D3F13AA505 /* AnurjaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B1426F27BC28C33C0AC019A9 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095AB763AF30108ADB7EFF2 /* SharedStore.swift */; };
+		B44FA96E3A347393F3BA2FC4 /* FoodLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8B25A708FCB0BA6A6C558 /* FoodLibrary.swift */; };
+		BA9CBA649F47DCCD74833AF3 /* GeneratedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B17FE2A0BDFB6C41BA20003 /* GeneratedModel.swift */; };
+		C559065BF57E736D23A9A8A6 /* FoodLibraryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7E7D3F3F7B1884AE6EB159 /* FoodLibraryData.swift */; };
 		C65B4C1CA79A9A734518D7B6 /* SharedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */; };
 		C84B3D0095782C2D63490DE9 /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD027168559904D4FBCE53FE /* WatchConnectivityManager.swift */; };
 		D3CD0A19DD8DD04163DCDEFA /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D4B076A45456C61E7B73AC /* Persistence.swift */; };
 		D4674775CF1627651B193FE7 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F469BBA78D27676C104CA2E /* MainTabView.swift */; };
+		D5C57E9FEBD0A093D3D74531 /* LocalDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6D5ABAD68C928C42C8CAA4 /* LocalDatabase.swift */; };
 		D91EA4A4312088C9F5C90838 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC700785017DF975363425C /* HealthKitService.swift */; };
 		DB8568236517B855604F75ED /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE6C2761B9A4CBCD90940D /* WatchConnectivityManager.swift */; };
 		DEF5B03B2C71FB4E8773FB2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09E6153FF0A2D17808B66BAE /* Assets.xcassets */; };
@@ -68,6 +75,7 @@
 		E476D37D951C22E2DCCAB159 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF414911EE73A316DD87D4 /* Palette.swift */; };
 		EC8890DC74A281474485916E /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
 		F3669A6B939534E18BA58C64 /* CompanionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF2BCA2DB8C4CED5E236E5 /* CompanionMessage.swift */; };
+		FD352A18C7A0B28D7DC4710D /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6252CA9871BD648CCA877E7C /* Services.swift */; };
 		FED4A64A655150C16BFD240D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C544B4939976BBA753BBD1 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -140,22 +148,16 @@
 
 /* Begin PBXFileReference section */
 		0095AB763AF30108ADB7EFF2 /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
-		06452E7E22A54CEB03576439 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
-		826DB4E87936E467AE64311E /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
-		67B8B25A708FCB0BA6A6C558 /* FoodLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLibrary.swift; sourceTree = "<group>"; };
-		0A7E7D3F3F7B1884AE6EB159 /* FoodLibraryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLibraryData.swift; sourceTree = "<group>"; };
-		4D2DE01367D6392C154D75F2 /* MLEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLEngine.swift; sourceTree = "<group>"; };
-		1B17FE2A0BDFB6C41BA20003 /* GeneratedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedModel.swift; sourceTree = "<group>"; };
-		0E6D5ABAD68C928C42C8CAA4 /* LocalDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDatabase.swift; sourceTree = "<group>"; };
-		3DB53AA18EC1333904C76CA0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		6252CA9871BD648CCA877E7C /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
-		C53D9A6C9AD30EA7DF3A4EF5 /* AddMealFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMealFlow.swift; sourceTree = "<group>"; };
 		0162C4B4F396776CC2D32BE7 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		06452E7E22A54CEB03576439 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
 		06D4B076A45456C61E7B73AC /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		09E6153FF0A2D17808B66BAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0A7E7D3F3F7B1884AE6EB159 /* FoodLibraryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLibraryData.swift; sourceTree = "<group>"; };
+		0E6D5ABAD68C928C42C8CAA4 /* LocalDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDatabase.swift; sourceTree = "<group>"; };
 		11E2A478FE1363135F063730 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		1553525C76496E4522D58DF5 /* MealsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealsView.swift; sourceTree = "<group>"; };
 		165F1629CA99D279232162C2 /* FlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowUITests.swift; sourceTree = "<group>"; };
+		1B17FE2A0BDFB6C41BA20003 /* GeneratedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedModel.swift; sourceTree = "<group>"; };
 		24C544B4939976BBA753BBD1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2790943CE16FEC60B0C57995 /* AnurjaWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaWatchApp.swift; sourceTree = "<group>"; };
 		27978F2FD6689A4DD49EDDF1 /* SharedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModels.swift; sourceTree = "<group>"; };
@@ -163,24 +165,38 @@
 		2BDF414911EE73A316DD87D4 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		2DB1AD3CA561DBB1B97FB9CA /* AnurjaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaApp.swift; sourceTree = "<group>"; };
 		33080C10611C01AA8A0D99BF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3DB53AA18EC1333904C76CA0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3DF328F3734478EC5C8D40F2 /* AnurjaWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AnurjaWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E15E70C5ACB84FD0683CA5B /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
 		3FDA091E4779F38EDFC40C1F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		4D2DE01367D6392C154D75F2 /* MLEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLEngine.swift; sourceTree = "<group>"; };
 		53B4ED0FC389A6D3F13AA505 /* AnurjaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AnurjaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6198331983EFE66EFB559FB0 /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
+		6252CA9871BD648CCA877E7C /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
+		67B8B25A708FCB0BA6A6C558 /* FoodLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLibrary.swift; sourceTree = "<group>"; };
 		68FDC14977304B96BA9BCC27 /* Anurja.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anurja.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CD91A1E5692A8123275B355 /* WatchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHomeView.swift; sourceTree = "<group>"; };
 		7F469BBA78D27676C104CA2E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		826DB4E87936E467AE64311E /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		971DA13517403084FB875C39 /* SparklineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineChart.swift; sourceTree = "<group>"; };
 		9EE88A7D0245E9BEA7DF1303 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		A2EA17671B40D7FE601FDB3A /* AnurjaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnurjaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB9091C7DC1C98EFE7ADEEDA /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		C1F3EA81749B9DC985D6AD5A /* AnurjaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnurjaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C53D9A6C9AD30EA7DF3A4EF5 /* AddMealFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMealFlow.swift; sourceTree = "<group>"; };
 		CD027168559904D4FBCE53FE /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
 		D0B48AEC492E7950FE9A3670 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		D8740C5E5595601702D88625 /* AnurjaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaWidget.swift; sourceTree = "<group>"; };
 		DC783D4CCF9E51EE7AD37484 /* GlucoseEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseEntryView.swift; sourceTree = "<group>"; };
 		DE9624B905DEFA657A4E9CCE /* Coach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coach.swift; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F1 /* FormCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCoach.swift; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F3 /* FormSquat.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FormModels/FormSquat.mlmodel; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F4 /* FormChairStand.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FormModels/FormChairStand.mlmodel; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F5 /* FormLunge.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FormModels/FormLunge.mlmodel; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F6 /* FormMarch.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FormModels/FormMarch.mlmodel; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F7 /* FormLateralRaise.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FormModels/FormLateralRaise.mlmodel; sourceTree = "<group>"; };
+		A1F00D0000000000000000F1 /* FoodClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FoodModels/FoodClassifier.mlmodel; sourceTree = "<group>"; };
+		A1F0C0DE00000000000000F2 /* FormFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFeatures.swift; sourceTree = "<group>"; };
 		E9DE6C2761B9A4CBCD90940D /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
 		EBC700785017DF975363425C /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		F9B11CADAD7B6161EEC7A49C /* AnurjaWatchWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnurjaWatchWidget.swift; sourceTree = "<group>"; };
@@ -256,6 +272,14 @@
 				9EE88A7D0245E9BEA7DF1303 /* AppState.swift */,
 				09E6153FF0A2D17808B66BAE /* Assets.xcassets */,
 				DE9624B905DEFA657A4E9CCE /* Coach.swift */,
+				A1F0C0DE00000000000000F1 /* FormCoach.swift */,
+				A1F0C0DE00000000000000F3 /* FormSquat.mlmodel */,
+				A1F0C0DE00000000000000F4 /* FormChairStand.mlmodel */,
+				A1F0C0DE00000000000000F5 /* FormLunge.mlmodel */,
+				A1F0C0DE00000000000000F6 /* FormMarch.mlmodel */,
+				A1F0C0DE00000000000000F7 /* FormLateralRaise.mlmodel */,
+				A1F00D0000000000000000F1 /* FoodClassifier.mlmodel */,
+				A1F0C0DE00000000000000F2 /* FormFeatures.swift */,
 				06452E7E22A54CEB03576439 /* Forecast.swift */,
 				826DB4E87936E467AE64311E /* Profile.swift */,
 				67B8B25A708FCB0BA6A6C558 /* FoodLibrary.swift */,
@@ -405,7 +429,6 @@
 				LastUpgradeCheck = 2720;
 				TargetAttributes = {
 					0732856C142F68C37D9C40C4 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					29D5CBA8C4433CD3815257B7 = {
@@ -414,15 +437,12 @@
 						TestTargetID = EA2DCEA1239353AA54C5A399;
 					};
 					32BEBC874E924959973BF050 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					AFD8E4DEC93EB9A520761CD5 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					EA2DCEA1239353AA54C5A399 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -539,6 +559,14 @@
 				3A9999E58DCAFFB3D19EEC30 /* AnurjaApp.swift in Sources */,
 				6106DB98A20054D35BC6A780 /* AppState.swift in Sources */,
 				567B1DF19E957BFB97DEC4A1 /* Coach.swift in Sources */,
+				A1F0C0DE00000000000000B1 /* FormCoach.swift in Sources */,
+				A1F0C0DE00000000000000B3 /* FormSquat.mlmodel in Sources */,
+				A1F0C0DE00000000000000B4 /* FormChairStand.mlmodel in Sources */,
+				A1F0C0DE00000000000000B5 /* FormLunge.mlmodel in Sources */,
+				A1F0C0DE00000000000000B6 /* FormMarch.mlmodel in Sources */,
+				A1F0C0DE00000000000000B7 /* FormLateralRaise.mlmodel in Sources */,
+				A1F00D0000000000000000B1 /* FoodClassifier.mlmodel in Sources */,
+				A1F0C0DE00000000000000B2 /* FormFeatures.swift in Sources */,
 				5196CF7473CF2A637C561F0E /* CompanionMessage.swift in Sources */,
 				8C03B6441C753152CDAC00B3 /* Forecast.swift in Sources */,
 				25CD7087829D68DD5BD9DE42 /* Profile.swift in Sources */,
@@ -608,9 +636,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AnurjaWatch/AnurjaWatch.entitlements;
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AnurjaWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.watchkitapp;
 				PRODUCT_NAME = AnurjaWatch;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -630,7 +659,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.uitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.uitests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Anurja;
@@ -720,6 +749,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Anurja/Anurja.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Anurja/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -727,7 +757,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja;
 				PRODUCT_NAME = Anurja;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
@@ -740,9 +770,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AnurjaWatch/AnurjaWatch.entitlements;
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AnurjaWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.watchkitapp;
 				PRODUCT_NAME = AnurjaWatch;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -762,7 +793,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.uitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.uitests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Anurja;
@@ -842,6 +873,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AnurjaWidget/AnurjaWidget.entitlements;
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AnurjaWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -850,7 +882,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.widget;
 				PRODUCT_NAME = AnurjaWidget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -862,6 +894,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AnurjaWidget/AnurjaWidget.entitlements;
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AnurjaWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -870,7 +903,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.widget;
 				PRODUCT_NAME = AnurjaWidget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -885,6 +918,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Anurja/Anurja.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Anurja/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -892,7 +926,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja;
 				PRODUCT_NAME = Anurja;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
@@ -904,6 +938,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AnurjaWatchWidget/AnurjaWatchWidget.entitlements;
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AnurjaWatchWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -911,7 +946,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.watchkitapp.widget;
 				PRODUCT_NAME = AnurjaWatchWidget;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -924,6 +959,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AnurjaWatchWidget/AnurjaWatchWidget.entitlements;
+				DEVELOPMENT_TEAM = 5KDGWFU93T;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AnurjaWatchWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -931,7 +967,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anurja.app.watchkitapp.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.novotia.anurja.watchkitapp.widget;
 				PRODUCT_NAME = AnurjaWatchWidget;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;

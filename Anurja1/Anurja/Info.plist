@@ -38,7 +38,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Anurja uses the camera to recognise your meals and to check your exercise form. Photos and video are processed on your device.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Anurja reads glucose, steps, active calories and sleep to explain your meal patterns.</string>
+	<string>Anurja reads glucose, steps, distance, heart rate, active calories and sleep to explain your meal patterns and track your walks.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Anurja syncs your logs with your own Anurja server on this network.</string>
 	<key>NSMotionUsageDescription</key>

@@ -4,7 +4,6 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject private var state: AppState
     @State private var editing = false
-    @State private var server = APIClient.shared.serverString
 
     var body: some View {
         ScrollView {
@@ -15,7 +14,6 @@ struct ProfileView: View {
                 targetsCard
                 devicesCard
                 alertsCard
-                syncCard
                 Text("Language follows your iPhone settings")
                     .scaledFont(size: 13)
                     .foregroundStyle(Color.muted)
@@ -160,45 +158,6 @@ struct ProfileView: View {
         .anurjaCard()
     }
 
-    private var syncCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Data & sync")
-                .scaledFont(size: 17, weight: .bold)
-            Text("Everything you log is saved in a database on this phone and synced to your Anurja server when it's reachable.")
-                .scaledFont(size: 13)
-                .foregroundStyle(Color.muted)
-                .fixedSize(horizontal: false, vertical: true)
-            TextField("Server address", text: $server)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .keyboardType(.URL)
-                .scaledFont(size: 15)
-                .padding(.horizontal, 14)
-                .frame(minHeight: 46)
-                .background(Color.cream, in: Capsule())
-                .onSubmit(saveServer)
-            HStack {
-                Text(state.syncStatus.label)
-                    .scaledFont(size: 13)
-                    .foregroundStyle(Color.forest)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 8)
-                Button("Sync now") {
-                    saveServer()
-                }
-                .scaledFont(size: 15, weight: .semibold)
-                .foregroundStyle(Color.terracotta)
-                .frame(minHeight: 44)
-            }
-        }
-        .anurjaCard()
-    }
-
-    private func saveServer() {
-        APIClient.shared.serverString = server
-        state.sync()
-    }
-
     private var allergyText: String {
         var names = state.profile.allergies.sorted { $0.rawValue < $1.rawValue }.map(\.title)
         if !state.profile.otherAllergy.isEmpty { names.append(state.profile.otherAllergy) }
@@ -316,5 +275,5 @@ struct EditProfileSheet: View {
 }
 
 #Preview("Me") {
-    MainTabView().environmentObject(PreviewData.state(tab: .me))
+    ProfileView().environmentObject(PreviewData.state())
 }

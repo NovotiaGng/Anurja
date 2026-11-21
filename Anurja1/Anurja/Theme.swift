@@ -335,14 +335,14 @@ struct ProfileButton: View {
     @EnvironmentObject private var state: AppState
 
     var body: some View {
-        Button {
-            state.tab = .me
+        NavigationLink {
+            PushedPage { ProfileView() }
         } label: {
-            Image(systemName: "person.crop.circle.fill")
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(Color.cream, Color.terracotta)
-                .font(.system(size: 34))
-                .frame(width: 44, height: 44)
+            Image(systemName: "person")
+                .font(.system(size: 22, weight: .medium))
+                .foregroundStyle(Color.white)
+                .frame(width: 52, height: 52)
+                .background(Color.terracotta, in: Circle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text("Profile"))
@@ -408,4 +408,18 @@ func trendWord(for symbol: String) -> String {
     case "arrow.down.right": String(localized: "Falling")
     default: String(localized: "Steady")
     }
+}
+
+/// Onboarding palette (light sage, leaf green) from the redesigned setup steps.
+extension Color {
+    static let mist = Color(hex: 0xF1F4F0)
+    static let leaf = Color(hex: 0x3D7A4C)
+    static let deepInk = Color(hex: 0x141C17)
+    static let fieldGray = Color(hex: 0xEEEFEA)
+    static let tileGreen = Color(hex: 0xE0F0E3)
+    static let tileBlue = Color(hex: 0xDDE7F6)
+    static let tilePurple = Color(hex: 0xE7E3F8)
+    static let tileOrange = Color(hex: 0xF9E2D5)
+    static let lime = Color(hex: 0xE5F6B8)
+    static let water = Color(hex: 0x3F6E9C)
 }

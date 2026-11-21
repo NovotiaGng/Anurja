@@ -1,4 +1,5 @@
 import Foundation
+import CoreML
 import UIKit
 import Vision
 
@@ -71,51 +72,116 @@ enum FoodLibrary {
             return item.name.lowercased().contains(query) || item.keywords.contains { $0.contains(query) }
         }
     }
-
-    /// Ranks library items against image labels from Vision.
-    static func matches(labels: [(identifier: String, confidence: Float)]) -> [FoodItem] {
-        var scores: [String: Float] = [:]
-        for label in labels {
-            let words = label.identifier.lowercased().replacingOccurrences(of: "_", with: " ")
-            for item in all {
-                let hit = item.keywords.contains { keyword in
-                    words.contains(keyword) || keyword.contains(words)
-                } || item.name.lowercased().contains(words)
-                if hit {
-                    scores[item.id, default: 0] += label.confidence
-                }
-            }
-        }
-        return scores
-            .sorted { $0.value > $1.value }
-            .prefix(6)
-            .compactMap { item(id: $0.key) }
-    }
 }
 
-/// On-device photo recognition with Apple's built-in image classifier. It
-/// suggests likely foods; the person always confirms on Review meal.
+/// On-device, offline photo recognition: Vision's image feature print, then
+/// FoodClassifier.mlmodel (Core ML, trained by tools/foodvision on real photos
+/// of Indian and world dishes, fruit and drinks). It suggests foods only when the model is confident;
+/// the person always confirms on Review meal.
 enum FoodRecognizer {
+
+    /// Classifier label -> library foods, closest first. Dishes the library
+    /// doesn't have (dhokla, jalebi, momos…) map to nothing, so a confident
+    /// unknown dish opens the library instead of a wrong guess.
+    static let libraryIDs: [String: [String]] = [
+        "aloo_gobi": ["roti_sabzi"],
+        "aloo_masala": ["roti_sabzi", "puri_aloo"],
+        "apple": ["apple"],
+        "bagel": ["bagel"],
+        "banana": ["banana"],
+        "bhindi_masala": ["roti_sabzi"],
+        "biryani": ["veg_biryani", "chicken_biryani"],
+        "burger": ["burger"],
+        "burrito": ["burrito"],
+        "butter_naan": ["naan_paneer"],
+        "cake": ["cake"],
+        "chai": ["masala_chai"],
+        "chapati": ["roti_sabzi", "roti_dal", "multigrain_roti"],
+        "chicken_curry": ["chicken_curry"],
+        "chole": ["chana_masala"],
+        "chole_bhature": ["chole_bhature"],
+        "coconut_chutney": ["idli", "plain_dosa"],
+        "coffee": ["black_coffee", "cappuccino"],
+        "cookie": ["biscuits"],
+        "croissant": ["croissant"],
+        "dal_makhani": ["dal_tadka", "roti_dal", "rice_dal"],
+        "doughnut": ["doughnut"],
+        "fish_curry": ["fish_curry"],
+        "french_fries": ["french_fries"],
+        "grape": ["grapes"],
+        "guacamole": ["guacamole"],
+        "gulab_jamun": ["gulab_jamun"],
+        "hot_dog": ["hot_dog"],
+        "ice_cream": ["ice_cream"],
+        "idli": ["idli"],
+        "juice": ["fruit_juice"],
+        "kadai_paneer": ["naan_paneer"],
+        "kheer": ["kheer"],
+        "lassi": ["mango_lassi", "buttermilk"],
+        "mango": ["mango"],
+        "masala_dosa": ["masala_dosa", "plain_dosa"],
+        "muffin": ["muffin"],
+        "noodles": ["noodles"],
+        "orange": ["orange"],
+        "pakode": ["pakora"],
+        "palak_paneer": ["palak_paneer"],
+        "pancake": ["pancakes"],
+        "pizza": ["pizza"],
+        "poha": ["poha"],
+        "rajma_curry": ["rajma_chawal"],
+        "salad": ["kachumber", "salad_curd", "sprouts_salad"],
+        "samosa": ["samosa"],
+        "sandwich": ["veg_sandwich"],
+        "shahi_paneer": ["naan_paneer"],
+        "soup": ["veg_soup"],
+        "strawberry": ["strawberries"],
+        "waffle": ["waffle"],
+        "watermelon": ["watermelon"],
+        "white_rice": ["rice_dal", "jeera_rice", "curd_rice"],
+    ]
+
+    private static let model: MLModel? = Bundle.main.url(forResource: "FoodClassifier", withExtension: "mlmodelc")
+        .flatMap { try? MLModel(contentsOf: $0) }
+
+    /// Lowest top-label confidence the app trusts, picked by train.py so 95 %
+    /// of val photos at or above it were right. No model or no value: trust nothing.
+    static let threshold: Double = (model?.modelDescription.metadata[.creatorDefinedKey] as? [String: String])?["threshold"]
+        .flatMap(Double.init) ?? 1.01
+
+    /// Empty when the top label is below `threshold` or not in the library.
     static func suggestions(for image: UIImage) async -> [FoodItem] {
         guard let cgImage = image.cgImage else { return [] }
         let orientation = CGImagePropertyOrientation(image.imageOrientation)
-        return await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                let request = VNClassifyImageRequest()
-                let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation)
-                do {
-                    try handler.perform([request])
-                } catch {
-                    continuation.resume(returning: [])
-                    return
-                }
-                let labels = (request.results ?? [])
-                    .filter { $0.confidence > 0.05 }
-                    .prefix(25)
-                    .map { (identifier: $0.identifier, confidence: $0.confidence) }
-                continuation.resume(returning: FoodLibrary.matches(labels: Array(labels)))
-            }
+        return await Task.detached(priority: .userInitiated) {
+            rank(probabilities(cgImage, orientation: orientation))
+        }.value
+    }
+
+    /// Vision's on-device feature print of the photo, then the dish model.
+    private static func probabilities(_ cgImage: CGImage, orientation: CGImagePropertyOrientation) -> [String: Double] {
+        let request = VNGenerateImageFeaturePrintRequest()
+        request.revision = VNGenerateImageFeaturePrintRequestRevision2  // what the model was trained on
+        guard let model,
+              (try? VNImageRequestHandler(cgImage: cgImage, orientation: orientation).perform([request])) != nil,
+              let print = request.results?.first, print.elementType == .float,
+              let features = try? MLMultiArray(shape: [NSNumber(value: print.elementCount)], dataType: .float32)
+        else { return [:] }
+        print.data.withUnsafeBytes { bytes in
+            features.withUnsafeMutableBytes { out, _ in out.copyMemory(from: bytes) }
         }
+        guard let output = try? model.prediction(from: MLDictionaryFeatureProvider(dictionary: ["featurePrint": features])) else { return [:] }
+        return output.featureValue(for: "classLabelProbs")?.dictionaryValue as? [String: Double] ?? [:]
+    }
+
+    /// Confident labels' foods first, then the rest of the top 3 as alternatives.
+    static func rank(_ probabilities: [String: Double]) -> [FoodItem] {
+        let ranked = probabilities.sorted { $0.value > $1.value }.prefix(3)
+        guard let top = ranked.first, top.value >= threshold, libraryIDs[top.key] != nil else { return [] }
+        var ids: [String] = []
+        for label in ranked.map(\.key) {
+            for id in libraryIDs[label] ?? [] where !ids.contains(id) { ids.append(id) }
+        }
+        return ids.compactMap { FoodLibrary.item(id: $0) }
     }
 }
 

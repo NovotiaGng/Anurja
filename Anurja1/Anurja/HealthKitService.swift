@@ -9,8 +9,10 @@ final class HealthKitService {
         guard let glucose = HKObjectType.quantityType(forIdentifier: .bloodGlucose),
               let steps = HKObjectType.quantityType(forIdentifier: .stepCount),
               let sleep = HKObjectType.categoryType(forIdentifier: .sleepAnalysis),
-              let energy = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
-        try? await store.requestAuthorization(toShare: [], read: [glucose, steps, sleep, energy])
+              let energy = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned),
+              let heart = HKObjectType.quantityType(forIdentifier: .heartRate),
+              let distance = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning) else { return }
+        try? await store.requestAuthorization(toShare: [], read: [glucose, steps, sleep, energy, heart, distance])
     }
 
     func fetchGlucose(hours: Int) async -> [GlucosePoint] {
@@ -77,6 +79,35 @@ final class HealthKitService {
                     .filter { asleep.contains($0.value) }
                     .reduce(0.0) { $0 + $1.endDate.timeIntervalSince($1.startDate) }
                 continuation.resume(returning: seconds > 0 ? seconds / 3600 : nil)
+            }
+            store.execute(query)
+        }
+    }
+
+    /// Sum of a cumulative quantity (steps, distance, energy) since `start`.
+    /// Apple Watch and iPhone samples are merged by HealthKit, no double counting.
+    func sum(_ id: HKQuantityTypeIdentifier, unit: HKUnit, since start: Date) async -> Double {
+        guard HKHealthStore.isHealthDataAvailable(),
+              let type = HKQuantityType.quantityType(forIdentifier: id) else { return 0 }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: [])
+        return await withCheckedContinuation { continuation in
+            let query = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
+                continuation.resume(returning: stats?.sumQuantity()?.doubleValue(for: unit) ?? 0)
+            }
+            store.execute(query)
+        }
+    }
+
+    /// Most recent heart rate (bpm) recorded since `start`, usually by Apple Watch.
+    func latestHeartRate(since start: Date) async -> Int? {
+        guard HKHealthStore.isHealthDataAvailable(),
+              let type = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return nil }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: [])
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+        return await withCheckedContinuation { continuation in
+            let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: 1, sortDescriptors: [sort]) { _, samples, _ in
+                let bpm = (samples?.first as? HKQuantitySample)?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: .minute()))
+                continuation.resume(returning: bpm.map { Int($0.rounded()) })
             }
             store.execute(query)
         }

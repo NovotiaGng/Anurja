@@ -13,6 +13,7 @@ struct AddMealFlow: View {
     @State private var photo: UIImage?
     @State private var candidates: [FoodItem] = []
     @State private var chosen: FoodItem?
+    @State private var unrecognised = false
 
     var body: some View {
         ZStack {
@@ -23,6 +24,12 @@ struct AddMealFlow: View {
                 case .choose:
                     chooser
                 case .library:
+                    if unrecognised {
+                        Text("Anurja couldn't tell what's on this plate. Pick it from the library.")
+                            .scaledFont(size: 15)
+                            .foregroundStyle(Color.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     FoodLibraryPicker { item in
                         chosen = item
                         candidates = []
@@ -104,6 +111,7 @@ struct AddMealFlow: View {
                     showCamera = true
                 }
                 OptionRow(symbol: "books.vertical", title: "Food library", subtitle: "Search or browse by category", selected: false) {
+                    unrecognised = false
                     step = .library
                 }
                 let recent = recentFoods
@@ -164,11 +172,13 @@ struct AddMealFlow: View {
             let found = await FoodRecognizer.suggestions(for: image)
             let safe = found.filter { $0.isSafe(for: state.profile) }
             candidates = safe.isEmpty ? found : safe
-            if candidates.isEmpty {
-                // Nothing recognised: fall back to the most common foods.
-                candidates = ["rice_dal", "roti_sabzi", "idli", "salad_curd", "veg_biryani"].compactMap { FoodLibrary.item(id: $0) }
+            guard let first = candidates.first else {
+                // Not confident: let the person pick rather than guess.
+                unrecognised = true
+                step = .library
+                return
             }
-            chosen = candidates.first
+            chosen = first
             step = .review
         }
     }
@@ -489,6 +499,7 @@ struct ReviewMealView: View {
 
     private var draft: MealLog {
         MealLog(
+            date: state.pendingMealDate ?? Date(),
             food: item.mealFood,
             duration: duration,
             contexts: contexts,

@@ -27,6 +27,9 @@ final class AppState: ObservableObject {
     @Published var healthSleepHours: Double?
     @Published var insightMeal: MealLog?
     @Published var coach: ExerciseKind?
+    @Published var showWalk = false
+    /// Set when logging a missed meal after the fact (e.g. breakfast at 8:30).
+    @Published var pendingMealDate: Date?
     @Published var showAddMeal = false
     @Published var showInsulin = false
     @Published var syncStatus: SyncStatus = .idle
@@ -42,7 +45,7 @@ final class AppState: ObservableObject {
     private var handledWatchIDs: [String] = []
     private var usingHealthData = false
     private let isPreview: Bool
-    private let health = HealthKitService()
+    let health = HealthKitService()
     private let link = WatchConnectivityManager()
     private let motion = MotionService()
     private let database = LocalDatabase.shared
@@ -306,11 +309,17 @@ final class AppState: ObservableObject {
     // MARK: - Logging
 
     func addMeal(_ meal: MealLog) {
+        // A meal logged after the fact (from the after-walk prompt) skips the
+        // insight pop-up, which would otherwise tear down the walk screen.
+        let backdated = pendingMealDate != nil
         meals.insert(meal, at: 0)
+        meals.sort { $0.date > $1.date }
         database.save(meals: [meal])
         showAddMeal = false
+        pendingMealDate = nil
         evaluateActivity(notify: false)
         sync()
+        if backdated { return }
         Task {
             try? await Task.sleep(for: .milliseconds(650))
             insightMeal = meal

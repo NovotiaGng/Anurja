@@ -1,0 +1,351 @@
+{
+  "chairStand" : {
+    "app" : {
+      "chest" : {
+        "acc" : 0.999,
+        "balanced" : 0.73399999999999999
+      },
+      "form_ok" : {
+        "acc" : 0.75600000000000001,
+        "balanced" : 0.75600000000000001
+      },
+      "knees" : {
+        "acc" : 0.86299999999999999,
+        "balanced" : 0.82899999999999996
+      },
+      "range" : {
+        "acc" : 0.97599999999999998,
+        "balanced" : 0.97599999999999998
+      },
+      "stand" : {
+        "acc" : 0.98299999999999998,
+        "balanced" : 0.98199999999999998
+      }
+    },
+    "episode_form_ok_acc" : 0.93100000000000005,
+    "episodes_test" : 320,
+    "evaluated_with" : "Core ML (FormChairStand.mlmodel, CPU)",
+    "frames_test" : 14304,
+    "frames_train" : 54936,
+    "hit_rate_test" : {
+      "chest" : 0.998,
+      "form_ok" : 0.442,
+      "knees" : 0.70999999999999996,
+      "range" : 0.54900000000000004,
+      "stand" : 0.20699999999999999
+    },
+    "model" : {
+      "chest" : {
+        "acc" : 0.997,
+        "balanced" : 0.5
+      },
+      "form_ok" : {
+        "acc" : 0.75600000000000001,
+        "balanced" : 0.75600000000000001
+      },
+      "knees" : {
+        "acc" : 0.86299999999999999,
+        "balanced" : 0.82899999999999996
+      },
+      "range" : {
+        "acc" : 0.97599999999999998,
+        "balanced" : 0.97599999999999998
+      },
+      "stand" : {
+        "acc" : 0.98299999999999998,
+        "balanced" : 0.98199999999999998
+      }
+    },
+    "rules_2d" : {
+      "chest" : {
+        "acc" : 0.999,
+        "balanced" : 0.73399999999999999
+      },
+      "knees" : {
+        "acc" : 0.74399999999999999,
+        "balanced" : 0.72099999999999997
+      },
+      "range" : {
+        "acc" : 0.94799999999999995,
+        "balanced" : 0.94599999999999995
+      },
+      "stand" : {
+        "acc" : 0.94099999999999995,
+        "balanced" : 0.96299999999999997
+      }
+    },
+    "use_model" : [
+      "form_ok",
+      "range",
+      "knees",
+      "stand"
+    ]
+  },
+  "lateralRaise" : {
+    "app" : {
+      "elbows" : {
+        "acc" : 1,
+        "balanced" : 1
+      },
+      "form_ok" : {
+        "acc" : 0.72899999999999998,
+        "balanced" : 0.72499999999999998
+      },
+      "range" : {
+        "acc" : 0.97799999999999998,
+        "balanced" : 0.97899999999999998
+      },
+      "still" : {
+        "acc" : 0.99099999999999999,
+        "balanced" : 0.90500000000000003
+      }
+    },
+    "episode_form_ok_acc" : 0.88500000000000001,
+    "episodes_test" : 200,
+    "evaluated_with" : "Core ML (FormLateralRaise.mlmodel, CPU)",
+    "frames_test" : 6695,
+    "frames_train" : 27125,
+    "hit_rate_test" : {
+      "elbows" : 1,
+      "form_ok" : 0.52700000000000002,
+      "range" : 0.51700000000000002,
+      "still" : 0.95399999999999996
+    },
+    "model" : {
+      "elbows" : {
+        "acc" : 1,
+        "balanced" : 1
+      },
+      "form_ok" : {
+        "acc" : 0.72899999999999998,
+        "balanced" : 0.72499999999999998
+      },
+      "range" : {
+        "acc" : 0.97799999999999998,
+        "balanced" : 0.97899999999999998
+      },
+      "still" : {
+        "acc" : 0.97799999999999998,
+        "balanced" : 0.84799999999999998
+      }
+    },
+    "rules_2d" : {
+      "elbows" : {
+        "acc" : 1,
+        "balanced" : 1
+      },
+      "range" : {
+        "acc" : 0.71899999999999997,
+        "balanced" : 0.72899999999999998
+      },
+      "still" : {
+        "acc" : 0.99099999999999999,
+        "balanced" : 0.90500000000000003
+      }
+    },
+    "use_model" : [
+      "form_ok",
+      "range"
+    ]
+  },
+  "lunge" : {
+    "app" : {
+      "knee" : {
+        "acc" : 0.84199999999999997,
+        "balanced" : 0.66900000000000004
+      },
+      "range" : {
+        "acc" : 0.94599999999999995,
+        "balanced" : 0.93600000000000005
+      },
+      "upright" : {
+        "acc" : 0.93000000000000005,
+        "balanced" : 0.76200000000000001
+      }
+    },
+    "episode_form_ok_acc" : 0.68100000000000005,
+    "episodes_test" : 320,
+    "evaluated_with" : "Core ML (FormLunge.mlmodel, CPU)",
+    "frames_test" : 12280,
+    "frames_train" : 48592,
+    "hit_rate_test" : {
+      "form_ok" : 0.52600000000000002,
+      "knee" : 0.14499999999999999,
+      "range" : 0.30599999999999999,
+      "upright" : 0.85499999999999998
+    },
+    "model" : {
+      "form_ok" : {
+        "acc" : 0.58899999999999997,
+        "balanced" : 0.59599999999999997
+      },
+      "knee" : {
+        "acc" : 0.84199999999999997,
+        "balanced" : 0.66900000000000004
+      },
+      "range" : {
+        "acc" : 0.94599999999999995,
+        "balanced" : 0.93600000000000005
+      },
+      "upright" : {
+        "acc" : 0.93000000000000005,
+        "balanced" : 0.76200000000000001
+      }
+    },
+    "rules_2d" : {
+      "knee" : {
+        "acc" : 0.72099999999999997,
+        "balanced" : 0.75700000000000001
+      },
+      "range" : {
+        "acc" : 0.92400000000000004,
+        "balanced" : 0.90300000000000002
+      },
+      "upright" : {
+        "acc" : 0.90100000000000002,
+        "balanced" : 0.65900000000000003
+      }
+    },
+    "use_model" : [
+      "range",
+      "upright",
+      "knee"
+    ]
+  },
+  "march" : {
+    "app" : {
+      "form_ok" : {
+        "acc" : 0.58699999999999997,
+        "balanced" : 0.58599999999999997
+      },
+      "range" : {
+        "acc" : 0.94499999999999995,
+        "balanced" : 0.91100000000000003
+      },
+      "tall" : {
+        "acc" : 0.94599999999999995,
+        "balanced" : 0.67100000000000004
+      }
+    },
+    "episode_form_ok_acc" : 0.54000000000000004,
+    "episodes_test" : 200,
+    "evaluated_with" : "Core ML (FormMarch.mlmodel, CPU)",
+    "frames_test" : 6435,
+    "frames_train" : 26295,
+    "hit_rate_test" : {
+      "form_ok" : 0.50600000000000001,
+      "range" : 0.27200000000000002,
+      "tall" : 0.94199999999999995
+    },
+    "model" : {
+      "form_ok" : {
+        "acc" : 0.58699999999999997,
+        "balanced" : 0.58599999999999997
+      },
+      "range" : {
+        "acc" : 0.94499999999999995,
+        "balanced" : 0.91100000000000003
+      },
+      "tall" : {
+        "acc" : 0.94599999999999995,
+        "balanced" : 0.67100000000000004
+      }
+    },
+    "rules_2d" : {
+      "range" : {
+        "acc" : 0.95099999999999996,
+        "balanced" : 0.91300000000000003
+      },
+      "tall" : {
+        "acc" : 0.95699999999999996,
+        "balanced" : 0.628
+      }
+    },
+    "use_model" : [
+      "form_ok",
+      "range",
+      "tall"
+    ]
+  },
+  "squat" : {
+    "app" : {
+      "chest" : {
+        "acc" : 0.99299999999999999,
+        "balanced" : 0.67700000000000005
+      },
+      "form_ok" : {
+        "acc" : 0.84499999999999997,
+        "balanced" : 0.84499999999999997
+      },
+      "knees" : {
+        "acc" : 0.76300000000000001,
+        "balanced" : 0.78800000000000003
+      },
+      "range" : {
+        "acc" : 0.94499999999999995,
+        "balanced" : 0.94999999999999996
+      },
+      "stand" : {
+        "acc" : 0.95499999999999996,
+        "balanced" : 0.97099999999999997
+      }
+    },
+    "episode_form_ok_acc" : 0.96299999999999997,
+    "episodes_test" : 320,
+    "evaluated_with" : "Core ML (FormSquat.mlmodel, CPU)",
+    "frames_test" : 12408,
+    "frames_train" : 50104,
+    "hit_rate_test" : {
+      "chest" : 0.98799999999999999,
+      "form_ok" : 0.53300000000000003,
+      "knees" : 0.68899999999999995,
+      "range" : 0.36699999999999999,
+      "stand" : 0.215
+    },
+    "model" : {
+      "chest" : {
+        "acc" : 0.98099999999999998,
+        "balanced" : 0.81200000000000006
+      },
+      "form_ok" : {
+        "acc" : 0.84499999999999997,
+        "balanced" : 0.84499999999999997
+      },
+      "knees" : {
+        "acc" : 0.76300000000000001,
+        "balanced" : 0.78800000000000003
+      },
+      "range" : {
+        "acc" : 0.95299999999999996,
+        "balanced" : 0.93999999999999995
+      },
+      "stand" : {
+        "acc" : 0.95499999999999996,
+        "balanced" : 0.97099999999999997
+      }
+    },
+    "rules_2d" : {
+      "chest" : {
+        "acc" : 0.99299999999999999,
+        "balanced" : 0.67700000000000005
+      },
+      "knees" : {
+        "acc" : 0.82899999999999996,
+        "balanced" : 0.82999999999999996
+      },
+      "range" : {
+        "acc" : 0.94499999999999995,
+        "balanced" : 0.94999999999999996
+      },
+      "stand" : {
+        "acc" : 0.873,
+        "balanced" : 0.91900000000000004
+      }
+    },
+    "use_model" : [
+      "form_ok",
+      "knees",
+      "stand"
+    ]
+  }
+}

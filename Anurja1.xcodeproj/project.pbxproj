@@ -17,10 +17,22 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Anurja u2013 iPhone preview.html",
+				Anurja/APIClient.swift,
+				Anurja/AddMealFlow.swift,
+				Anurja/FoodLibrary.swift,
+				Anurja/FoodLibraryData.swift,
+				Anurja/GeneratedModel.swift,
+				Anurja/LocalDatabase.swift,
+				Anurja/MLEngine.swift,
+				Anurja/Profile.swift,
+				Anurja/ProfileView.swift,
+				Anurja/Services.swift,
+				Anurja/Anurja.entitlements,
 				Anurja/AnurjaApp.swift,
 				Anurja/AppState.swift,
 				Anurja/Assets.xcassets,
 				Anurja/Coach.swift,
+				Anurja/FormCoach.swift,
 				Anurja/Forecast.swift,
 				Anurja/HabitsView.swift,
 				Anurja/HealthKitService.swift,
@@ -55,6 +67,8 @@
 				Shared/SharedStore.swift,
 				Shared/SparklineChart.swift,
 				tools/make_catalog.py,
+				tools/foodvision,
+				Anurja/FoodModels/FoodClassifier.mlmodel,
 			);
 			target = 47C4FEC5307A044B00EC3C0C /* Anurja1 */;
 		};
