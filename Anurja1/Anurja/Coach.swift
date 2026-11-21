@@ -638,6 +638,7 @@ struct CoachScreen: View {
     }
 
     private func close() {
+        state.endSession()
         award(force: false)
         camera.stop()
         clock.stop()

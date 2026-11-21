@@ -63,24 +63,25 @@ final class FlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Highest peak"].waitForExistence(timeout: 4))
         XCTAssertTrue(app.staticTexts["Lowest peak"].exists)
 
-        app.buttons["Habits"].tap()
-        let review = app.buttons["Fortnightly review"]
-        reveal(review)
-        XCTAssertTrue(review.waitForExistence(timeout: 4))
-        review.tap()
-        app.buttons["Keep it"].tap()
+        // Train: walk first, then the day's exercises chain one after another.
+        app.buttons["Train"].tap()
+        XCTAssertFalse(app.buttons["Save check-in"].exists)
+        app.buttons["Start today's session"].tap()
+        let doneWalking = app.buttons["Done walking"]
+        XCTAssertTrue(doneWalking.waitForExistence(timeout: 4))
+        doneWalking.tap()
 
-        let checkIn = app.buttons["Save check-in"]
-        reveal(checkIn)
-        checkIn.tap()
-
-        let squat = app.buttons["Wall push-up"]
-        reveal(squat)
-        squat.tap()
-        app.buttons["Check my form"].tap()
+        let checkForm = app.buttons["Check my form"]
+        XCTAssertTrue(checkForm.waitForExistence(timeout: 5))
+        checkForm.tap()
         XCTAssertTrue(app.staticTexts["Camera unavailable here, running a simulated session"].waitForExistence(timeout: 4))
         app.buttons["Finish set"].tap()
         app.buttons["Done"].tap()
+
+        // The next exercise opens by itself; closing it ends the session.
+        XCTAssertTrue(checkForm.waitForExistence(timeout: 5))
+        app.buttons["Close"].tap()
+        XCTAssertTrue(app.buttons["Start today's session"].waitForExistence(timeout: 4))
 
         app.buttons["Me"].tap()
         let restart = app.buttons["Restart demo"]

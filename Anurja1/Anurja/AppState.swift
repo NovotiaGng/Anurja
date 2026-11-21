@@ -367,6 +367,33 @@ final class AppState: ObservableObject {
         coach = exercise
     }
 
+    // MARK: - Daily session: walk, then today's exercises one after another
+
+    /// Exercises still to run in the current session.
+    @Published var sessionQueue: [ExerciseKind] = []
+    @Published var walking = false
+
+    func startDailySession() {
+        tab = .habits
+        sessionQueue = DayPlan.make(for: profile).queue
+        walking = true
+    }
+
+    /// Called when the walk or a coach screen closes.
+    func nextInSession() {
+        guard !sessionQueue.isEmpty else { return }
+        let next = sessionQueue.removeFirst()
+        // Let the previous full-screen cover finish dismissing first.
+        Task {
+            try? await Task.sleep(for: .milliseconds(600))
+            openCoach(next)
+        }
+    }
+
+    func endSession() {
+        sessionQueue = []
+    }
+
     func openAddMeal() {
         tab = .meals
         showAddMeal = true
@@ -449,6 +476,7 @@ final class AppState: ObservableObject {
         healthSleepHours = nil
         insightMeal = nil
         coach = nil
+        sessionQueue = []
         showAddMeal = false
         showInsulin = false
         syncStatus = .idle

@@ -15,7 +15,7 @@ enum AppTab: String, Codable, CaseIterable, Identifiable {
         case .home: "Home"
         case .trends: "Trends"
         case .meals: "Meals"
-        case .habits: "Habits"
+        case .habits: "Train"
         case .me: "Me"
         }
     }
@@ -25,7 +25,7 @@ enum AppTab: String, Codable, CaseIterable, Identifiable {
         case .home: "house"
         case .trends: "chart.bar"
         case .meals: "fork.knife"
-        case .habits: "leaf"
+        case .habits: "figure.walk"
         case .me: "person"
         }
     }

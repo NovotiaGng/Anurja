@@ -103,7 +103,7 @@ struct FloatingTabBar: View {
                 Button {
                     state.tab = .habits
                 } label: {
-                    Label("Habit check-in", systemImage: "checkmark.circle")
+                    Label("Today's training", systemImage: "figure.walk")
                 }
                 Button {
                     state.openCoach(.squat)
@@ -362,7 +362,18 @@ struct ActivityCard: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     Spacer(minLength: 0)
-                    if action.id == "squats" {
+                    if action.id == "brisk_walk" || action.id == "light_walk" {
+                        Button {
+                            state.startDailySession()
+                        } label: {
+                            Image(systemName: "play.circle.fill")
+                                .font(.system(size: 26))
+                                .foregroundStyle(Color.terracotta)
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("Start walk"))
+                    } else if action.id == "squats" {
                         Button {
                             state.openCoach(.squat)
                         } label: {
